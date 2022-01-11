@@ -1,0 +1,11 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^Makefile$
+^builds$
+^doc$
+^Meta$
+^\.gitlab-ci\.yml$
+^pkgdown$
+^_pkgdown\.yml$
+^public$

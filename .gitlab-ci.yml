@@ -1,0 +1,10 @@
+image: containers.cognigencorp.com/r/361:latest
+
+pages:
+  script:
+    - bash -lc "Rscript -e 'install.packages(\"pkgdown\"); pkgdown::build_site()'"
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
