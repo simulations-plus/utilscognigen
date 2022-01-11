@@ -14,4 +14,13 @@ LazyData: true
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Suggests: 
+    knitr,
     testthat
+Imports: 
+    assertthat,
+    callr,
+    fs,
+    rstudioapi,
+    xfun,
+    httr,
+    jsonlite
