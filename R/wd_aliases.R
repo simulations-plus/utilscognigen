@@ -1,8 +1,8 @@
 #' Change or print working directory
 #'
-#' These are straight wrappers around \code{\link[base]{setwd}} and
+#' These are wrappers around \code{\link[base]{setwd}} and
 #' \code{\link[base]{getwd}}.
-#' 
+#'
 #' @inheritParams base::setwd
 #'
 #' @name wd_aliases
@@ -11,8 +11,12 @@ NULL
 
 #' @rdname wd_aliases
 #' @export
-cd <- base::setwd
+cd <- function(dir) {
+  base::setwd(dir)
+}
 
 #' @rdname wd_aliases
 #' @export
-pwd <- base::getwd
+pwd <- function() {
+  base::getwd()
+}

@@ -14,6 +14,6 @@ pwd()
 \item{dir}{A character string: \link[base]{tilde expansion} will be done.}
 }
 \description{
-These are straight wrappers around \code{\link[base]{setwd}} and
+These are wrappers around \code{\link[base]{setwd}} and
 \code{\link[base]{getwd}}.
 }
