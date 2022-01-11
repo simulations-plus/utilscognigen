@@ -17,3 +17,8 @@ Name: render
 Description: Render an R Markdown document in batch mode (current source document)
 Binding: render
 Interactive: false
+
+Name: Toggle File Path Selection
+Description: Toggle file paths between Unix or Windows based on the first entry
+Binding: toggle_path_selection
+Interactive: false

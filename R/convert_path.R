@@ -75,6 +75,50 @@ path_to_windows <- function(path = NULL, ask = FALSE, normalize = TRUE) {
   return(convert_path(path, ask, normalize, to = "windows"))
 }
 
+#' Toggle paths between Unix or Windows based on the first entry
+#' 
+#' This is intended to be used as an RStudio Addin
+#' 
+#' @keywords internal
+toggle_path_selection <- function() {
+  
+  assertthat::assert_that(
+    rstudioapi::isAvailable()
+  )
+  
+  context <- rstudioapi::getActiveDocumentContext()
+  if(!utils::hasName(context, "selection")) return(invisible(NULL))
+  
+  selection <- context[["selection"]][[1]]
+  if(!utils::hasName(selection, "text")) return(invisible(NULL))
+  
+  text <- selection[["text"]]
+  
+  if(is.null(text)) return(invisible(NULL))
+  if(text == "") return(invisible(NULL))
+  
+  text <- unlist(strsplit(text, "\n|;|,"))
+  text <- text[text != ""]
+  
+  which_os <- ifelse(grepl("\\:", text[[1]]), "windows", "unix")
+  which_new_os <- ifelse(which_os == "windows", "unix", "windows")
+  
+  comments <- gsub("^(#*\\s*).*", "\\1", text)
+  uncommented_text <- gsub("^#*\\s*", "", text)
+  
+  was_single_quoted <- grepl("^\\'", uncommented_text)
+  was_double_quoted <- grepl('^\\"', uncommented_text)
+  
+  new_text <- suppressWarnings(convert_path(path = uncommented_text, to = which_new_os))
+  new_text <- ifelse(is.na(new_text), text, new_text)
+  new_text <- ifelse(was_single_quoted, paste0("'", new_text, "'"), new_text)
+  new_text <- ifelse(was_double_quoted, paste0('"', new_text, '"'), new_text)
+  new_text <- paste0(comments, new_text)
+  new_text <- paste0(new_text, collapse = "\n")
+  
+  rstudioapi::insertText(text = new_text)
+}
+
 
 # Helpers -----------------------------------------------------------------
 
