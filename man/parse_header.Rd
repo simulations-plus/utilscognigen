@@ -3,6 +3,7 @@
 \name{parse_header}
 \alias{parse_header}
 \alias{parse_header_name}
+\alias{parse_header_all_names}
 \alias{parse_header_history}
 \alias{parse_header_version}
 \alias{parse_header_copyright}
@@ -15,6 +16,8 @@
 parse_header(path = NULL, sections = .valid_header_sections, ...)
 
 parse_header_name(header)
+
+parse_header_all_names(header)
 
 parse_header_history(header)
 

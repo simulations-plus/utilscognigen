@@ -114,23 +114,28 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     file.exists(from),
     msg = "`from` must be an existing R or Rmd file"
   )
-
-  new_header <- build_new_header(path = to,
-                                 version = version,
-                                 purpose = FALSE,
-                                 input_files = FALSE,
-                                 output_files = FALSE)
+  
+  old_header <- get_header(from)
+  
+  new_header <- if(isFALSE(old_header)) {
+    build_new_header(path = to,
+                     version = version)
+  } else {
+    build_new_header(path = to,
+                     version = version,
+                     purpose = FALSE,
+                     input_files = FALSE,
+                     output_files = FALSE)
+  }
 
   # how files are copied depends on their type
   if(file_ext_to == "rmd") {
-
-    old_header <- get_header(from)
 
     if(isFALSE(old_header)) {
 
       file.copy(from, to)
 
-      suppressMessages(Redit(to))
+      suppressMessages(Redit(to, open = FALSE))
 
       warning(
         "`from` did not have a valid header. It was copied with a new header to `to`.",
@@ -167,6 +172,13 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
       message("Created '", to, "'")
     } else {
       stop("Failed to create '", to, "'")
+    }
+    
+    if(isFALSE(old_header)) {
+      warning(
+        "`from` did not have a valid header. It was copied with a new header to `to`.",
+        call. = FALSE
+      )
     }
 
     # append `from` into `to`

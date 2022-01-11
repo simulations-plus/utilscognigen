@@ -3,6 +3,7 @@
 \name{get_header_content}
 \alias{get_header_content}
 \alias{get_header_name}
+\alias{get_header_all_names}
 \alias{get_header_history}
 \alias{get_header_version}
 \alias{get_header_copyright}
@@ -12,6 +13,8 @@
 \title{Get content from an R script header}
 \usage{
 get_header_name(path = NULL)
+
+get_header_all_names(path = NULL)
 
 get_header_history(path = NULL)
 

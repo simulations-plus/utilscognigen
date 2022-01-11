@@ -28,6 +28,13 @@ get_header_name <- function(path = NULL) {
 
 #' @rdname get_header_content
 #' @export
+get_header_all_names <- function(path = NULL) {
+  files <- unname(unlist(parse_header(path, "all_names")))
+  return(files)
+}
+
+#' @rdname get_header_content
+#' @export
 get_header_history <- function(path = NULL) {
   files <- unname(unlist(parse_header(path, "history")))
   return(files)
@@ -176,6 +183,7 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
 # Header parsing functions ------------------------------------------------
 
 .valid_header_sections <- c("name",
+                            "all_names",
                             "history",
                             "version",
                             "copyright",
@@ -219,6 +227,7 @@ parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
 
   # Replace each section with its parsed value
   if("name" %in% sections) list_of_sections[["name"]] <- parse_header_name(header)
+  if("all_names" %in% sections) list_of_sections[["all_names"]] <- parse_header_all_names(header)
   if("history" %in% sections) list_of_sections[["history"]] <- parse_header_history(header)
   if("version" %in% sections) list_of_sections[["version"]] <- parse_header_version(header)
   if("copyright" %in% sections) list_of_sections[["copyright"]] <- parse_header_copyright(header)
@@ -234,11 +243,11 @@ parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
 
 #' @rdname parse_header
 parse_header_name <- function(header) {
-
-  has_name <- any(grepl("Name:", header, ignore.case = TRUE))
-
-  if(has_name) {
-    name_line <- min(grep("Name:", header, ignore.case = TRUE))
+  
+  has_name_lgl <- grepl("Name:", header, ignore.case = TRUE)
+  
+  if(any(has_name_lgl)) {
+    name_line <- min(which(has_name_lgl))
     name <- gsub("#+\\s?+Name:\\s?+(.*)", "\\1", header[name_line], ignore.case = TRUE, perl = TRUE)
     return(name)
   } else {
@@ -250,6 +259,22 @@ parse_header_name <- function(header) {
     return(NULL)
   }
 
+}
+
+
+#' @rdname parse_header
+parse_header_all_names <- function(header) {
+  
+  has_name_lgl <- grepl("Name:", header, ignore.case = TRUE)
+  
+  if(any(has_name_lgl)) {
+    name_line <- which(has_name_lgl)
+    name <- gsub("#+\\s?+Name:\\s?+(.*)", "\\1", header[name_line], ignore.case = TRUE, perl = TRUE)
+    return(name)
+  } else {
+    return(NULL)
+  }
+  
 }
 
 
@@ -285,26 +310,38 @@ parse_header_version <- function(header) {
 
 #' @rdname parse_header
 parse_header_copyright <- function(header) {
-
+  
   copyright_section_start <- grep("Copyright.*Cognigen Corporation", header, ignore.case = TRUE)
   if(length(copyright_section_start) == 0) {
     # No copyright file section detected
     return(NULL)
   }
 
-  copyright_section_end <- grep("^#{3}|^#\\s{3}", header, ignore.case = TRUE)
+  copyright_section_end <- grep("^#{3}|^#\\s*$", header, ignore.case = TRUE)
   if(length(copyright_section_end) == 0) {
     # No end of copyright section detected
     return(NULL)
   }
-  copyright_section_end <- min(copyright_section_end[copyright_section_end > copyright_section_start]) - 1
-
-  copyright_section <- header[copyright_section_start:copyright_section_end]
-
-  copyright_section <- trimws(gsub("#", "", copyright_section))
-  copyright_section <- paste0(copyright_section, collapse = " ")
-
-  return(copyright_section)
+  
+  # one end for each start
+  copyright_section <- vapply(
+    X = copyright_section_start,
+    FUN = function(start) {
+      end <- min(copyright_section_end[copyright_section_end > start]) - 1
+      section <- header[start:end]
+      section <- trimws(gsub("#", "", section))
+      section <- paste0(section, collapse = " ")
+    },
+    FUN.VALUE = character(1)
+  )
+  
+  if(length(copyright_section) == 1) {
+    return(copyright_section)
+  } else if(length(unique(copyright_section)) == 1) {
+    return(unique(copyright_section))
+  } else {
+    return(copyright_section)
+  }
 
 }
 
