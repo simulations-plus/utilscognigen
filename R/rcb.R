@@ -169,7 +169,6 @@ scanlogs_if_not_empty <- function(...) {
   sl <- Filter(function(x) !is.null(x), sl)
   if(length(sl)) {
     scanlogs_header <- paste0("\nscanlogs:\n", paste0(rep("=", getOption("width")), collapse = ""), sep = "\n")
-    browser()
 
     # add extra breaks
     if(is.list(sl)) {
