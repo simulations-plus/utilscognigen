@@ -1,0 +1,19 @@
+Name: logfile
+Description: Open R or SAS logfile for the current source document
+Binding: logfile
+Interactive: false
+
+Name: scanlogs
+Description: Scan the log file for the current source document
+Binding: scanlogs
+Interactive: false
+
+Name: rcb
+Description: Run an R program in batch mode (current source document)
+Binding: rcb
+Interactive: false
+
+Name: render
+Description: Render an R Markdown document in batch mode (current source document)
+Binding: render
+Interactive: false
