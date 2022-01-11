@@ -35,8 +35,8 @@
 #' * Add headers to existing R and Rmd files without a header
 #' * Add new timestamps to headers in existing R and Rmd files
 #'
-#' R programs do not have to be `Redit`ed every time they are updated, and
-#' `Redit` should not be used for files that are simply being opened.
+#' `Redit` does not need to be used every time a program is updated and `Redit`
+#' should not be used for files that are simply being opened.
 #'
 #' If a standard header cannot be identified in an existing file, a new header
 #' will be added if possible. In some cases, an error will occur with a
@@ -53,7 +53,7 @@
 #' # Update these programs and create a backup
 #' Redit("file1.R", "file2.R", backup = TRUE)
 #'
-#' # Update the history of the open R program if it has a valid header
+#' # Update the history of the open R program if it has a valid header.
 #' # If there is no valid header, either a header will be added or the error
 #' # will try to help resolve the issue
 #' Redit()
