@@ -9,7 +9,7 @@ library(utilscognigen)
 
 Install the development version with:
 ```r
-remotes::install_gitlab(repo = "repo-name/utilscognigen", host = "gitlab.cognigencorp.com")
+remotes::install_gitlab(repo = "r/utilscognigen", host = "gitlab.cognigencorp.com")
 ```
 
 # Functionality
