@@ -10,8 +10,9 @@ Rcopy(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable())
 \item{from}{path or GitLab web URL of original R program or Rmd file.
 Defaults to the path of the source editor context.}
 
-\item{to}{path or directory of new file. If `to` is a directory, `from` is
-copied to that directory. Defaults to the basename of the `from` file.}
+\item{to}{path or directory of new file. If \code{to} is a directory,
+\code{from} is copied to that directory. Defaults to the basename of the
+\code{from} file.}
 
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.}

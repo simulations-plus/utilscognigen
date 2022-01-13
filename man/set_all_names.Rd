@@ -2,10 +2,19 @@
 % Please edit documentation in R/cli.R
 \name{set_all_names}
 \alias{set_all_names}
-\title{helper function for cli messages to set all names of x to some nm}
+\title{Helper function for cli messages to set all names of x to some nm}
 \usage{
 set_all_names(x, nm)
 }
-\description{
-helper function for cli messages to set all names of x to some nm
+\arguments{
+\item{x}{vector}
+
+\item{nm}{name}
 }
+\value{
+named vector
+}
+\description{
+Helper function for cli messages to set all names of x to some nm
+}
+\keyword{internal}
