@@ -42,9 +42,11 @@ logfile <- function(...) {
 logfile_R <- function(path) {
   log_name <- paste0(tools::file_path_sans_ext(path), ".Rout")
   if(!file.exists(log_name)) {
-    stop(
-    log_name, " has not been created. \n",
-    "Generate a log file with `rcb ", basename(path), "` from the Terminal within the script directory."
+    cli::cli_abort(
+      c(
+        "{log_name} has not been created.",
+        i = "Generate a log file with `rcb()` from the R console or `rcb {basename(path)}` from the Terminal within the script directory."
+      )
     )
   }
   rstudioapi::navigateToFile(log_name)
@@ -54,9 +56,11 @@ logfile_R <- function(path) {
 logfile_r <- function(path) {
   log_name <- paste0(path, ".Rout")
   if(!file.exists(log_name)) {
-    stop(
-      log_name, " has not been created. \n",
-      "Generate a log file with `rcb ", basename(path), "` from the Terminal within the script directory."
+    cli::cli_abort(
+      c(
+        "{log_name} has not been created.",
+        i = "Generate a log file with `rcb()` from the R console or `rcb {basename(path)}` from the Terminal within the script directory."
+      )
     )
   }
   rstudioapi::navigateToFile(log_name)
@@ -66,9 +70,11 @@ logfile_r <- function(path) {
 logfile_Rmd <- function(path) {
   log_name <- paste0(tools::file_path_sans_ext(path), "-render.Rout")
   if(!file.exists(log_name)) {
-    stop(
-      log_name, " has not been created. \n",
-      "Generate a log file with `interactivecog::render()` from the R console."
+    cli::cli_abort(
+      c(
+        "{log_name} has not been created.",
+        i = "Generate a log file with `render()` from the R console."
+      )
     )
   }
   rstudioapi::navigateToFile(log_name)
@@ -79,9 +85,11 @@ logfile_sas <- function(path) {
   log_name <- paste0(tools::file_path_sans_ext(path), c(".log", ".lst"))
   log_exists <- file.exists(log_name)
   if(!log_exists[1]) {
-    stop(
-      log_name[1], " has not been created. \n",
-      "Generate a log file with `sas94 +we ", basename(path), "` from the Terminal within the script directory.\n"
+    cli::cli_abort(
+      c(
+        "{log_name[1]} has not been created.",
+        i = "Generate a log file with `sas94 +we {basename(path)}` from the Terminal within the script directory."
+      )
     )
   }
   log_name <- log_name[log_exists]
@@ -92,8 +100,10 @@ logfile_sas <- function(path) {
 logfile_tex <- function(path) {
   log_name <- paste0(tools::file_path_sans_ext(path), ".log")
   if(!file.exists(log_name)) {
-    stop(
-      log_name, " has not been created."
+    cli::cli_abort(
+      c(
+        "{log_name} has not been created."
+      )
     )
   }
   rstudioapi::navigateToFile(log_name)

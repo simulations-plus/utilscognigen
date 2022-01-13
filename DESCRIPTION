@@ -23,4 +23,5 @@ Imports:
     rstudioapi,
     xfun,
     httr,
-    jsonlite
+    jsonlite,
+    cli

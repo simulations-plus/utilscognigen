@@ -167,7 +167,7 @@ make_unix_replacements <- function(path, normalize) {
   # Catch any C: paths
   c_drive <- grepl("^C:", path, ignore.case = TRUE)
   if(any(c_drive)) {
-    warning("There is no equivalent to the C drive on Unix")
+    cli::cli_warn("There is no equivalent to the C drive on Unix")
     path[c_drive] <- NA_character_
   }
 
@@ -185,7 +185,7 @@ make_unix_replacements <- function(path, normalize) {
     dne <- startsWith(path, "Error in normalizePath")
 
     if(any(dne)) {
-      warning("NA results do not exist", call. = FALSE)
+      cli::cli_warn("NA results do not exist")
       path[dne] <- NA
     }
   }
@@ -217,7 +217,7 @@ make_windows_replacements <- function(path, normalize) {
   # Catch any directories that don't exist on Windows
   dne_paths <- grepl("^/", path)
   if(any(dne_paths)) {
-    warning("There are only Windows equivalents for '~', '/cognigen', '/doc', '/home', '/misc'")
+    cli::cli_warn("There are only Windows equivalents for '~', '/cognigen', '/doc', '/home', '/misc'")
     path[dne_paths] <- NA_character_
   }
 
@@ -235,7 +235,7 @@ make_windows_replacements <- function(path, normalize) {
     dne <- startsWith(path, "Error in normalizePath")
 
     if(any(dne)) {
-      warning("NA results do not exist", call. = FALSE)
+      cli::cli_warn("NA results do not exist")
       path[dne] <- NA
     }
   }

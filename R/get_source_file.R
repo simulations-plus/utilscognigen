@@ -14,7 +14,7 @@ get_source_file <- function() {
 
   file <- rstudioapi::getSourceEditorContext()$path
   if(is.null(file)) {
-    stop("There is no active file in the RStudio source editor")
+      cli::cli_abort("There is no active file in the RStudio source editor")
   }
   return(file)
 }

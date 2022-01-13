@@ -83,8 +83,7 @@ download_gitlab <- function(url, destfile) {
 
   # Warning and return FALSE if url cannot be decoded
   if(inherits(content, "try-error")) {
-    warning("Content of `url` could not be decoded: ", url,
-            immediate. = TRUE)
+    cli::cli_warn("Content of `url` could not be decoded: {url}")
     return(FALSE)
   }
 
@@ -380,8 +379,7 @@ curl_and_parse <- function(url) {
   # Throw warning for message in curl_result
   # a 404 error might be present if there is a bug in the api formatting
   if("message" %in% names(curl_result)) {
-    warning(curl_result$message, ": ", url,
-            immediate. = TRUE)
+    cli::cli_warn("{curl_result$message}: {url}")
   }
 
   return(curl_result)

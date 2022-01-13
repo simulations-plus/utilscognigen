@@ -1,7 +1,9 @@
 # Various functions to interact with R script headers
 
-.try_this_on_header_errors <- "For R files, update the first line so it is an R command.\nFor Rmd files, delete or rename any chunks named 'header'.\nThen run `Redit()` to include a clean header."
-
+.try_this_on_header_errors <- c(
+  r = "For R files, update the first line so it is an R command. Then run `Redit()`.",
+  rmd= "For Rmd files, temporarily remove all comments from the YAML. Then run `Redit()`."
+)
 
 # Header content retrievers -----------------------------------------------
 
@@ -218,7 +220,7 @@ parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
   header <- get_header(path, ...)
 
   if(is.logical(header)) {
-    stop(attr(header, "reason"), call. = FALSE)
+    cli::cli_abort(attr(header, "reason"))
   }
 
   # Prepare list of sections
@@ -251,10 +253,11 @@ parse_header_name <- function(header) {
     name <- gsub("#+\\s?+Name:\\s?+(.*)", "\\1", header[name_line], ignore.case = TRUE, perl = TRUE)
     return(name)
   } else {
-    warning(
-      "Name of program not included in current header.",
-      "\n", .try_this_on_header_errors,
-      call. = FALSE
+    cli::cli_warn(
+      c(
+        "Name of program not included in current header.",
+        set_all_names(.try_this_on_header_errors, "i")
+      )
     )
     return(NULL)
   }
@@ -394,7 +397,7 @@ parse_header_input_files <- function(path, header) {
     # No input file section detected
     return(NULL)
   } else if(length(input_section_start) > 1) {
-    warning("Multiple input file sections detected. None will be reported.", call. = FALSE)
+    cli::cli_warn("Multiple input file sections detected. None will be reported.")
     return(NULL)
   }
 
@@ -422,7 +425,7 @@ parse_header_output_files <- function(path, header) {
     # No output file section detected
     return(NULL)
   } else if(length(output_section_start) > 1) {
-    warning("Multiple output file sections detected. None will be reported.", call. = FALSE)
+    cli::cli_warn("Multiple output file sections detected. None will be reported.")
     return(NULL)
   }
 

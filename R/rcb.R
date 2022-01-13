@@ -36,13 +36,23 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
   # Fail if any files do not exist
   files_exist <- file.exists(files)
   if(any(!files_exist)) {
-    stop("File(s) do not exist: ", paste0(files[!files_exist], collapse = ", "))
+    cli::cli_abort(
+      c(
+        "File(s) do not exist: ",
+        set_all_names(files[!files_exist], "x")
+      )
+    )
   }
 
   # Fail if any files are not R files
   files_exts_r <- tools::file_ext(files) %in% c("r", "R")
   if(any(!files_exts_r)) {
-    stop("File(s) are not R files: ", paste0(files[!files_exts_r], collapse = ", "))
+    cli::cli_abort(
+      c(
+        "File(s) are not R files: ",
+        set_all_names(files[!files_exts_r], "x")
+      )
+    )
   }
 
   files <- normalizePath(files)
@@ -73,7 +83,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
     rstudioapi::jobRunScript(job_file)
 
-    message("Submitted job '", basename(job_file), "'")
+    cli::cli_alert_info("Submitted job '{basename(job_file)}'")
 
     return(invisible(NULL))
   }
@@ -81,7 +91,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
   executed_status <- logical(length(files))
   names(executed_status) <- files
 
-  message("Executing R program(s) in batch mode ...")
+  cli::cli_alert_info("Executing R program(s) in batch mode ...")
 
   # Execute programs
   for(i in seq_along(files)) {
@@ -94,24 +104,26 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
       if(i < length(files)) {
         executed_status[(i + 1):length(files)] <- NA
-        message("Execution of ", f, " failed. No additional programs will be run.")
+        cli::cli_alert_danger("Execution failed for '{f}'. No additional programs will be run.")
       } else {
-        message("Execution of ", f, " failed.")
+        cli::cli_alert_danger("Execution failed for '{f}'")
       }
+      
+      Sys.sleep(3)
 
       if(scanlogs) scanlogs_if_not_empty(files[1:i])
-
+      
       return(executed_status)
     }
 
-    message("Executed '", f, "'")
+    cli::cli_alert_success("Executed '{f}'")
 
   }
 
   Sys.sleep(3)
 
   if(scanlogs) scanlogs_if_not_empty(files[1:i])
-
+  
   return(executed_status)
 
 }

@@ -120,10 +120,7 @@ Redit <- function(...,
   call_file_refresh <- is.null(path) && open && rstudioapi::isAvailable()
 
   if(is.null(path)) {
-    stop(
-      "An R or Rmd file must be open or a path must be specified to use `.Redit()`.",
-      call. = FALSE
-    )
+    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use `.Redit()`.")
   }
 
   path <- normalizePath(file.path(normalizePath(dirname(path), mustWork = FALSE), basename(path)), mustWork = FALSE)
@@ -131,7 +128,7 @@ Redit <- function(...,
   file_ext <- tools::file_ext(path)
 
   if(!(tolower(file_ext) %in% c("r", "rmd", ""))) {
-    try(stop("'", file_ext, "' is not a valid file extension", call. = FALSE))
+    try(cli::cli_abort("'{file_ext}' is not a valid file extension"))
   } else {
 
     # Update files without extension to .R
@@ -147,7 +144,8 @@ Redit <- function(...,
                              backup = backup))
 
     if(!inherits(tried, "try-error")) {
-      message(ifelse(file_existed, "Updated '", "Created '"), path, "'")
+      updated_created <- ifelse(file_existed, "Updated", "Created")
+      cli::cli_alert_success("{updated_created} '{path}'")
 
       if(call_file_refresh) {
         file_refresh()
@@ -200,10 +198,7 @@ make_header <- function(path = NULL,
 
   path <- if(is.null(path)) get_source_file() else path
   if(is.null(path)) {
-    stop(
-      "An R or Rmd file must be open or a path must be specified to use `make_header()`.",
-      call. = FALSE
-    )
+    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use `make_header()`.")
   }
 
   file_ext <- tolower(tools::file_ext(path))
@@ -219,13 +214,13 @@ make_header <- function(path = NULL,
     # Potential warnings upon exit
     on.exit(expr = {
       if(!is.null(version) && !isFALSE(old_header))
-        warning("`version` is ignored since header in '", path, "' already exists.")
+        cli::cli_warn("`version` is ignored since header in '{path}' already exists.")
       if(!is.null(purpose) && !isFALSE(old_header))
-        warning("`purpose` is ignored since header in '", path, "' already exists.")
+        cli::cli_warn("`purpose` is ignored since header in '{path}' already exists.")
       if(!is.null(input_files) && !isFALSE(old_header))
-        warning("`input_files` is ignored since header in '", path, "' already exists.")
+        cli::cli_warn("`input_files` is ignored since header in '{path}' already exists.")
       if(!is.null(output_files) && !isFALSE(old_header))
-        warning("`output_files` is ignored since header in '", path, "' already exists.")
+        cli::cli_warn("`output_files` is ignored since header in '{path}' already exists.")
     },
     add = TRUE)
 
@@ -238,10 +233,11 @@ make_header <- function(path = NULL,
       old_date_user_line_i <- grep(paste0("# (", .days_of_week, ")"), old_header)
 
       if(length(old_date_user_line_i) == 0) {
-        stop(
-          "Header is missing creation/modification history in existing file: '", path, "'",
-          "\n", .try_this_on_header_errors,
-          call. = FALSE
+        cli::cli_abort(
+          c(
+            "Header is missing creation/modification history in existing file: '{path}'",
+            i = "{.try_this_on_header_errors[file_ext]}"
+          )
         )
       }
 
@@ -265,9 +261,9 @@ make_header <- function(path = NULL,
 
         # Issues that can only be resolved by the user
         if(code == "multiple_chunks_named_header") {
-          stop(attr(old_header, "reason"), call. = FALSE)
+          cli::cli_abort(attr(old_header, "reason"))
         } else if(code == "no_end_of_header") {
-          stop(attr(old_header, "reason"), call. = FALSE)
+          cli::cli_abort(attr(old_header, "reason"))
         }
 
         # We can add a header chunk or update an empty header chunk
@@ -283,7 +279,7 @@ make_header <- function(path = NULL,
           lines <- readLines(path)
           yamls <- grep("^---", lines)
           if(length(yamls) < 2) {
-            stop("No YAML found in Rmd file and there is no header chunk.")
+            cli::cli_abort("No YAML found in Rmd file and there is no header chunk.")
           }
           yaml_end <- yamls[[2]]
 
@@ -356,10 +352,7 @@ make_header <- function(path = NULL,
 
         }
 
-        stop(
-          attr(old_header, "reason"),
-          call. = FALSE
-        )
+        cli::cli_abort(attr(old_header, "reason"))
 
       } else if(file_ext == "r") {
 
@@ -376,7 +369,7 @@ make_header <- function(path = NULL,
         # Append `tmp` into `path`
         file.append(file1 = path, file2 = tmp)
 
-        message("Added header to '", path, "'")
+        cli::cli_alert_success("Added header to '{path}'")
 
         # Early return
         return(invisible(NULL))
@@ -491,7 +484,7 @@ clean_version <- function(version) {
 
   clean <- gsub("\\.|\\s", "", version)
   if(!grepl("^\\d{3}$", clean)) {
-    stop("`version` should be `NULL` or an R version number in the form 'N.n.n' or 'Nnn'.")
+    cli::cli_abort("`version` should be `NULL` or an R version number in the form 'N.n.n' or 'Nnn'.")
   }
 
   clean <- switch(clean,
@@ -500,7 +493,7 @@ clean_version <- function(version) {
                   "361" = "R version 3.6.1 (2019-07-05)")
 
   if(is.null(clean)) {
-    stop("R version ", version, " is not supported")
+    cli::cli_abort("R version {version} is not supported")
   }
 
   return(clean)
@@ -528,7 +521,7 @@ get_user_full_name <- function(user = Sys.getenv("USER")) {
                                            stdout = TRUE))
 
   if(length(user_account) == 0) {
-    stop("user not found: '", user, "'")
+    cli::cli_abort("user not found: '{user}'")
   }
 
   # Fifth field is full name

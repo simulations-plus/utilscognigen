@@ -137,10 +137,7 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
       suppressMessages(Redit(to, open = FALSE))
 
-      warning(
-        "`from` did not have a valid header. It was copied with a new header to `to`.",
-        call. = FALSE
-      )
+      cli::cli_warn("`from` did not have a valid header. It was copied with a new header to `to`.")
 
     } else {
 
@@ -159,9 +156,9 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     }
 
     if(file.exists(to)) {
-      message("Created '", to, "'")
+      cli::cli_alert_success("Created '{to}'")
     } else {
-      stop("Failed to create '", to, "'")
+      cli::cli_abort("Failed to create '{to}'")
     }
 
   } else if(file_ext_to == "r") {
@@ -169,16 +166,13 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     writeLines(new_header, to)
 
     if(file.exists(to)) {
-      message("Created '", to, "'")
+      cli::cli_alert_success("Created '{to}'")
     } else {
-      stop("Failed to create '", to, "'")
+      cli::cli_abort("Failed to create '{to}'")
     }
     
     if(isFALSE(old_header)) {
-      warning(
-        "`from` did not have a valid header. It was copied with a new header to `to`.",
-        call. = FALSE
-      )
+      cli::cli_warn("`from` did not have a valid header. It was copied with a new header to `to`.")
     }
 
     # append `from` into `to`
@@ -186,9 +180,9 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
     # Messages use `from_original` for clear representation
     if(appended) {
-      message("Appended '", to, "' with '", from_original, "'")
+      cli::cli_alert_success("Appended '{to}' with '{from_original}'")
     } else {
-      stop("Failed to append '", to, "' with '", from_original, "'")
+      cli::cli_abort("Failed to append '{to}' with '{from_original}'")
     }
 
   }
