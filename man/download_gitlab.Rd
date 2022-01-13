@@ -5,12 +5,13 @@
 \title{Download trees (directories) and blobs (files) from GitLab using the GitLab
 API}
 \usage{
-download_gitlab(url, destfile)
+download_gitlab(url, destfile = NULL)
 }
 \arguments{
 \item{url}{a single web URL pointing to a GitLab resource}
 
-\item{destfile}{either a single non-existing directory or a single file}
+\item{destfile}{either a single non-existing directory or a single file.
+Defaults to the basename of the \code{from} file.}
 }
 \value{
 \code{logical} indicating whether resources were successfully
@@ -20,8 +21,8 @@ download_gitlab(url, destfile)
 }
 \description{
 \code{url} is converted to its GitLab API format. For tree
-input, the first 100 pages are downloaded. For blob input, the blob is
-downloaded. Version 4 of the GitLab API is used.
+  input, the first 100 pages are downloaded. For blob input, the blob is
+  downloaded. Version 4 of the GitLab API is used.
 }
 \examples{
 \dontrun{

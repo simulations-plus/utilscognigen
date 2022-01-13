@@ -2,11 +2,12 @@
 #' API
 #'
 #' @description \code{url} is converted to its GitLab API format. For tree
-#' input, the first 100 pages are downloaded. For blob input, the blob is
-#' downloaded. Version 4 of the GitLab API is used.
+#'   input, the first 100 pages are downloaded. For blob input, the blob is
+#'   downloaded. Version 4 of the GitLab API is used.
 #'
 #' @param url a single web URL pointing to a GitLab resource
-#' @param destfile either a single non-existing directory or a single file
+#' @param destfile either a single non-existing directory or a single file.
+#'   Defaults to the basename of the \code{from} file.
 #'
 #' @return \code{logical} indicating whether resources were successfully
 #'   downloaded. This function does report success even if some resources are
@@ -28,7 +29,17 @@
 #'   "functions"
 #' )
 #' }
-download_gitlab <- function(url, destfile) {
+download_gitlab <- function(url, destfile = NULL) {
+  
+  assertthat::assert_that(
+    is.character("url"),
+    length(url) == 1,
+    msg = "`url` must be a single character web URL"
+  )
+  
+  if(is.null(destfile)) {
+    destfile <- basename(url)
+  }
 
   assertthat::assert_that(
     is.character(destfile),
@@ -70,25 +81,46 @@ download_gitlab <- function(url, destfile) {
     "file_name" %in% names(curl_result),
     msg = "Unexpected structure of curl results"
   )
-
+  
   # Try decoding content
-  content <- try({
-    rawToChar(
-      jsonlite::base64_dec(
-        curl_result$content
-      )
-    )
-  },
-  silent = TRUE)
-
+  content <- try(
+    jsonlite::base64_dec(curl_result$content), 
+    silent = TRUE
+  )
+  
   # Warning and return FALSE if url cannot be decoded
   if(inherits(content, "try-error")) {
     cli::cli_warn("Content of `url` could not be decoded: {url}")
     return(FALSE)
   }
-
-  cat(content, file = destfile)
-
+  
+  # Try converting to raw
+  raw_content <- try(
+    rawToChar(content), 
+    silent = TRUE
+  )
+  
+  # If converting to raw fails, we expect the content to be binary
+  # Try writing decoded content as binary
+  if(inherits(raw_content, "try-error")) {
+    binary_written <- try(
+      writeBin(
+        object = content,
+        con = destfile
+      ),
+      silent = TRUE
+    )
+    
+    if(inherits(binary_written, "try-error")) {
+      cli::cli_warn(
+        "Content of `url` could not be converted to text or saved as binary: {url}"
+      )
+    }
+    
+  } else {
+    cat(raw_content, file = destfile)
+  }
+  
   return(file.exists(destfile))
 
 }
