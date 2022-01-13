@@ -7,9 +7,12 @@ cat(
 
 test_that("Rcopy adds header when no header exists", {
   
-  Rcopy(
-    from = filename_no_header,
-    to = filename_no_header_copy
+  expect_warning(
+    object = Rcopy(
+      from = filename_no_header,
+      to = filename_no_header_copy
+    ),
+    regexp = "did not have a valid header"
   )
   
   # get_header returns FALSE if no header if found
