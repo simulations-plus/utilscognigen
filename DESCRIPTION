@@ -24,4 +24,4 @@ Imports:
     xfun,
     httr,
     jsonlite,
-    cli
+    cli (>= 3.0.1)
