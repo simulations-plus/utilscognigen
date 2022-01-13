@@ -104,19 +104,29 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
       if(i < length(files)) {
         executed_status[(i + 1):length(files)] <- NA
-        cli::cli_alert_danger("Execution failed for '{f}'. No additional programs will be run.")
+        cli::cli_bullets(
+          c(
+            x = "Execution failed for {.file {f}}",
+            `!` = "No additional programs will be run"
+          )
+        )
       } else {
-        cli::cli_alert_danger("Execution failed for '{f}'")
+        cli::cli_alert_danger("Execution failed for {.file {f}}")
       }
       
       Sys.sleep(3)
 
       if(scanlogs) scanlogs_if_not_empty(files[1:i])
       
-      return(executed_status)
+      cli_executed_status <- set_cli_executed_status(executed_status)
+      cli::cli_bullets(cli_executed_status)
+      cli::cat_line()
+      cli_executed_status_key()
+      
+      return(invisible(executed_status))
     }
 
-    cli::cli_alert_success("Executed '{f}'")
+    cli::cli_alert_success("Executed {.file {f}}")
 
   }
 
@@ -124,7 +134,12 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
   if(scanlogs) scanlogs_if_not_empty(files[1:i])
   
-  return(executed_status)
+  cli_executed_status <- set_cli_executed_status(executed_status)
+  cli::cli_bullets(cli_executed_status)
+  cli::cat_line()
+  cli_executed_status_key()
+  
+  return(invisible(executed_status))
 
 }
 
@@ -197,4 +212,37 @@ scanlogs_if_not_empty <- function(...) {
     )
   }
   return(invisible(NULL))
+}
+
+# Set the names for cli executed status
+# x is expected to be a named logical vector that may contain NAs
+# the names of x are filenames
+set_cli_executed_status <- function(x) {
+  lgl <- unname(x)
+  files <- names(x)
+  
+  names(files) <- ifelse(
+    is.na(lgl), "!",
+    ifelse(
+      lgl, "v", 
+      ifelse(
+        !lgl, "x", ""
+      )
+    )
+  )
+  
+  files
+}
+
+cli_executed_status_key <- function() {
+  
+  cli::cat_line("Execution Key:")
+  
+  cli::cli_text(
+    c(
+      "{cli::col_green(cli::symbol$tick)} Executed Successfully",
+      " | {cli::col_red(cli::symbol$cross)} Execution Failed",
+      " | {cli::col_yellow('!')} Execution Skipped"
+    )
+  )
 }
