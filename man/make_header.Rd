@@ -2,8 +2,8 @@
 % Please edit documentation in R/Redit.R
 \name{make_header}
 \alias{make_header}
-\title{Create a file with a header or append a modification history entry to an
-existing file with a header}
+\title{Create a file with a header or append a timestamp entry to an existing file
+with a header}
 \usage{
 make_header(
   path = NULL,
@@ -43,7 +43,7 @@ with a warning for files that already have a header.}
 invisibly returns \code{NULL}
 }
 \description{
-Create a file with a header or append a modification history entry to an
-existing file with a header
+Create a file with a header or append a timestamp entry to an existing file
+with a header
 }
 \keyword{internal}

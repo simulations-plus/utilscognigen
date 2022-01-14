@@ -4,7 +4,7 @@
 \alias{parse_header}
 \alias{parse_header_name}
 \alias{parse_header_all_names}
-\alias{parse_header_history}
+\alias{parse_header_timestamp}
 \alias{parse_header_version}
 \alias{parse_header_copyright}
 \alias{parse_header_purpose}
@@ -19,7 +19,7 @@ parse_header_name(header)
 
 parse_header_all_names(header)
 
-parse_header_history(header)
+parse_header_timestamp(header)
 
 parse_header_version(header)
 

@@ -4,7 +4,7 @@
 \alias{get_header_content}
 \alias{get_header_name}
 \alias{get_header_all_names}
-\alias{get_header_history}
+\alias{get_header_timestamp}
 \alias{get_header_version}
 \alias{get_header_copyright}
 \alias{get_header_purpose}
@@ -16,7 +16,7 @@ get_header_name(path = NULL)
 
 get_header_all_names(path = NULL)
 
-get_header_history(path = NULL)
+get_header_timestamp(path = NULL)
 
 get_header_version(path = NULL)
 

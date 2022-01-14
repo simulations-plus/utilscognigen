@@ -52,12 +52,12 @@ test_that("Rcopy updates existing header", {
   )
   
   expect_length(
-    object = get_header_history(filename_header),
+    object = get_header_timestamp(filename_header),
     n = 1
   )
   
   expect_length(
-    object = get_header_history(filename_header_copy),
+    object = get_header_timestamp(filename_header_copy),
     n = 2
   )
   
@@ -67,7 +67,7 @@ test_that("Rcopy updates existing header", {
   )
   
   expect_is(
-    object = get_header_history(filename_header_copy),
+    object = get_header_timestamp(filename_header_copy),
     class = "character"
   )
   

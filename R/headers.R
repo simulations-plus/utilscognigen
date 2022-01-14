@@ -37,8 +37,8 @@ get_header_all_names <- function(path = NULL) {
 
 #' @rdname get_header_content
 #' @export
-get_header_history <- function(path = NULL) {
-  files <- unname(unlist(parse_header(path, "history")))
+get_header_timestamp <- function(path = NULL) {
+  files <- unname(unlist(parse_header(path, "timestamp")))
   return(files)
 }
 
@@ -186,7 +186,7 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
 
 .valid_header_sections <- c("name",
                             "all_names",
-                            "history",
+                            "timestamp",
                             "version",
                             "copyright",
                             "purpose",
@@ -230,7 +230,7 @@ parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
   # Replace each section with its parsed value
   if("name" %in% sections) list_of_sections[["name"]] <- parse_header_name(header)
   if("all_names" %in% sections) list_of_sections[["all_names"]] <- parse_header_all_names(header)
-  if("history" %in% sections) list_of_sections[["history"]] <- parse_header_history(header)
+  if("timestamp" %in% sections) list_of_sections[["timestamp"]] <- parse_header_timestamp(header)
   if("version" %in% sections) list_of_sections[["version"]] <- parse_header_version(header)
   if("copyright" %in% sections) list_of_sections[["copyright"]] <- parse_header_copyright(header)
   if("purpose" %in% sections) list_of_sections[["purpose"]] <- parse_header_purpose(header)
@@ -282,13 +282,13 @@ parse_header_all_names <- function(header) {
 
 
 #' @rdname parse_header
-parse_header_history <- function(header) {
+parse_header_timestamp <- function(header) {
 
-  # History must start with a day of the week abbreviation
-  history <- header[grepl(paste0("^#\\s?(", .days_of_week, ")"), header, ignore.case = TRUE)]
-  if(length(history)) {
-    history <- trimws(gsub("#", "", history))
-    return(history)
+  # timestamp must start with a day of the week abbreviation
+  timestamp <- header[grepl(paste0("^#\\s?(", .days_of_week, ")"), header, ignore.case = TRUE)]
+  if(length(timestamp)) {
+    timestamp <- trimws(gsub("#", "", timestamp))
+    return(timestamp)
   } else {
     return(NULL)
   }

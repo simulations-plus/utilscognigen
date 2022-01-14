@@ -24,7 +24,7 @@
 #' @details
 #' Cognigen's R program header documents key elements of programs including:
 #' * Name: The full path to the program on Cognigen's file system.
-#' * History: The timestamp and programmer of key updates to the program.
+#' * Timestamp: The timestamp and programmer of key updates to the program.
 #' * Copyright: Cognigen's standard Copyright language.
 #' * Purpose: What the program is designed to do.
 #' * Input Files: Files read by the program.
@@ -53,7 +53,7 @@
 #' # Update these programs and create a backup
 #' Redit("file1.R", "file2.R", backup = TRUE)
 #'
-#' # Update the history of the open R program if it has a valid header.
+#' # Update the timestamp of the open R program if it has a valid header.
 #' # If there is no valid header, either a header will be added or the error
 #' # will try to help resolve the issue
 #' Redit()
@@ -181,8 +181,8 @@ Redit <- function(...,
 
 .section_break <- paste0(rep("#", .split_length), collapse = "")
 
-#' Create a file with a header or append a modification history entry to an
-#' existing file with a header
+#' Create a file with a header or append a timestamp entry to an existing file
+#' with a header
 #'
 #' @inheritParams Redit
 #'
@@ -235,7 +235,7 @@ make_header <- function(path = NULL,
       if(length(old_date_user_line_i) == 0) {
         cli::cli_abort(
           c(
-            "Header is missing creation/modification history in existing file: '{path}'",
+            "Header is missing creation/modification timestamp in existing file: '{path}'",
             i = "{.try_this_on_header_errors[file_ext]}"
           )
         )

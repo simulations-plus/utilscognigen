@@ -17,7 +17,7 @@ test_that("header retrievers work", {
   )
   
   expect_is(
-    object = get_header_history(filename),
+    object = get_header_timestamp(filename),
     class = "character"
   )
   

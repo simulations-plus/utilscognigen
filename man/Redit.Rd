@@ -42,7 +42,7 @@ Create, update, and open R programs with QMS approved headers.
 Cognigen's R program header documents key elements of programs including:
 \itemize{
 \item Name: The full path to the program on Cognigen's file system.
-\item History: The timestamp and programmer of key updates to the program.
+\item Timestamp: The timestamp and programmer of key updates to the program.
 \item Copyright: Cognigen's standard Copyright language.
 \item Purpose: What the program is designed to do.
 \item Input Files: Files read by the program.
@@ -72,7 +72,7 @@ Redit("file1.R", "file2.R")
 # Update these programs and create a backup
 Redit("file1.R", "file2.R", backup = TRUE)
 
-# Update the history of the open R program if it has a valid header.
+# Update the timestamp of the open R program if it has a valid header.
 # If there is no valid header, either a header will be added or the error
 # will try to help resolve the issue
 Redit()
