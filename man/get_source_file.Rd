@@ -11,6 +11,6 @@ returns the path of the source editor; fails if there is no file
   active in the source editor.
 }
 \description{
-Calls \code{rstudioapi::}\code{\link[rstudioapi]{getSourceEditorContext}} to
-obtain the source context.
+Calls \code{\link[rstudioapi]{getSourceEditorContext}} to obtain the source
+context.
 }

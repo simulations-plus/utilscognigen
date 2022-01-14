@@ -9,8 +9,8 @@
 
 #' Get content from an R script header
 #'
-#' For `get_header_input_files` and `get_header_output files`, file paths are
-#' split by new lines, commas, and semicolons.
+#' For \code{get_header_input_files} and \code{get_header_output_files}, file
+#' paths are split by new lines, commas, and semicolons.
 #'
 #' @param path a file path to an R script. Defaults to the path of the source
 #'   editor context.
