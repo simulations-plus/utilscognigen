@@ -45,3 +45,4 @@ file_copy("old-dir/file.R", "new-dir/file.R", args = NULL)
 file_copy("old-dir/file.R", "new-dir/file.R", args = c("-b", "-n", "-p"))
 }
 }
+\keyword{internal}

@@ -15,7 +15,7 @@
 #'
 #' @return returns a \code{logical} vector indicating which copy operations
 #'   succeeded for each of the files attempted.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
