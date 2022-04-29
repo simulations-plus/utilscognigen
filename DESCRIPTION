@@ -15,7 +15,10 @@ RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Suggests: 
     knitr,
-    testthat
+    testthat,
+    haven,
+    openxlsx,
+    readxl
 Imports: 
     assertthat,
     callr,
