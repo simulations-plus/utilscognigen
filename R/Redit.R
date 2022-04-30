@@ -82,7 +82,12 @@ Redit <- function(...,
                   open = rstudioapi::isAvailable()) {
 
   paths <- unlist(list(...))
-  paths <- if(length(paths) == 0) get_source_file() else paths
+  if (length(paths) == 0){
+    # Redit is called from interactive session
+    paths <- get_source_file()
+    # save current document from interactive session
+    rstudioapi::documentSave()
+  } 
 
   invisible(lapply(paths, function(path) {
     .Redit(

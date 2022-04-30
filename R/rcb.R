@@ -31,7 +31,12 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
   files <- c(...)
 
-  files <- if(is.null(files)) get_source_file() else files
+  if (is.null(files)){
+    # rcb is called from interactive session
+    files <- get_source_file()
+    # save current document from interactive session
+    rstudioapi::documentSave()
+  }
 
   # Fail if any files do not exist
   files_exist <- file.exists(files)

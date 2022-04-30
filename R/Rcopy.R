@@ -11,7 +11,8 @@
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.
 #' @param open \code{logical} indicating whether to open files in RStudio
-#'
+#' @param save \code{logical} indicating whether to save files prior to copy
+#' 
 #' @return invisibly returns \code{NULL}
 #' @export
 #'
@@ -41,7 +42,7 @@
 #'
 #' @seealso \code{?interactivecog::Rcopy_shared_code} for simpler copying from
 #'   the shared-code repository; \code{\link{Redit}} for creating R programs
-Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable()) {
+Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable(), save = FALSE) {
 
   assertthat::assert_that(
     length(from) == 1 || is.null(from),
@@ -49,7 +50,12 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     msg = "`from` and `to` must have length 1"
     )
 
-  from <- if(is.null(from)) get_source_file() else from
+  if (is.null(from)){
+    # Rcopy is called from interactive session
+    from <- get_source_file()
+    # save current document from interactive session
+    if (is.logical(save) && save[1] == TRUE) rstudioapi::documentSave()
+  } 
 
   # to is the basename of from by default
   to <- if (is.null(to))

@@ -22,7 +22,12 @@
 #' }
 render <- function(path = NULL, open = rstudioapi::isAvailable()) {
 
-  path <- if(is.null(path)) get_source_file() else path
+  if (is.null(path)){
+    # render is called from interactive session
+    path <- get_source_file()
+    # save current document from interactive session
+    rstudioapi::documentSave()
+  }
 
   assertthat::assert_that(
     file.exists(path),
