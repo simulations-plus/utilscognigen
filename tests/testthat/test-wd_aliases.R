@@ -11,7 +11,7 @@ test_that(
 setwd(olddir)
 
 test_that(
-  'pwd return current directory',
+  'pwd returns current directory',
   {
     expect_equal(pwd(), getwd())
   }

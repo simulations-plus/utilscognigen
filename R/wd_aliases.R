@@ -14,7 +14,7 @@ NULL
 cd <- function(dir) {
   
   if ( missing(dir) ){
-    dir <- dirname(rstudioapi::documentPath())
+    dir <- dirname( rstudioapi::documentPath() )
   }
   base::setwd(dir)
 }
