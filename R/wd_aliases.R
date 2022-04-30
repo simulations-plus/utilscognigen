@@ -12,6 +12,10 @@ NULL
 #' @rdname wd_aliases
 #' @export
 cd <- function(dir) {
+  
+  if ( missing(dir) ){
+    dir <- dirname(rstudioapi::documentPath())
+  }
   base::setwd(dir)
 }
 
