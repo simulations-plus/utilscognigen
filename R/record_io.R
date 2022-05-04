@@ -60,7 +60,7 @@
 #' )
 #' 
 #' record_output(
-#'   png('Rplots_%03d.png)
+#'   png('Rplots_%03d.png')
 #' )
 #' plot(1) ; plot(2)
 #' dev.off()
