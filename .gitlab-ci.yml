@@ -1,4 +1,4 @@
-image: containers.cognigencorp.com/r/361:latest
+image: containers.cognigencorp.com/r/413:latest
 
 pages:
   script:
