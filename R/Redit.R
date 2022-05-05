@@ -495,7 +495,8 @@ clean_version <- function(version) {
   clean <- switch(clean,
                   "343" = "R version 3.4.3 (2017-11-30)",
                   "351" = "R version 3.5.1 (2018-07-02)",
-                  "361" = "R version 3.6.1 (2019-07-05)")
+                  "361" = "R version 3.6.1 (2019-07-05)",
+                  "413" = "R version 4.1.3 (2022-03-10)")
 
   if(is.null(clean)) {
     cli::cli_abort("R version {version} is not supported")
