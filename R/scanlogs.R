@@ -32,7 +32,7 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
   ext[ext %in% c("sas", "SAS", "lst")] <- "log"
   ext <- unique(ext)
   if(!all(ext %in% c("Rout", "log"))) {
-    cli::cli_abort("Only Rout and log files are supported for `dir_scanlogs()`")
+    cli::cli_abort("Only Rout and log files are supported for {.fn dir_scanlogs}")
   }
 
   log_paths <- list.files(path, pattern = paste0(".", ext, "$", collapse = "|"), full.names = TRUE)
@@ -42,7 +42,7 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
   }
 
   if(length(log_paths) == 0) {
-    cli::cli_alert_danger("'{path}' contains no matching {paste0(ext, collapse = ' or ')} files")
+    cli::cli_alert_danger("{.file {path}} contains no matching {paste0(ext, collapse = ' or ')} files")
     return(invisible(NULL))
   } else if(length(log_paths) == 1) {
     results <- list(scanlogs(log_paths))
@@ -116,9 +116,9 @@ scanlogs_single <- function(path = NULL) {
 
   path <- if(is.null(path)) get_source_file() else path
   if(is.null(path)) {
-    cli::cli_abort("A script must be open or a path must be specified to use `scanlogs()`.")
+    cli::cli_abort("A script must be open or a path must be specified to use {.fn scanlogs}.")
   } else if(!file.exists(path)) {
-    cli::cli_abort("{path} does not exist.")
+    cli::cli_abort("{.file {path}} does not exist.")
   }
   extension <- tools::file_ext(path)
   for_method <- structure(path, class = extension)
@@ -144,8 +144,8 @@ scanlogs_single.R <- function(path = NULL) {
   if(!file.exists(log_name)) {
     cli::cli_abort(
       c(
-        "{log_name} has not been created.",
-        i = "Generate a log file with `rcb()` from the R console or `rcb {basename(path)}` from the Terminal within the script directory."
+        "{.file {log_name}} has not been created.",
+        i = "Generate a log file with {.fn rcb} from the R console or {.code rcb {basename(path)}} from the Terminal within the script directory."
       )
     )
   }
@@ -162,8 +162,8 @@ scanlogs_single.Rmd <- function(path = NULL) {
   if(!file.exists(log_name)) {
     cli::cli_abort(
       c(
-        "{log_name} has not been created.",
-        i = "Generate a log file with `render()` from the R console."
+        "{.file {log_name}} has not been created.",
+        i = "Generate a log file with {.fn render} from the R console."
       )
     )
   }

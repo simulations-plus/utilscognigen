@@ -90,7 +90,7 @@ download_gitlab <- function(url, destfile = NULL) {
   
   # Warning and return FALSE if url cannot be decoded
   if(inherits(content, "try-error")) {
-    cli::cli_warn("Content of `url` could not be decoded: {url}")
+    cli::cli_warn("Content of {.code url} could not be decoded: {.url {url}}")
     return(FALSE)
   }
   
@@ -113,7 +113,7 @@ download_gitlab <- function(url, destfile = NULL) {
     
     if(inherits(binary_written, "try-error")) {
       cli::cli_warn(
-        "Content of `url` could not be converted to text or saved as binary: {url}"
+        "Content of {.code url} could not be converted to text or saved as binary: {.url {url}}"
       )
     }
     
@@ -411,7 +411,7 @@ curl_and_parse <- function(url) {
   # Throw warning for message in curl_result
   # a 404 error might be present if there is a bug in the api formatting
   if("message" %in% names(curl_result)) {
-    cli::cli_warn("{curl_result$message}: {url}")
+    cli::cli_warn("{curl_result$message}: {.url {url}}")
   }
 
   return(curl_result)

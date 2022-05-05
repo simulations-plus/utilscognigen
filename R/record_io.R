@@ -228,19 +228,19 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
   
   if ( class(io) == 'try-error' ){
     cli::cli_alert_warning(
-      'Invalid {type} information: {file1}'
+      'Invalid {type} information: {.file {file1}}'
     )
   } else {
     assign(x = 'record_files', value = io, envir = ioenv)
     if ( nofile ){
       cli::cli_alert_warning(
-        'First argument of inner call recorded: {file1}'
+        'First argument of inner call recorded: {.file {file1}}'
       )
     } else {
       if ( !quiet ){
         file1 <- suppressWarnings(normalizePath(file1))
         cli::cli_alert_info(
-          '{snakecase::to_title_case(type)} file recorded: {file1}'
+          '{snakecase::to_title_case(type)} file recorded: {.file {file1}}'
         )
       }
     }
@@ -263,14 +263,14 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
     
     if ( class(io) == 'try-error' ){
       cli::cli_alert_warning(
-        'Invalid output information: {file2}'
+        'Invalid output information: {.file {file2}}'
       )
     } else {
       assign(x = 'record_files', value = io, envir = ioenv)
       if ( !quiet ){
         file2 <- suppressWarnings(normalizePath(file2))
         cli::cli_alert_info(
-          'Output file(s) recorded: {file2}'
+          'Output file(s) recorded: {.file {file2}}'
         )
       }
     }
@@ -320,7 +320,7 @@ recorded_io <- function(){
         )
       } else {
         cli::cli_alert_warning(
-          sprintf('Invalid file: %s', x[3])
+          'Invalid file: {x[3]}'
         )
         NA
       }

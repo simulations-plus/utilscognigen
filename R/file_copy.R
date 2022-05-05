@@ -53,13 +53,13 @@ file_copy <- function(from, to, args = c("-p", "-r")) {
   if(length(from) == 1) {
 
     # Copy a single file to a single file or directory
-    if(length(to) > 1) cli::cli_abort("More `from` elements than `to`")
+    if(length(to) > 1) cli::cli_abort("More {.code from} elements than {.code to}")
     return(cp(from, to, args))
 
   } else if(length(from) > 1 && length(to) == 1) {
 
     # Copy multiple files to a single directory
-    if(!dir.exists(to)) cli::cli_abort("Multiple `from` provided with only one `to`, but `to` is not an existing directory.")
+    if(!dir.exists(to)) cli::cli_abort("Multiple {.code from} provided with only one {.code to}, but {.code to} is not an existing directory.")
     return(vapply(
       X = from,
       FUN = cp,
@@ -72,7 +72,7 @@ file_copy <- function(from, to, args = c("-p", "-r")) {
   } else if(length(from) > 1 && length(to) > 1) {
 
     # Copy multiple files to multiple files
-    if(length(from) != length(to)) cli::cli_abort("Multiple `from` and `to` provided, but they are not of equal length.")
+    if(length(from) != length(to)) cli::cli_abort("Multiple {.code from} and {.code to} provided, but they are not of equal length.")
     return(mapply(
       FUN = cp,
       from = from,
@@ -101,7 +101,7 @@ file_copy <- function(from, to, args = c("-p", "-r")) {
 #' @keywords internal
 cp <- function(from, to, args = NULL) {
   if(!file.exists(from)) {
-    cli::cli_abort("File does not exist: '{from}'")
+    cli::cli_abort("File does not exist: {.file {from}}")
   }
 
   res <- system2("cp", args = c(from, to, args))

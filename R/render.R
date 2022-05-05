@@ -91,9 +91,9 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
     if(file.exists(output)) {
       opened <- file_open(output)
       if(isTRUE(opened)) {
-        cli::cli_alert_success("Opened output file: '{output}'")
+        cli::cli_alert_success("Opened output file: {.file {output}}")
       } else {
-        cli::cli_alert_danger("Could not open output file: '{output}'")
+        cli::cli_alert_danger("Could not open output file: {.file {output}}")
       }
     }
   }

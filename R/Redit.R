@@ -125,7 +125,7 @@ Redit <- function(...,
   call_file_refresh <- is.null(path) && open && rstudioapi::isAvailable()
 
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use `.Redit()`.")
+    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn .Redit}.")
   }
 
   path <- normalizePath(file.path(normalizePath(dirname(path), mustWork = FALSE), basename(path)), mustWork = FALSE)
@@ -150,7 +150,7 @@ Redit <- function(...,
 
     if(!inherits(tried, "try-error")) {
       updated_created <- ifelse(file_existed, "Updated", "Created")
-      cli::cli_alert_success("{updated_created} '{path}'")
+      cli::cli_alert_success("{updated_created} {.file {path}}")
 
       if(call_file_refresh) {
         file_refresh()
@@ -203,7 +203,7 @@ make_header <- function(path = NULL,
 
   path <- if(is.null(path)) get_source_file() else path
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use `make_header()`.")
+    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.code make_header}.")
   }
 
   file_ext <- tolower(tools::file_ext(path))
@@ -219,13 +219,13 @@ make_header <- function(path = NULL,
     # Potential warnings upon exit
     on.exit(expr = {
       if(!is.null(version) && !isFALSE(old_header))
-        cli::cli_warn("`version` is ignored since header in '{path}' already exists.")
+        cli::cli_warn("{.code version} is ignored since header in {.file {path}} already exists.")
       if(!is.null(purpose) && !isFALSE(old_header))
-        cli::cli_warn("`purpose` is ignored since header in '{path}' already exists.")
+        cli::cli_warn("{.code purpose} is ignored since header in {.file {path}} already exists.")
       if(!is.null(input_files) && !isFALSE(old_header))
-        cli::cli_warn("`input_files` is ignored since header in '{path}' already exists.")
+        cli::cli_warn("{.code input_files} is ignored since header in {.file {path}} already exists.")
       if(!is.null(output_files) && !isFALSE(old_header))
-        cli::cli_warn("`output_files` is ignored since header in '{path}' already exists.")
+        cli::cli_warn("{.code output_files} is ignored since header in {.file {path}} already exists.")
     },
     add = TRUE)
 
@@ -240,7 +240,7 @@ make_header <- function(path = NULL,
       if(length(old_date_user_line_i) == 0) {
         cli::cli_abort(
           c(
-            "Header is missing creation/modification timestamp in existing file: '{path}'",
+            "Header is missing creation/modification timestamp in existing file: {.file {path}}",
             i = "{.try_this_on_header_errors[file_ext]}"
           )
         )
@@ -374,7 +374,7 @@ make_header <- function(path = NULL,
         # Append `tmp` into `path`
         file.append(file1 = path, file2 = tmp)
 
-        cli::cli_alert_success("Added header to '{path}'")
+        cli::cli_alert_success("Added header to {.file {path}}")
 
         # Early return
         return(invisible(NULL))
@@ -489,7 +489,7 @@ clean_version <- function(version) {
 
   clean <- gsub("\\.|\\s", "", version)
   if(!grepl("^\\d{3}$", clean)) {
-    cli::cli_abort("`version` should be `NULL` or an R version number in the form 'N.n.n' or 'Nnn'.")
+    cli::cli_abort("{.code version} should be {.code NULL} or an R version number in the form 'N.n.n' or 'Nnn'.")
   }
 
   clean <- switch(clean,
@@ -499,7 +499,7 @@ clean_version <- function(version) {
                   "413" = "R version 4.1.3 (2022-03-10)")
 
   if(is.null(clean)) {
-    cli::cli_abort("R version {version} is not supported")
+    cli::cli_abort("R version {.version {version}} is not supported")
   }
 
   return(clean)
