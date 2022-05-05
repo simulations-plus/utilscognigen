@@ -4,13 +4,15 @@
 \alias{render}
 \title{Render an R Markdown document and open the output}
 \usage{
-render(path = NULL, open = rstudioapi::isAvailable())
+render(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE)
 }
 \arguments{
 \item{path}{file path of R Markdown document. Defaults to the path of the
 source editor context.}
 
 \item{open}{\code{logical} indicating whether to open the output file}
+
+\item{as_job}{\code{logical} indicating whether to execute as an RStudio job.}
 }
 \value{
 \code{logical} indicating whether the document was successfully

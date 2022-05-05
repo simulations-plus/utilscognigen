@@ -6,14 +6,20 @@
 \alias{pwd}
 \title{Change or print working directory}
 \usage{
-cd(dir)
+cd(dir, focus = FALSE)
 
 pwd()
 }
 \arguments{
 \item{dir}{A character string: \link[base]{tilde expansion} will be done.}
+
+\item{focus}{\code{logical} indicating whether to show the working directory
+in the RStudio Files pane}
 }
 \description{
 These are wrappers around \code{\link[base]{setwd}} and
 \code{\link[base]{getwd}}.
+
+\code{cd()}, when called without any arguments, sets the working directory
+to the directory of the source file.
 }

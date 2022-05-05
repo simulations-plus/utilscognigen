@@ -33,7 +33,7 @@ file_open <- function(..., no_copies = FALSE) {
 .file_open <- function(path, no_copies = FALSE) {
 
   if(!file.exists(path)) {
-    cli::cli_alert_danger("File not found: '{path}'")
+    cli::cli_alert_danger("File not found: {.file {path}}")
     return(FALSE)
   }
 
@@ -45,7 +45,7 @@ file_open <- function(..., no_copies = FALSE) {
     )
 
   if(dir.exists(path)) {
-    cli::cli_alert_danger("File is a directory: '{path}'")
+    cli::cli_alert_danger("File is a directory: {.file {path}}")
     return(FALSE)
   }
 
@@ -73,13 +73,13 @@ file_open <- function(..., no_copies = FALSE) {
                           rstudioapi::navigateToFile)
 
   if(no_copies && identical(open_function, file.show)) {
-    cli::cli_alert_danger("Cannot open an editable version. Printing Windows path: '{path_to_windows(path)}'")
+    cli::cli_alert_danger("Cannot open an editable version. Printing Windows path: {.file {path_to_windows(path)}}")
     return(FALSE)
   }
 
   # Check if file is binary and extension is not expected
   if(is_binary(path) && identical(open_function, rstudioapi::navigateToFile)) {
-    cli::cli_alert_danger("File is binary and cannot be opened: '{path}'")
+    cli::cli_alert_danger("File is binary and cannot be opened: {.file {path}}")
     return(FALSE)
   }
 

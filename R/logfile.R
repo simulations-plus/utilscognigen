@@ -44,8 +44,8 @@ logfile_R <- function(path) {
   if(!file.exists(log_name)) {
     cli::cli_abort(
       c(
-        "{log_name} has not been created.",
-        i = "Generate a log file with `rcb()` from the R console or `rcb {basename(path)}` from the Terminal within the script directory."
+        "{.file {log_name}} has not been created.",
+        i = "Generate a log file with {.fn rcb} from the R console or {.code rcb {basename(path)}} from the Terminal within the script directory."
       )
     )
   }
@@ -58,8 +58,8 @@ logfile_r <- function(path) {
   if(!file.exists(log_name)) {
     cli::cli_abort(
       c(
-        "{log_name} has not been created.",
-        i = "Generate a log file with `rcb()` from the R console or `rcb {basename(path)}` from the Terminal within the script directory."
+        "{.file {log_name}} has not been created.",
+        i = "Generate a log file with {.fn rcb} from the R console or {.code rcb {basename(path)}} from the Terminal within the script directory."
       )
     )
   }
@@ -72,8 +72,8 @@ logfile_Rmd <- function(path) {
   if(!file.exists(log_name)) {
     cli::cli_abort(
       c(
-        "{log_name} has not been created.",
-        i = "Generate a log file with `render()` from the R console."
+        "{.file {log_name}} has not been created.",
+        i = "Generate a log file with {.fn render} from the R console."
       )
     )
   }
@@ -87,8 +87,8 @@ logfile_sas <- function(path) {
   if(!log_exists[1]) {
     cli::cli_abort(
       c(
-        "{log_name[1]} has not been created.",
-        i = "Generate a log file with `sas94 +we {basename(path)}` from the Terminal within the script directory."
+        "{.file {log_name[1]}} has not been created.",
+        i = "Generate a log file with {.code sas94 +we {basename(path)}} from the Terminal within the script directory."
       )
     )
   }
@@ -102,7 +102,7 @@ logfile_tex <- function(path) {
   if(!file.exists(log_name)) {
     cli::cli_abort(
       c(
-        "{log_name} has not been created."
+        "{.file {log_name}} has not been created."
       )
     )
   }

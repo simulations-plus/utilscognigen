@@ -17,10 +17,11 @@
 #' @param normalize \code{logical} indicating whether to normalize the file
 #'   paths. Ignored on platforms other than the desired OS. When \code{TRUE},
 #'   files that do not exist result in \code{NA}.
-#' @param to which OS representation to match. Either 'unix' or 'windows'.
 #'
 #' @return \code{character} vector with length of \code{path} containing the
 #'   converted paths
+#'
+#' @name path_to_
 #'
 #' @examples
 #' \dontrun{
@@ -36,40 +37,16 @@
 #' # Get the Windows representation of Unix paths, checking for their existence (if using Windows)
 #' path_to_windows(c("/doc/client/drug", "/doc/client2/drug"), normalize = TRUE)
 #' }
-convert_path <- function(path = NULL, ask = FALSE, normalize = TRUE, to = "unix") {
+NULL
+#> NULL
 
-  # Ask for input. Designed to enter paths containing single backslashes
-  if(ask) {
-    path <- readline("Enter paths: ")
-  }
-
-  path <- if(is.null(path)) get_source_file() else path
-  path <- clean_path(path)
-
-  # Normalize early if normalize is requested on a different OS
-  if(normalize && .Platform$OS.type != to) {
-    path <- normalizePath(path, mustWork = FALSE)
-  }
-
-  if(to == "unix") {
-    path <- make_unix_replacements(path = path, normalize = normalize)
-  } else if(to == "windows") {
-    path <- make_windows_replacements(path = path, normalize = normalize)
-  }
-
-  return(path)
-
-}
-
-
-
-#' @rdname convert_path
+#' @rdname path_to_
 #' @export
 path_to_unix <- function(path = NULL, ask = FALSE, normalize = TRUE) {
   return(convert_path(path, ask, normalize, to = "unix"))
 }
 
-#' @rdname convert_path
+#' @rdname path_to_
 #' @export
 path_to_windows <- function(path = NULL, ask = FALSE, normalize = TRUE) {
   return(convert_path(path, ask, normalize, to = "windows"))
@@ -122,6 +99,40 @@ toggle_path_selection <- function() {
 
 # Helpers -----------------------------------------------------------------
 
+#' Facilitator for \code{path_to_unix} and \code{path_to_windows}
+#' 
+#' @inheritParams path_to_unix
+#' @param to which OS representation to match. Either 'unix' or 'windows'.
+#' 
+#' @return \code{character} vector with length of \code{path} containing the
+#'   converted paths
+#'
+#' @keywords internal
+convert_path <- function(path = NULL, ask = FALSE, normalize = TRUE, to = "unix") {
+  
+  # Ask for input. Designed to enter paths containing single backslashes
+  if(ask) {
+    path <- readline("Enter paths: ")
+  }
+  
+  path <- if(is.null(path)) get_source_file() else path
+  path <- clean_path(path)
+  
+  # Normalize early if normalize is requested on a different OS
+  if(normalize && .Platform$OS.type != to) {
+    path <- normalizePath(path, mustWork = FALSE)
+  }
+  
+  if(to == "unix") {
+    path <- make_unix_replacements(path = path, normalize = normalize)
+  } else if(to == "windows") {
+    path <- make_windows_replacements(path = path, normalize = normalize)
+  }
+  
+  return(path)
+  
+}
+
 
 #' Clean file paths
 #'
@@ -133,9 +144,9 @@ toggle_path_selection <- function() {
 #' @return \code{character} vector of cleaned file paths
 #' @keywords internal
 clean_path <- function(path) {
-
+  
   assertthat::assert_that(is.character(path))
-
+  
   path <- gsub('"', "", path)
   path <- gsub("'", "", path)
   path <- unlist(strsplit(path, ","))
@@ -143,7 +154,7 @@ clean_path <- function(path) {
   path <- gsub("\\\\", "/", path)
   path <- gsub("/+", "/", path)
   path <- trimws(path)
-
+  
   return(path)
 }
 
@@ -156,21 +167,21 @@ clean_path <- function(path) {
 #'   converted paths
 #' @keywords internal
 make_unix_replacements <- function(path, normalize) {
-
+  
   # Replace Windows-specific path representations with their Unix equivalent
   path <- gsub("^~", paste0("/home/", Sys.info()[["user"]]), path)
   path <- gsub("^H:", paste0("/home/", Sys.info()[["user"]]), path, ignore.case = TRUE)
   path <- gsub("^I:", "/home", path, ignore.case = TRUE)
   path <- gsub("^L:", "/cognigen", path, ignore.case = TRUE)
   path <- gsub("^M:", "/doc", path, ignore.case = TRUE)
-
+  
   # Catch any C: paths
   c_drive <- grepl("^C:", path, ignore.case = TRUE)
   if(any(c_drive)) {
     cli::cli_warn("There is no equivalent to the C drive on Unix")
     path[c_drive] <- NA_character_
   }
-
+  
   # Normalize paths if requested and OS is unix
   # Warnings are thrown if the file does not exist
   if(normalize && .Platform$OS.type == "unix") {
@@ -181,17 +192,17 @@ make_unix_replacements <- function(path, normalize) {
                    },
                    FUN.VALUE = character(1),
                    USE.NAMES = FALSE)
-
+    
     dne <- startsWith(path, "Error in normalizePath")
-
+    
     if(any(dne)) {
       cli::cli_warn("NA results do not exist")
       path[dne] <- NA
     }
   }
-
+  
   return(path)
-
+  
 }
 
 
@@ -203,7 +214,7 @@ make_unix_replacements <- function(path, normalize) {
 #'   converted paths
 #' @keywords internal
 make_windows_replacements <- function(path, normalize) {
-
+  
   # Replace Unix-specific path representations with their Windows equivalent
   path <- gsub("^~", "H:", path)
   path <- gsub(paste0("^/home/", Sys.info()[["user"]]), "H:", path, ignore.case = TRUE)
@@ -213,14 +224,14 @@ make_windows_replacements <- function(path, normalize) {
   path <- gsub("^/doc", "M:", path, ignore.case = TRUE)
   path <- gsub("^/misc/doc", "M:", path, ignore.case = TRUE)
   path <- gsub("^/misc", "M:", path, ignore.case = TRUE)
-
+  
   # Catch any directories that don't exist on Windows
   dne_paths <- grepl("^/", path)
   if(any(dne_paths)) {
     cli::cli_warn("There are only Windows equivalents for '~', '/cognigen', '/doc', '/home', '/misc'")
     path[dne_paths] <- NA_character_
   }
-
+  
   # Normalize paths if requested and OS is Windows
   # Warnings are thrown if the file does not exist
   if(normalize && .Platform$OS.type == "windows") {
@@ -231,15 +242,15 @@ make_windows_replacements <- function(path, normalize) {
                    },
                    FUN.VALUE = character(1),
                    USE.NAMES = FALSE)
-
+    
     dne <- startsWith(path, "Error in normalizePath")
-
+    
     if(any(dne)) {
       cli::cli_warn("NA results do not exist")
       path[dne] <- NA
     }
   }
-
+  
   return(path)
-
+  
 }

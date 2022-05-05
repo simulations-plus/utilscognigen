@@ -11,6 +11,7 @@
 #' @param path file path of R Markdown document. Defaults to the path of the
 #'   source editor context.
 #' @param open \code{logical} indicating whether to open the output file
+#' @inheritParams rcb
 #'
 #' @return \code{logical} indicating whether the document was successfully
 #'   rendered.
@@ -20,9 +21,14 @@
 #' \dontrun{
 #' render("markdown_doc.Rmd")
 #' }
-render <- function(path = NULL, open = rstudioapi::isAvailable()) {
+render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE) {
 
-  path <- if(is.null(path)) get_source_file() else path
+  if (is.null(path)){
+    # render is called from interactive session
+    path <- get_source_file()
+    # save current document from interactive session
+    rstudioapi::documentSave()
+  }
 
   assertthat::assert_that(
     file.exists(path),
@@ -65,7 +71,10 @@ render <- function(path = NULL, open = rstudioapi::isAvailable()) {
 
   }
 
-  execution_status <- unname(rcb(r_path))
+  execution_status <- unname(rcb(
+    r_path, 
+    as_job = as_job
+  ))
 
   if(!execution_status) {
     return(FALSE)
@@ -82,9 +91,9 @@ render <- function(path = NULL, open = rstudioapi::isAvailable()) {
     if(file.exists(output)) {
       opened <- file_open(output)
       if(isTRUE(opened)) {
-        cli::cli_alert_success("Opened output file: '{output}'")
+        cli::cli_alert_success("Opened output file: {.file {output}}")
       } else {
-        cli::cli_alert_danger("Could not open output file: '{output}'")
+        cli::cli_alert_danger("Could not open output file: {.file {output}}")
       }
     }
   }

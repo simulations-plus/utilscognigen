@@ -4,7 +4,13 @@
 \alias{Rcopy}
 \title{Copy and open R and Rmd files with QMS approved headers.}
 \usage{
-Rcopy(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable())
+Rcopy(
+  from = NULL,
+  to = NULL,
+  version = NULL,
+  open = rstudioapi::isAvailable(),
+  save = FALSE
+)
 }
 \arguments{
 \item{from}{path or GitLab web URL of original R program or Rmd file.
@@ -18,6 +24,8 @@ Defaults to the path of the source editor context.}
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.}
 
 \item{open}{\code{logical} indicating whether to open files in RStudio}
+
+\item{save}{\code{logical} indicating whether to save files prior to copy}
 }
 \value{
 invisibly returns \code{NULL}

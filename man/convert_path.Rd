@@ -2,15 +2,9 @@
 % Please edit documentation in R/convert_path.R
 \name{convert_path}
 \alias{convert_path}
-\alias{path_to_unix}
-\alias{path_to_windows}
-\title{Convert file paths to their Unix or Windows representations}
+\title{Facilitator for \code{path_to_unix} and \code{path_to_windows}}
 \usage{
 convert_path(path = NULL, ask = FALSE, normalize = TRUE, to = "unix")
-
-path_to_unix(path = NULL, ask = FALSE, normalize = TRUE)
-
-path_to_windows(path = NULL, ask = FALSE, normalize = TRUE)
 }
 \arguments{
 \item{path}{file paths. Defaults to the path of the source editor context.}
@@ -30,31 +24,6 @@ files that do not exist result in \code{NA}.}
   converted paths
 }
 \description{
-Convert file paths to their Unix or Windows representations
+Facilitator for \code{path_to_unix} and \code{path_to_windows}
 }
-\details{
-Paths are split by commas. Paths that do not exist result in
-  \code{NA} if \code{normalize} is \code{TRUE}.
-
-  When converting to Unix representation, paths in Windows 'C:/' result in
-  \code{NA} since there is no Unix equivalent.
-
-  When converting to Windows representation, paths not in '~', '/cognigen',
-  '/doc', '/home', '/misc' result in \code{NA} since there is no Windows
-  equivalent.
-}
-\examples{
-\dontrun{
-# Ask for input
-path_to_unix(ask = TRUE)
-
-# Get the Windows representation for the active source document
-path_to_windows()
-
-# Get the theoretical Unix representation of Windows paths without checking for their existence
-path_to_unix(c("M:/client/drug", "M:\\\\client2\\\\drug"), normalize = FALSE)
-
-# Get the Windows representation of Unix paths, checking for their existence (if using Windows)
-path_to_windows(c("/doc/client/drug", "/doc/client2/drug"), normalize = TRUE)
-}
-}
+\keyword{internal}

@@ -11,7 +11,8 @@
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.
 #' @param open \code{logical} indicating whether to open files in RStudio
-#'
+#' @param save \code{logical} indicating whether to save files prior to copy
+#' 
 #' @return invisibly returns \code{NULL}
 #' @export
 #'
@@ -41,7 +42,7 @@
 #'
 #' @seealso \code{?interactivecog::Rcopy_shared_code} for simpler copying from
 #'   the shared-code repository; \code{\link{Redit}} for creating R programs
-Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable()) {
+Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable(), save = FALSE) {
 
   assertthat::assert_that(
     length(from) == 1 || is.null(from),
@@ -49,7 +50,12 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     msg = "`from` and `to` must have length 1"
     )
 
-  from <- if(is.null(from)) get_source_file() else from
+  if (is.null(from)){
+    # Rcopy is called from interactive session
+    from <- get_source_file()
+    # save current document from interactive session
+    if (is.logical(save) && save[1] == TRUE) rstudioapi::documentSave()
+  } 
 
   # to is the basename of from by default
   to <- if (is.null(to))
@@ -138,7 +144,7 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
       suppressMessages(Redit(to, open = FALSE))
 
-      cli::cli_warn("`from` did not have a valid header. It was copied with a new header to `to`.")
+      cli::cli_warn("{.code from} did not have a valid header. It was copied with a new header to {.code to}.")
 
     } else {
 
@@ -157,9 +163,9 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     }
 
     if(file.exists(to)) {
-      cli::cli_alert_success("Created '{to}'")
+      cli::cli_alert_success("Created {.file {to}}")
     } else {
-      cli::cli_abort("Failed to create '{to}'")
+      cli::cli_abort("Failed to create {.file {to}}")
     }
 
   } else if(file_ext_to == "r") {
@@ -167,13 +173,13 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     writeLines(new_header, to)
 
     if(file.exists(to)) {
-      cli::cli_alert_success("Created '{to}'")
+      cli::cli_alert_success("Created {.file {to}}")
     } else {
-      cli::cli_abort("Failed to create '{to}'")
+      cli::cli_abort("Failed to create {.file {to}}")
     }
     
     if(isFALSE(old_header)) {
-      cli::cli_warn("`from` did not have a valid header. It was copied with a new header to `to`.")
+      cli::cli_warn("{.code from} did not have a valid header. It was copied with a new header to {.code to}.")
     }
 
     # append `from` into `to`
@@ -181,9 +187,9 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
     # Messages use `from_original` for clear representation
     if(appended) {
-      cli::cli_alert_success("Appended '{to}' with '{from_original}'")
+      cli::cli_alert_success("Appended {.file {to}} with {.file {from_original}}")
     } else {
-      cli::cli_abort("Failed to append '{to}' with '{from_original}'")
+      cli::cli_abort("Failed to append {.file {to}} with {.file {from_original}}")
     }
 
   }
