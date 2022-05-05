@@ -200,12 +200,9 @@ test_that(
   "record_input: output type when a function call (readChar) provided ", 
   {
     expect_type(
-      { 
-        myfile <- file.path(tempdir(), 'dat.txt')
-        record_input(
-          readChar(con = myfile, nchars = file.info(myfile)$size)
-        )
-      },
+      record_input(
+        readChar(con = file.path(tempdir(), 'dat.txt'), nchars = file.info(file.path(tempdir(), 'dat.txt'))$size)
+      ),
       'character'
     )
   }
@@ -264,10 +261,10 @@ test_that(
 )
 
 test_that(
-  "recorded_io: recorded file info", 
+  "recorded_io: recorded file info",
   {
     expect_identical(
-      { 
+      {
         get(x = 'record_files', envir = ioenv)$path
       },
       file.path(
