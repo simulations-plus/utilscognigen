@@ -11,6 +11,7 @@
 #' @param path file path of R Markdown document. Defaults to the path of the
 #'   source editor context.
 #' @param open \code{logical} indicating whether to open the output file
+#' @inheritParams rcb
 #'
 #' @return \code{logical} indicating whether the document was successfully
 #'   rendered.
@@ -20,7 +21,7 @@
 #' \dontrun{
 #' render("markdown_doc.Rmd")
 #' }
-render <- function(path = NULL, open = rstudioapi::isAvailable()) {
+render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE) {
 
   if (is.null(path)){
     # render is called from interactive session
@@ -70,7 +71,10 @@ render <- function(path = NULL, open = rstudioapi::isAvailable()) {
 
   }
 
-  execution_status <- unname(rcb(r_path))
+  execution_status <- unname(rcb(
+    r_path, 
+    as_job = as_job
+  ))
 
   if(!execution_status) {
     return(FALSE)
