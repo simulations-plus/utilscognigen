@@ -43,7 +43,11 @@ By default, a message will be printed by both \code{record_input} and
 \code{record_output} to report the path of the files that were stored.
 
 Ultimately, the collected information can be summarized by calling 
-\code{recorded_io} (typically at the end of R script). 
+\code{recorded_io} typically at the end of R script. In a .Rmd file,
+\code{recorded_io} would need to be called inside a chunk set with 
+the \code{message = FALSE} option so the information could be printed 
+to console or the .Rout file when .Rmd file is rendered using 
+\code{utilscognige::render}.
 
 In some cases (eg, in an interactive R session), it could be useful to call
 the \code{clear_recorded_io} function to erase all the recorded input and

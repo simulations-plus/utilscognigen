@@ -186,7 +186,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
 # Helpers -----------------------------------------------------------------
 
-# Function to supress printed output
+# Function to suppress printed output
 # From http://r.789695.n4.nabble.com/Suppressing-output-e-g-from-cat-td859876.html
 quiet <- function(x) {
   sink(tempfile())
