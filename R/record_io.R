@@ -298,6 +298,19 @@ recorded_io <- function(){
     return(invisible())
   }
   
+  # when called from R Markdown non-interactively, require that chunk option
+  # message=FALSE. this results in the message being written to the log file.
+  if( !interactive() ){
+    source_file <- get_source_file()
+    if( !is.null(source_file) ){
+      if( tolower(tools::file_ext(source_file)) == "rmd" ) {
+        if( !isFALSE(knitr::opts_current$get("message")) ) {
+          cli::cli_abort("{.fn recorded_io} requires the chunk option {.code message=FALSE} when called from R Markdown.")
+        }
+      }
+    }
+  }
+  
   ios <- apply(
     X = record_files,
     MARGIN = 1,
