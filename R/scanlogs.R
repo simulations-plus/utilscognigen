@@ -7,8 +7,8 @@
 #'   scanned
 #' @param ext a \code{character} vector of file extensions to scan the logs of
 #'
-#' @return \code{dir_scanlogs()} invisibly returns a named \code{list} of
-#'   \code{character} vectors
+#' @return \code{dir_scanlogs()} returns a named \code{list} of \code{character}
+#'   vectors
 #' @export
 #'
 #' @examples
@@ -17,7 +17,7 @@
 #' dir_scanlogs()
 #'
 #' # Scan all Rout files with "final" in the file name
-#' dir_scanlogs(path = "/stage_directory/asmbdat/", pattern = "final", ext = "Rout")
+#' dir_scanlogs(path = "./stage_directory/asmbdat/", pattern = "final", ext = "Rout")
 #' }
 #'
 #' @rdname scanlogs
@@ -35,7 +35,9 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
     cli::cli_abort("Only Rout and log files are supported for {.fn dir_scanlogs}")
   }
 
-  log_paths <- list.files(path, pattern = paste0(".", ext, "$", collapse = "|"), full.names = TRUE)
+  log_paths <- normalizePath(
+    list.files(path, pattern = paste0(".", ext, "$", collapse = "|"), full.names = TRUE)
+  )
 
   if(!is.null(pattern)) {
     log_paths <- log_paths[grep(pattern, basename(log_paths))]
@@ -44,14 +46,11 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
   if(length(log_paths) == 0) {
     cli::cli_alert_danger("{.file {path}} contains no matching {paste0(ext, collapse = ' or ')} files")
     return(invisible(NULL))
-  } else if(length(log_paths) == 1) {
-    results <- list(scanlogs(log_paths))
   } else {
-    results <- scanlogs(log_paths)
+    sl <- scanlogs(log_paths)
   }
 
-  names(results) <- log_paths
-  return(invisible(results))
+  sl
 }
 
 #' Scan log files of R and/or SAS programs
@@ -64,34 +63,46 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
 #'   extensions .R, .r, .Rout, .sas, .log, or .lst. Defaults to the path of the
 #'   source editor context.
 #'
-#' @return \code{scanlogs()} invisibly returns a \code{character} vector of
-#'   scanned results or a \code{list} of \code{character} vectors when multiple
-#'   paths are provided.
+#' @return \code{scanlogs()} returns a named \code{list} of \code{character}
+#'   vectors of scanned results.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' scanlogs()
-#' scanlogs("/stage_directory/asmbdat/mk-something.Rout")
-#' scanlogs("/stage_directory/sas/check-something.log")
-#' scanlogs("/stage_directory/asmbdat/mk-something.Rout", "/stage_directory/sas/check-something.log")
+#' scanlogs("./stage_directory/asmbdat/mk-something.Rout")
+#' scanlogs("./stage_directory/sas/check-something.log")
+#' scanlogs("./stage_directory/asmbdat/mk-something.Rout", "./stage_directory/sas/check-something.log")
 #' }
 #' 
 scanlogs <- function(...) {
   paths <- unlist(list(...))
-  if(length(paths) == 0) {
-    invisible(scanlogs_single())
-  } else if(length(paths) == 1) {
-    invisible(scanlogs_single(paths))
-  } else {
-    invisible(lapply(paths, function(path) {
-      res <- scanlogs_single(path)
-      if(!is.null(res)) {
-        cat("\n")
-      }
-      return(res)
-    }))
-  }
+  
+  paths <- if(is.null(paths)) get_source_file() else paths
+  
+  sl <- lapply(paths, function(path) {
+    scanlogs_single(path)
+  })
+  
+  sl <- stats::setNames(sl, paths)
+  sl <- structure(sl, class = c("scanlogs", class(sl)))
+  sl
+}
+
+
+#' @export
+print.scanlogs <- function(x, ...) {
+  cli::cli_h1("scanlogs")
+  lapply(names(x), function(path) {
+    sl_content <- x[[path]]
+    cli::cli_h2(path)
+    if(is.null(sl_content)) {
+      cli::cli_verbatim(paste0(basename(path), ": No scanlogs results."))
+    } else {
+      cli::cli_verbatim(x[[path]])
+    }
+  })
+  invisible(x)
 }
 
 
@@ -103,8 +114,8 @@ scanlogs <- function(...) {
 #'   .sas, .log, or .lst. Defaults to the path of the source editor context
 #'
 #' @return invisibly returns a \code{character} vector of scanned results. For
-#'   R, the findings are prepended by the log path and line number. For SAS, the
-#'   findings are prepended by the log path.
+#'   R, the findings are prepended by the basename of the log path and line
+#'   number. For SAS, the findings are prepended by the log path.
 #'
 #' @keywords internal
 #'   
@@ -128,7 +139,6 @@ scanlogs_single <- function(path = NULL) {
 scanlogs_single.sas <- function(path = NULL) {
   path <- if(is.null(path)) get_source_file() else path
   return_value <- system(paste0("scanlogs ", path), intern = TRUE)
-  cat(return_value, sep = "\n")
   return(invisible(return_value))
 }
 
@@ -145,7 +155,7 @@ scanlogs_single.R <- function(path = NULL) {
     cli::cli_abort(
       c(
         "{.file {log_name}} has not been created.",
-        i = "Generate a log file with {.fn rcb} from the R console or {.code rcb {basename(path)}} from the Terminal within the script directory."
+        i = "Generate a log file with {.fn rcb} from the R console or {.code {paste('rcb', basename(path))}} from the Terminal within the script directory."
       )
     )
   }
@@ -190,9 +200,9 @@ scan_rout <- function(path) {
     return(invisible(NULL))
   }
 
-  return_value <- paste0(path, " line ", all_kept_lines, ": ", rout[all_kept_lines])
+  basename_path <- basename(path)
+  return_value <- paste0(basename_path, " line ", all_kept_lines, ": ", rout[all_kept_lines])
 
-  cat(return_value, sep = "\n")
   return(invisible(return_value))
 }
 
