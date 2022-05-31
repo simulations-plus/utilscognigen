@@ -147,17 +147,17 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
       cli::cli_warn("{.code from} did not have a valid header. It was copied with a new header to {.code to}.")
 
     } else {
-
+      
       lines <- readLines(from)
-      header_chunk_start <- min(grep("^```\\{r header[,\\s\\}]", lines))
+      header_start <- min(which(lines == old_header[[1]]))
 
-      # add the new header to the beginning of the header chunk
+      # add the new header to the beginning of the header
       new_lines <- c(
-        lines[1:header_chunk_start],
+        lines[1:(header_start - 1)],
         new_header,
-        lines[(header_chunk_start + 1):length(lines)]
+        lines[header_start:length(lines)]
       )
-
+      
       writeLines(new_lines, to)
 
     }

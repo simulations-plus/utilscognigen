@@ -87,7 +87,7 @@ get_header_output_files <- function(path = NULL) {
 #'   beginning of the header. There is no maximum.
 #' @param max_first_line \code{numeric}; The maximum number of non-blank lines
 #'   permitted before the beginning of the header in an R script. For Rmd files,
-#'   this is determined by considering the chunk named header.
+#'   this is determined by considering the number of lines in the YAML.
 #'
 #' @return a \code{character} vector of lines of the header or \code{FALSE} with
 #'   a reason attribute if no acceptable header is found
@@ -110,48 +110,18 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
   top_of_header_regex <- paste0("^", hashes)
   potential_header_lines <- grep(top_of_header_regex, x)
 
-  # require header chunk (named header) for Rmd files
+  # require header be included in the YAML for Rmd files
   if(file_ext == "rmd") {
-
-    header_chunk_start <- grep("^```\\{r header[,\\s\\}]", x)
-    if(length(header_chunk_start) == 0) {
-      return(structure(FALSE,
-                       reason = "No chunk named header found in Rmd file",
-                       code = "no_chunk_named_header"))
-    } else if(length(header_chunk_start) > 1) {
-      return(structure(FALSE,
-                       reason = "Multiple chunks named header found in Rmd file. There should be only 1 header.",
-                       code = "multiple_chunks_named_header"))
+    
+    yamls <- grep("^---", x)
+    if(length(yamls) < 2) {
+      cli::cli_abort("No YAML found in Rmd file.")
     }
-
-    chunk_ends <- grep("^```$", trimws(x))
-    if(length(chunk_ends) == 0) {
-      return(structure(FALSE,
-                       reason = "No end of header chunk found in Rmd file",
-                       code = "no_end_of_header"))
-    }
-
-    header_chunk_end <- min(chunk_ends[chunk_ends > header_chunk_start])
-    if(length(header_chunk_end) == 0) {
-      return(structure(FALSE,
-                       reason = "No end of header chunk found in Rmd file",
-                       code = "no_end_of_header"))
-    }
-
-    if(header_chunk_end - header_chunk_start == 1) {
-      return(structure(FALSE,
-                       reason = "Empty header chunk",
-                       code = "empty_header_chunk"))
-    }
-
-    if(length(potential_header_lines) == 0) {
-      return(structure(FALSE,
-                       reason = "No header found in header chunk",
-                       code = "no_header_in_header_chunk"))
-    }
+    yaml_start <- yamls[[1]]
+    yaml_end <- yamls[[2]]
 
     # Update max_first_line which is the max line where the header content can start
-    max_first_line <- header_chunk_end
+    max_first_line <- yaml_end - 1
 
   }
 
@@ -162,7 +132,11 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
   first_line_header <- min(potential_header_lines)
 
   if(first_line_header > max_first_line) {
-    return(structure(FALSE, reason = "Too many lines before header"))
+    if(file_ext == "rmd") {
+      return(structure(FALSE, reason = "No header found in YAML of Rmd file"))
+    } else {
+      return(structure(FALSE, reason = "Too many lines before header"))
+    }
   }
 
   # 2 is subtracted to account for the starting point and the min(grep())
@@ -175,8 +149,7 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
   header <- x[first_line_header:last_line_header]
 
   # Remove last character from header if it a "#" and remove extra white space
-  header <- trimws(gsub("#$", "", header))
-  header <- gsub("\\s\\s", " ", header)
+  header <- trimws(gsub("\\s\\s", " ", header))
 
   return(header)
 }

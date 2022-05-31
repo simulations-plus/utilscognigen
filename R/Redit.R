@@ -41,7 +41,7 @@
 #' If a standard header cannot be identified in an existing file, a new header
 #' will be added if possible. In some cases, an error will occur with a
 #' suggestion to update the program: For R files, update the first line so it is
-#' an R command; For Rmd files, delete or rename any chunks named "header".
+#' an R command; For Rmd files, temporarily remove all comments from the YAML.
 #'
 #' @export
 #'
@@ -203,7 +203,7 @@ make_header <- function(path = NULL,
 
   path <- if(is.null(path)) get_source_file() else path
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.code make_header}.")
+    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn make_header}.")
   }
 
   file_ext <- tolower(tools::file_ext(path))
@@ -258,103 +258,44 @@ make_header <- function(path = NULL,
       return(invisible(NULL))
 
     } else if(isFALSE(old_header)) {
+      
+      reason <- attr(old_header, "reason")
+      reason <- if(is.null(reason)) "" else reason
 
       # Rmd special cases
       if(file_ext == "rmd") {
-        code <- attr(old_header, "code")
-        code <- if(is.null(code)) "" else code
-
-        # Issues that can only be resolved by the user
-        if(code == "multiple_chunks_named_header") {
-          cli::cli_abort(attr(old_header, "reason"))
-        } else if(code == "no_end_of_header") {
-          cli::cli_abort(attr(old_header, "reason"))
-        }
-
-        # We can add a header chunk or update an empty header chunk
 
         header <- build_new_header(path = path,
                                    version = version,
                                    purpose = purpose,
                                    input_files = input_files,
                                    output_files = output_files)
-
-        if(code == "no_chunk_named_header") {
-
-          lines <- readLines(path)
+        
+        # insert header at bottom of YAML if no header is found in the YAML (or
+        # at all)
+        if(reason %in% c("No header found", "No header found in YAML of Rmd file")) {
+          
+          lines <- readLines(path, warn = FALSE)
+          
           yamls <- grep("^---", lines)
           if(length(yamls) < 2) {
-            cli::cli_abort("No YAML found in Rmd file and there is no header chunk.")
+            cli::cli_abort("No YAML found in Rmd file.")
           }
+          yaml_start <- yamls[[1]]
           yaml_end <- yamls[[2]]
-
-          new_header_chunk <- paste(
-            '```{r header, include=FALSE}',
+          
+          lines_with_header <- c(
+            lines[1:(yaml_end - 1)],
             header,
-            '```',
-            sep = "\n"
+            lines[yaml_end:length(lines)]
           )
-
-          # append the new header chunk after the end of the YAML
-          new_lines <- c(
-            lines[1:yaml_end],
-            "",
-            new_header_chunk,
-            "",
-            lines[(yaml_end + 1):length(lines)]
-          )
-
-          writeLines(new_lines, path)
-
-          # Early return
+          
+          writeLines(lines_with_header, path)
+          
+          cli::cli_alert_success("Added header to {.file {path}}")
+          
+          # early return
           return(invisible(NULL))
-
-        } else if (code == "empty_header_chunk") {
-
-          lines <- readLines(path)
-          header_chunk_start <- min(grep("^```\\{r header[,\\s\\}]", lines))
-          chunk_ends <- grep("^```$", trimws(lines))
-          header_chunk_end <- min(chunk_ends[chunk_ends > header_chunk_start])
-
-          new_header_chunk <- paste(
-            # intentionally does not include the named header line, since the
-            # existing file could include intentional settings
-            header,
-            '```',
-            sep = "\n"
-          )
-
-          # replace the empty chunk with the new header
-          new_lines <- c(
-            lines[1:header_chunk_start],
-            new_header_chunk,
-            "",
-            lines[(header_chunk_end + 1):length(lines)]
-          )
-
-          writeLines(new_lines, path)
-
-          # Early return
-          return(invisible(NULL))
-
-        } else if(code == "no_header_in_header_chunk") {
-
-          lines <- readLines(path)
-          header_chunk_start <- min(grep("^```\\{r header[,\\s\\}]", lines))
-
-          # add the header to the beginning of the empty chunk
-          new_lines <- c(
-            lines[1:header_chunk_start],
-            header,
-            "",
-            lines[(header_chunk_start + 1):length(lines)]
-          )
-
-          writeLines(new_lines, path)
-
-          # Early return
-          return(invisible(NULL))
-
         }
 
         cli::cli_abort(attr(old_header, "reason"))
@@ -401,18 +342,15 @@ make_header <- function(path = NULL,
     # TODO what should a new Rmd look like? I know what I like
     rmd_content <- paste(
       '---',
-      'title: ""',
+      paste0('title: "', tools::file_path_sans_ext(basename(path)), '"'),
       paste0('author: "', get_user_full_name(), '"'),
       'date: "`r Sys.Date()`"',
       'output:',
       '  html_document:',
       '    theme: spacelab',
       '    toc: true',
-      '---',
-      '',
-      '```{r header, include=FALSE}',
       header,
-      '```',
+      '---',
       sep = "\n"
     )
 

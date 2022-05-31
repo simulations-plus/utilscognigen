@@ -14,7 +14,7 @@ beginning of the header. There is no maximum.}
 
 \item{max_first_line}{\code{numeric}; The maximum number of non-blank lines
 permitted before the beginning of the header in an R script. For Rmd files,
-this is determined by considering the chunk named header.}
+this is determined by considering the number of lines in the YAML.}
 }
 \value{
 a \code{character} vector of lines of the header or \code{FALSE} with
