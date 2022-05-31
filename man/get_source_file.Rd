@@ -2,16 +2,19 @@
 % Please edit documentation in R/get_source_file.R
 \name{get_source_file}
 \alias{get_source_file}
-\title{Get the path of the RStudio source editor}
+\title{Get the path of the RStudio source editor or the R script being executed}
 \usage{
 get_source_file()
 }
 \value{
-returns the path of the source editor; fails if there is no file
-  active in the source editor.
+returns the path of the source editor or the script being executed.
 }
 \description{
-Calls \code{\link[rstudioapi]{getSourceEditorContext}} to obtain the source
+For interactive sessions: Calls
+\code{\link[rstudioapi]{getSourceEditorContext}} to obtain the source
 context. The source editor context refers to the active file opened in
 RStudio.
+
+For non-interactive sessions: Parses \code{\link[base]{commandArgs}} to 
+obtain the name of the script being executed.
 }
