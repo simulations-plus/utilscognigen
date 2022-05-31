@@ -17,7 +17,7 @@ test_that("rcb executes", {
 
 test_that("scanlogs identifies warning", {
   expect_match(
-    object = scanlogs(filename),
+    object = scanlogs(filename)[[1]],
     regexp = "rcb warning",
     all = FALSE
   )
@@ -37,7 +37,7 @@ test_that("rcb fails", {
 
 test_that("scanlogs identifies error", {
   expect_match(
-    object = scanlogs(filename),
+    object = scanlogs(filename)[[1]],
     regexp = "rcb error",
     all = FALSE
   )

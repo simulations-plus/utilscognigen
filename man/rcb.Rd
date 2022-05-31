@@ -26,8 +26,8 @@ parent directory. If the execution of any program is unsuccessful, later
 programs are not executed. Command line equivalent for each run is \code{R
 CMD BATCH --no-save --no-environ --no-init-file --no-restore script.R}
 
-In RStudio sessions, programs are executed as jobs so the R Console remains
-available.
+In RStudio sessions, programs can be executed as jobs so the R Console
+remains available.
 }
 \examples{
 \dontrun{
