@@ -23,12 +23,11 @@ extensions .R, .r, .Rout, .sas, .log, or .lst. Defaults to the path of the
 source editor context.}
 }
 \value{
-\code{dir_scanlogs()} invisibly returns a named \code{list} of
-  \code{character} vectors
+\code{dir_scanlogs()} returns a named \code{list} of \code{character}
+  vectors
 
-\code{scanlogs()} invisibly returns a \code{character} vector of
-  scanned results or a \code{list} of \code{character} vectors when multiple
-  paths are provided.
+\code{scanlogs()} returns a named \code{list} of \code{character}
+  vectors of scanned results.
 }
 \description{
 Scan the log files of multiple R and/or SAS programs The scan searches
@@ -41,14 +40,14 @@ notes, and other messages using the system command \code{scanlogs}.
 dir_scanlogs()
 
 # Scan all Rout files with "final" in the file name
-dir_scanlogs(path = "/stage_directory/asmbdat/", pattern = "final", ext = "Rout")
+dir_scanlogs(path = "./stage_directory/asmbdat/", pattern = "final", ext = "Rout")
 }
 
 \dontrun{
 scanlogs()
-scanlogs("/stage_directory/asmbdat/mk-something.Rout")
-scanlogs("/stage_directory/sas/check-something.log")
-scanlogs("/stage_directory/asmbdat/mk-something.Rout", "/stage_directory/sas/check-something.log")
+scanlogs("./stage_directory/asmbdat/mk-something.Rout")
+scanlogs("./stage_directory/sas/check-something.log")
+scanlogs("./stage_directory/asmbdat/mk-something.Rout", "./stage_directory/sas/check-something.log")
 }
 
 }

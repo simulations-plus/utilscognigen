@@ -62,7 +62,7 @@ should not be used for files that are simply being opened.
 If a standard header cannot be identified in an existing file, a new header
 will be added if possible. In some cases, an error will occur with a
 suggestion to update the program: For R files, update the first line so it is
-an R command; For Rmd files, delete or rename any chunks named "header".
+an R command; For Rmd files, temporarily remove all comments from the YAML.
 }
 \examples{
 \dontrun{

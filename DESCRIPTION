@@ -15,7 +15,6 @@ RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Suggests: 
     knitr,
-    testthat,
     haven,
     openxlsx,
     readxl
@@ -27,4 +26,5 @@ Imports:
     xfun,
     httr,
     jsonlite,
-    cli (>= 3.0.1)
+    cli (>= 3.0.1),
+    testthat

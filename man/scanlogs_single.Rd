@@ -12,8 +12,8 @@ scanlogs_single(path = NULL)
 }
 \value{
 invisibly returns a \code{character} vector of scanned results. For
-  R, the findings are prepended by the log path and line number. For SAS, the
-  findings are prepended by the log path.
+  R, the findings are prepended by the basename of the log path and line
+  number. For SAS, the findings are prepended by the log path.
 }
 \description{
 Only a single path should be passed directly to \code{scanlogs_single()}.

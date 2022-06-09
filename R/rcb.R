@@ -5,8 +5,8 @@
 #' programs are not executed. Command line equivalent for each run is \code{R
 #' CMD BATCH --no-save --no-environ --no-init-file --no-restore script.R}
 #'
-#' In RStudio sessions, programs are executed as jobs so the R Console remains
-#' available.
+#' In RStudio sessions, programs can be executed as jobs so the R Console
+#' remains available.
 #'
 #' @param ... file paths of R programs. Defaults to the path of the source
 #'   editor context.
@@ -65,7 +65,18 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
   # Submit as a job for RStudio sessions
   if(isTRUE(as_job) && rstudioapi::isAvailable()) {
     rstudioapi::verifyAvailable(version_needed = "1.2")
-    job_file <- fs::file_temp(pattern = "rcb-", ext = "R")
+    
+    # name the job file after the R script being executed if only one script is
+    # being executed
+    if(length(files) == 1) {
+      job_file <- file.path(tempdir(), paste0("rcb-", tools::file_path_sans_ext(basename(files)), ".R"))
+      if(file.exists(job_file)) {
+        file.remove(job_file)
+      }
+    } else {
+      job_file <- fs::file_temp(pattern = "rcb-", ext = "R")
+    }
+    
     rcb_call <- paste0("rcb(\n", paste0('  "', files, '"', collapse = ", \n"), "\n)")
 
     Redit(
@@ -104,7 +115,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
     status <- .rcb(f)
     executed_status[i] <- status
 
-    # If any executions are unsuccessful, stop execution, notify user, run scanlogs
+    # If any executions are unsuccessful, stop execution
     if(isFALSE(status)) {
 
       if(i < length(files)) {
@@ -112,37 +123,30 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
         cli::cli_bullets(
           c(
             x = "Execution failed for {.file {f}}",
-            `!` = "No additional programs will be run"
+            `!` = "No additional programs will be executed"
           )
         )
       } else {
         cli::cli_alert_danger("Execution failed for {.file {f}}")
       }
       
-      Sys.sleep(3)
-
-      if(scanlogs) scanlogs_if_not_empty(files[1:i])
+      # exit for loop
+      break
       
-      cli_executed_status <- set_cli_executed_status(executed_status)
-      cli::cli_bullets(cli_executed_status)
-      cli::cat_line()
-      cli_executed_status_key()
-      
-      return(invisible(executed_status))
     }
 
     cli::cli_alert_success("Executed {.file {f}}")
 
   }
-
-  Sys.sleep(3)
-
-  if(scanlogs) scanlogs_if_not_empty(files[1:i])
   
   cli_executed_status <- set_cli_executed_status(executed_status)
+  
+  cli::cli_h1("rcb summary")
   cli::cli_bullets(cli_executed_status)
-  cli::cat_line()
+  cli::cli_verbatim("")
   cli_executed_status_key()
+  
+  if(scanlogs) print(scanlogs(files[1:i]))
   
   return(invisible(executed_status))
 
@@ -186,39 +190,6 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
 # Helpers -----------------------------------------------------------------
 
-# Function to supress printed output
-# From http://r.789695.n4.nabble.com/Suppressing-output-e-g-from-cat-td859876.html
-quiet <- function(x) {
-  sink(tempfile())
-  on.exit(sink())
-  invisible(force(x))
-}
-
-# Execute scanlogs, but only print if there are any results
-# Also prints extra breaks
-scanlogs_if_not_empty <- function(...) {
-  sl <- quiet(scanlogs(...))
-  sl <- Filter(function(x) !is.null(x), sl)
-  if(length(sl)) {
-    scanlogs_header <- paste0("\nscanlogs:\n", paste0(rep("=", getOption("width")), collapse = ""), sep = "\n")
-
-    # add extra breaks
-    if(is.list(sl)) {
-      sl <- unlist(lapply(sl, function(x) list(x, "\n")))
-    }
-    sl <- paste0(sl, collapse = "\n")
-    sl <- gsub("\n\n\n+", "\n\n", sl)
-
-    cat(
-      scanlogs_header,
-      sl,
-      "\n",
-      sep = ""
-    )
-  }
-  return(invisible(NULL))
-}
-
 # Set the names for cli executed status
 # x is expected to be a named logical vector that may contain NAs
 # the names of x are filenames
@@ -241,7 +212,7 @@ set_cli_executed_status <- function(x) {
 
 cli_executed_status_key <- function() {
   
-  cli::cat_line("Execution Key:")
+  cli::cli_verbatim("Execution Key:")
   
   cli::cli_text(
     c(
