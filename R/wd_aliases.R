@@ -18,7 +18,7 @@ NULL
 
 #' @rdname wd_aliases
 #' @export
-cd <- function(dir, focus = FALSE) {
+cd <- function(dir, focus = TRUE) {
   
   if(missing(dir)) {
     source_file <- rstudioapi::documentPath()

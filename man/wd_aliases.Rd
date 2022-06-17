@@ -6,7 +6,7 @@
 \alias{pwd}
 \title{Change or print working directory}
 \usage{
-cd(dir, focus = FALSE)
+cd(dir, focus = TRUE)
 
 pwd()
 }
