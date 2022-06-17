@@ -9,6 +9,8 @@
 #' alternatively, call could be a simple file path.
 #' @param quiet a logical value indicating whether messages should be printed 
 #' (FALSE; default) or not (TRUE).
+#' @param path a file path to an R, Rmd, or log file. Defaults to the path of
+#'   the source editor context.
 #' 
 #' @export
 #' 
@@ -35,11 +37,15 @@
 #' \code{recorded_io} would need to be called inside a chunk set with 
 #' the \code{message = FALSE} option so the information could be printed 
 #' to console or the .Rout file when .Rmd file is rendered using 
-#' \code{utilscognige::render}.
+#' \code{\link[utilscognigen]{render}}.
 #' 
 #' In some cases (eg, in an interactive R session), it could be useful to call
 #' the \code{clear_recorded_io} function to erase all the recorded input and
 #' output file paths.
+#' 
+#' To retrieve collected input and output files from an executed R or Rmd file,
+#' use \code{get_recorded_io}. This returns a list with two character vector
+#' elements: input_files and output_files.
 #' 
 #' @examples
 #' 
@@ -375,5 +381,82 @@ clear_recorded_io <- function(){
       envir = ioenv
     )
   }
+  
+}
+
+
+#' @rdname recorded_io
+#' @export
+get_recorded_io <- function(path = NULL) {
+  
+  path <- if(is.null(path)) get_source_file() else path
+  
+  if(is.null(path)) {
+    cli::cli_abort("An R, Rmd, or log file must be open or a path must be specified to use {.fn get_recorded_io}.")
+  } else if(length(path) > 1) {
+    cli::cli_abort("Only one file can be specified to use {.fn get_recorded_io}")
+  } else if(!file.exists(path)) {
+    cli::cli_abort("{.file {path}} does not exist.")
+  }
+  
+  extension <- tools::file_ext(path)
+  
+  log_name <- switch(
+    extension,
+    Rout = path,
+    R = paste0(tools::file_path_sans_ext(path), ".Rout"),
+    r = paste0(path, ".Rout"),
+    Rmd = paste0(tools::file_path_sans_ext(path), "-render.Rout")
+  )
+  
+  if(!file.exists(log_name)) {
+    
+    if(endsWith(log_name, "-render\\.Rout")) {
+      cli::cli_abort(
+        c(
+          "{.file {log_name}} has not been created.",
+          i = "Generate a log file with {.fn render} from the R console."
+        )
+      )
+    } else {
+      cli::cli_abort(
+        c(
+          "{.file {log_name}} has not been created.",
+          i = "Generate a log file with {.fn rcb} from the R console or {.code {paste('rcb', basename(path))}} from the Terminal within the script directory."
+        )
+      )
+    }
+    
+  }
+  
+  rout <- readLines(log_name, warn = FALSE)
+  
+  rout_recorded_input <- unique(grep(
+    "^\\*{2}\\[input\\]", 
+    x = rout, 
+    value = TRUE
+  ))
+  
+  rout_recorded_output <- unique(grep(
+    "^\\*{2}\\[output\\]",
+    x = rout,
+    value = TRUE
+  ))
+  
+  if(length(rout_recorded_input) == 0) {
+    rout_recorded_input <- character()
+  }
+  
+  if(length(rout_recorded_output) == 0) {
+    rout_recorded_output <- character()
+  }
+  
+  rout_recorded_input <- trimws(gsub("^\\*{2}\\[input\\]", "", rout_recorded_input))
+  rout_recorded_output <- trimws(gsub("^\\*{2}\\[output\\]", "", rout_recorded_output))
+  
+  list(
+    input_files = rout_recorded_input,
+    output_files = rout_recorded_output
+  )
   
 }

@@ -313,3 +313,37 @@ test_that(
     )
   }
 )
+
+test_that(
+  "get_recorded_io: retrieve input and output files",
+  {
+    expect_identical(
+      {
+        file.create("input1.csv")
+        file.create("input2.csv")
+        program_content <- c(
+          "library(utilscognigen)",
+          "record_input('input1.csv')",
+          "record_input('input2.csv')",
+          "recorded_io()"
+        )
+        
+        program_name <- "get-recorded-io-test.R"
+        
+        cat(
+          program_content,
+          file = program_name,
+          sep = "\n"
+        )
+        
+        rcb(program_name)
+        
+        get_recorded_io(program_name)
+      },
+      list(
+        input_files = normalizePath(c("input1.csv", "input2.csv")),
+        output_files = character()
+      )
+    )
+  }
+)
