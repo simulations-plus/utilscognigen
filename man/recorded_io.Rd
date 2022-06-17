@@ -5,6 +5,7 @@
 \alias{record_input}
 \alias{record_output}
 \alias{clear_recorded_io}
+\alias{get_recorded_io}
 \title{Utility function to collect the paths of input and output files used and 
 created in a R script, and print a short report in the console or log file.}
 \usage{
@@ -15,6 +16,8 @@ record_output(call, quiet = FALSE)
 recorded_io()
 
 clear_recorded_io()
+
+get_recorded_io(path = NULL)
 }
 \arguments{
 \item{call}{a function call to read a data file or create a new file; 
@@ -22,6 +25,9 @@ alternatively, call could be a simple file path.}
 
 \item{quiet}{a logical value indicating whether messages should be printed 
 (FALSE; default) or not (TRUE).}
+
+\item{path}{a file path to an R, Rmd, or log file. Defaults to the path of
+the source editor context.}
 }
 \value{
 If \code{call} is a function call, \code{record_input} will execute
@@ -47,11 +53,15 @@ Ultimately, the collected information can be summarized by calling
 \code{recorded_io} would need to be called inside a chunk set with 
 the \code{message = FALSE} option so the information could be printed 
 to console or the .Rout file when .Rmd file is rendered using 
-\code{utilscognige::render}.
+\code{\link[utilscognigen]{render}}.
 
 In some cases (eg, in an interactive R session), it could be useful to call
 the \code{clear_recorded_io} function to erase all the recorded input and
 output file paths.
+
+To retrieve collected input and output files from an executed R or Rmd file,
+use \code{get_recorded_io}. This returns a list with two character vector
+elements: input_files and output_files.
 }
 \description{
 Utility function to collect the paths of input and output files used and 
