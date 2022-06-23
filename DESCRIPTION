@@ -27,4 +27,5 @@ Imports:
     httr,
     jsonlite,
     cli (>= 3.0.1),
-    testthat
+    testthat,
+    rlang
