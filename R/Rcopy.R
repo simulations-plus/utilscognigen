@@ -144,7 +144,7 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
       suppressMessages(Redit(to, open = FALSE))
 
-      cli::cli_warn("{.code from} did not have a valid header. It was copied with a new header to {.code to}.")
+      cli::cli_warn("{.arg from} did not have a valid header. It was copied with a new header to {.arg to}.")
 
     } else {
       
@@ -179,7 +179,7 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
     }
     
     if(isFALSE(old_header)) {
-      cli::cli_warn("{.code from} did not have a valid header. It was copied with a new header to {.code to}.")
+      cli::cli_warn("{.arg from} did not have a valid header. It was copied with a new header to {.arg to}.")
     }
 
     # append `from` into `to`

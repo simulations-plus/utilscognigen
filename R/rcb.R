@@ -99,7 +99,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
 
     rstudioapi::jobRunScript(job_file)
 
-    cli::cli_alert_info("Submitted job '{basename(job_file)}'")
+    cli::cli_alert_info("Submitted job {.strong {basename(job_file)}}")
 
     return(invisible(NULL))
   }

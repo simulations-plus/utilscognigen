@@ -90,7 +90,7 @@ download_gitlab <- function(url, destfile = NULL) {
   
   # Warning and return FALSE if url cannot be decoded
   if(inherits(content, "try-error")) {
-    cli::cli_warn("Content of {.code url} could not be decoded: {.url {url}}")
+    cli::cli_warn("Content of {.arg url} could not be decoded: {.url {url}}")
     return(FALSE)
   }
   
@@ -113,7 +113,7 @@ download_gitlab <- function(url, destfile = NULL) {
     
     if(inherits(binary_written, "try-error")) {
       cli::cli_warn(
-        "Content of {.code url} could not be converted to text or saved as binary: {.url {url}}"
+        "Content of {.arg url} could not be converted to text or saved as binary: {.url {url}}"
       )
     }
     

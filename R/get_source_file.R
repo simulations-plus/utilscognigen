@@ -67,6 +67,6 @@ get_source_file <- function() {
     
   }
   
-  file
+  fs::path_real(file)
   
 }

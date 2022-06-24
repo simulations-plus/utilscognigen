@@ -152,10 +152,11 @@ scanlogs_single.R <- function(path = NULL) {
                                          ifelse(extension == "Rout", ".Rout", NA_character_)))
   log_name <- paste0(tools::file_path_sans_ext(path), extension_replacement)
   if(!file.exists(log_name)) {
+    code <- paste0("rcb ", basename(path))
     cli::cli_abort(
       c(
         "{.file {log_name}} has not been created.",
-        i = "Generate a log file with {.fn rcb} from the R console or {.code {paste('rcb', basename(path))}} from the Terminal within the script directory."
+        i = "Generate a log file with {.fn rcb} from the R console or {.code {code}} from the Terminal within the script directory."
       )
     )
   }
