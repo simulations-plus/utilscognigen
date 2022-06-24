@@ -2,19 +2,23 @@
 % Please edit documentation in R/cli.R
 \name{set_all_names}
 \alias{set_all_names}
-\title{Helper function for cli messages to set all names of x to some nm}
+\title{Helper function for cli messages to set all names of x to some nm and
+optionally style as inline markup}
 \usage{
-set_all_names(x, nm)
+set_all_names(x, nm, inline_class = NULL)
 }
 \arguments{
 \item{x}{vector}
 
 \item{nm}{name}
+
+\item{inline_class}{an inline class. See \code{\link[cli]{inline-markup}}.}
 }
 \value{
 named vector
 }
 \description{
-Helper function for cli messages to set all names of x to some nm
+Helper function for cli messages to set all names of x to some nm and
+optionally style as inline markup
 }
 \keyword{internal}

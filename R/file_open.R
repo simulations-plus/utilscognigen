@@ -37,7 +37,7 @@ file_open <- function(..., no_copies = FALSE) {
     cli::cli_warn(
       c(
         "Only one directory can be included in {.fn file_open}.",
-        set_all_names(dir_paths, "!")
+        set_all_names(dir_paths, "!", inline_class = ".file")
       )
     )
     show_dirs <- FALSE
@@ -45,7 +45,7 @@ file_open <- function(..., no_copies = FALSE) {
     cli::cli_warn(
       c(
         "RStudio is not available. Cannot show directory:",
-        set_all_names(dir_paths, "!")
+        set_all_names(dir_paths, "!", inline_class = ".file")
       )
     )
     show_dirs <- FALSE
