@@ -21,14 +21,19 @@ NULL
 cd <- function(dir, focus = TRUE) {
   
   if(missing(dir)) {
-    source_file <- rstudioapi::documentPath()
-    if(is.null(source_file)) {
-      cli::cli_abort(c(
-        "There is no active file in the RStudio source editor.",
-        i = "Provide a {.code dir} or call {.fn cd} from RStudio with an open file to change the working directory."
-      ))
-    }
+    source_file <- tryCatch(
+      get_source_file(), 
+      finally = if(inherits(try(get_source_file(), silent = TRUE), "try-error")) {
+        cli::cli_alert_info(
+          "Provide a {.arg dir} or call {.fn cd} from RStudio with an open file to change the working directory."
+        )
+      }
+    )
     dir <- dirname(source_file)
+  }
+  
+  if(length(dir) > 1) {
+    cli::cli_abort("Multiple {.arg dir} provided.")
   }
   
   # in case dir is actually a file, cd to the parent directory
@@ -42,6 +47,8 @@ cd <- function(dir, focus = TRUE) {
     invisible(rstudioapi::executeCommand("goToWorkingDir"))
   }
   
+  cli::cli_alert_info("Working directory set: \n{.file {base::getwd()}}")
+  
   invisible(prev_dir)
   
 }
@@ -49,5 +56,5 @@ cd <- function(dir, focus = TRUE) {
 #' @rdname wd_aliases
 #' @export
 pwd <- function() {
-  base::getwd()
+  fs::path_real(base::getwd())
 }
