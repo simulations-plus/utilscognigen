@@ -2,9 +2,9 @@
 #'
 #' @param ... file paths to retrieve the log files of. Defaults to the path of
 #'   the source editor context.
-#' @param open \code{logical} indicating whether to open files in RStudio
+#' @param open \code{logical} indicating whether to open files in RStudio.
 #'
-#' @return file paths to log files
+#' @return file paths to log files.
 #'
 #' @export
 logfile <- function(..., open = TRUE) {
@@ -42,6 +42,8 @@ logfile <- function(..., open = TRUE) {
   path = paths,
   extension = tools::file_ext(paths),
   open = open)
+  
+  log_paths <- unlist(log_paths)
   
   if(open) {
     invisible(log_paths)

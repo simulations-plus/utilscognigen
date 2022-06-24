@@ -23,12 +23,12 @@ Defaults to the path of the source editor context.}
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.}
 
-\item{open}{\code{logical} indicating whether to open files in RStudio}
+\item{open}{\code{logical} indicating whether to open files in RStudio.}
 
-\item{save}{\code{logical} indicating whether to save files prior to copy}
+\item{save}{\code{logical} indicating whether to save files prior to copy.}
 }
 \value{
-invisibly returns \code{NULL}
+invisibly returns \code{NULL}.
 }
 \description{
 This function is somewhat similar to the Cognigen system command

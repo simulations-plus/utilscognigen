@@ -7,7 +7,7 @@
 get_header(x, min_hash = 30L, max_first_line = 1L)
 }
 \arguments{
-\item{x}{a scanned R or Rmd file or a file path}
+\item{x}{a scanned R or Rmd file or a file path.}
 
 \item{min_hash}{\code{numeric}; The minimum number of "#" that define the
 beginning of the header. There is no maximum.}
@@ -18,7 +18,7 @@ this is determined by considering the number of lines in the YAML.}
 }
 \value{
 a \code{character} vector of lines of the header or \code{FALSE} with
-  a reason attribute if no acceptable header is found
+  a reason attribute if no acceptable header is found.
 }
 \description{
 Extract a Cognigen header for an R script

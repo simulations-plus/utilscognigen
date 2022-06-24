@@ -7,15 +7,15 @@
 record_io(call, file, type = "input", quiet = FALSE)
 }
 \arguments{
-\item{call}{a function call to read a data file or create a new file; 
+\item{call}{a function call to read a data file or create a new file;
 alternatively, call could be a simple file path.}
 
 \item{file}{a file path.}
 
 \item{type}{either 'input' or 'output' to document whether the recorded
-information corresponds to an input or output file}
+information corresponds to an input or output file.}
 
-\item{quiet}{a logical value indicating whether messages should be printed 
+\item{quiet}{a logical value indicating whether messages should be printed
 (FALSE; default) or not (TRUE).}
 }
 \description{

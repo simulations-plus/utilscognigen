@@ -8,10 +8,10 @@ get_user_full_name(user = Sys.getenv("USER"))
 }
 \arguments{
 \item{user}{\code{character} user. Defaults to the system environment
-variable \code{USER}}
+variable \code{USER}.}
 }
 \value{
-\code{character} full name of the \code{user}
+\code{character} full name of the \code{user}.
 }
 \description{
 Get the full name of a \code{user}

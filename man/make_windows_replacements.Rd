@@ -15,7 +15,7 @@ files that do not exist result in \code{NA}.}
 }
 \value{
 \code{character} vector the length of \code{path} containing the
-  converted paths
+  converted paths.
 }
 \description{
 Make replacements to file paths to get the Windows representation

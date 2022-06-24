@@ -10,10 +10,10 @@
 #'   \code{from} file.
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.
-#' @param open \code{logical} indicating whether to open files in RStudio
-#' @param save \code{logical} indicating whether to save files prior to copy
+#' @param open \code{logical} indicating whether to open files in RStudio.
+#' @param save \code{logical} indicating whether to save files prior to copy.
 #' 
-#' @return invisibly returns \code{NULL}
+#' @return invisibly returns \code{NULL}.
 #' @export
 #'
 #' @examples

@@ -20,12 +20,16 @@ library(utilscognigen)
 
 # Configuration options
 
-These are default settings that can be controlled with `options()`. Set the desired options in your .Rprofile. Do not set these options in production code; none of these options control behavior in non-interactive R sessions.
+These are settings that can be controlled with `options()`. Set the desired options in your .Rprofile. Do not set these options in production code; none of these options control behavior in non-interactive R sessions.
 
-## `utilscognigen_cd_focus`
+## `cli.num_colors`
+
+This is a `cli` option that controls the number of ANSI colors. Set `options(cli.num_colors = 0)` to turn off ANSI colors. See `cli::num_ansi_colors()`. See also the `cli.default_num_colors` option.
+
+## `utilscognigen.cd_focus`
 
 This option controls whether `cd()` shows the working directory in the RStudio Files pane.
 
-## `utilscognigen_rcb_as_job`
+## `utilscognigen.rcb_as_job`
 
 This option controls whether `rcb()` tries to execute the programs as an RStudio Job.

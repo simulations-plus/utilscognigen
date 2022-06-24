@@ -2,7 +2,7 @@
 % Please edit documentation in R/Redit.R
 \name{Redit}
 \alias{Redit}
-\title{Create, update, and open R programs with QMS approved headers.}
+\title{Create, update, and open R programs with QMS approved headers}
 \usage{
 Redit(
   ...,
@@ -28,15 +28,15 @@ be wrapped to fit in the header. When \code{NULL} (the default), a blank
 section is included. When \code{FALSE}, no section is included. Ignored
 with a warning for files that already have a header.}
 
-\item{backup}{\code{logical} indicating whether to create backup files}
+\item{backup}{\code{logical} indicating whether to create backup files.}
 
-\item{open}{\code{logical} indicating whether to open files in RStudio}
+\item{open}{\code{logical} indicating whether to open files in RStudio.}
 }
 \value{
-invisibly returns \code{NULL}
+invisibly returns \code{NULL}.
 }
 \description{
-Create, update, and open R programs with QMS approved headers.
+Create, update, and open R programs with QMS approved headers
 }
 \details{
 Cognigen's R program header documents key elements of programs including:
@@ -51,9 +51,9 @@ Cognigen's R program header documents key elements of programs including:
 
 \code{Redit} serves a few distinct purposes:
 \itemize{
-\item Create new R and Rmd files with standard headers
-\item Add headers to existing R and Rmd files without a header
-\item Add new timestamps to headers in existing R and Rmd files
+\item Create new R and Rmd files with standard headers.
+\item Add headers to existing R and Rmd files without a header.
+\item Add new timestamps and program owner name to headers in existing R and Rmd files.
 }
 
 \code{Redit} does not need to be used every time a program is updated and \code{Redit}
@@ -93,5 +93,5 @@ Redit(
 }
 \seealso{
 \code{\link{Rcopy}} for copying R programs, \code{\link{get_header_content}}
-for getting content from headers
+for getting content from headers.
 }

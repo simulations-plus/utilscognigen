@@ -6,7 +6,7 @@
 \alias{pwd}
 \title{Change or print working directory}
 \usage{
-cd(dir, focus = TRUE)
+cd(dir, focus = getOption("utilscognigen.cd_focus", TRUE))
 
 pwd()
 }
@@ -14,7 +14,7 @@ pwd()
 \item{dir}{A character string: \link[base]{tilde expansion} will be done.}
 
 \item{focus}{\code{logical} indicating whether to show the working directory
-in the RStudio Files pane}
+in the RStudio Files pane.}
 }
 \description{
 These are wrappers around \code{\link[base]{setwd}} and

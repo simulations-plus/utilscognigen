@@ -10,7 +10,7 @@
 #'
 #' @inheritParams base::setwd
 #' @param focus \code{logical} indicating whether to show the working directory
-#' in the RStudio Files pane
+#' in the RStudio Files pane.
 #'
 #' @name wd_aliases
 NULL
@@ -18,7 +18,7 @@ NULL
 
 #' @rdname wd_aliases
 #' @export
-cd <- function(dir, focus = getOption("utilscognigen_cd_focus", TRUE)) {
+cd <- function(dir, focus = getOption("utilscognigen.cd_focus", TRUE)) {
   
   if(missing(dir)) {
     source_file <- tryCatch(

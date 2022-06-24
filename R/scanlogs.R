@@ -4,11 +4,11 @@
 #' @param path a single directory path. Defaults to the working directory.
 #' @param pattern optional \code{character} string containing a regular
 #'   expression. Only file names which match the regular expression will be
-#'   scanned
-#' @param ext a \code{character} vector of file extensions to scan the logs of
+#'   scanned.
+#' @param ext a \code{character} vector of file extensions to scan the logs of.
 #'
 #' @return \code{dir_scanlogs()} returns a named \code{list} of \code{character}
-#'   vectors
+#'   vectors.
 #' @export
 #'
 #' @examples
@@ -111,7 +111,7 @@ print.scanlogs <- function(x, ...) {
 #' Only a single path should be passed directly to \code{scanlogs_single()}.
 #'
 #' @param path a file name or path with extension .R, .r, .Rmd, .Rout, .r.Rout,
-#'   .sas, .log, or .lst. Defaults to the path of the source editor context
+#'   .sas, .log, or .lst. Defaults to the path of the source editor context.
 #'
 #' @return invisibly returns a \code{character} vector of scanned results. For
 #'   R, the findings are prepended by the basename of the log path and line

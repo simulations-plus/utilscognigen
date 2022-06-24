@@ -3,7 +3,7 @@
 #' @description Calls \code{\link[callr]{rcmd}} on all files from each files'
 #' parent directory. If the execution of any program is unsuccessful, later
 #' programs are not executed. Command line equivalent for each run is \code{R
-#' CMD BATCH --no-save --no-environ --no-init-file --no-restore script.R}
+#' CMD BATCH --no-save --no-environ --no-init-file --no-restore script.R}.
 #'
 #' In RStudio sessions, programs can be executed as jobs so the R Console
 #' remains available.
@@ -23,7 +23,7 @@
 #' \dontrun{
 #' rcb("script1.R", "script2.R")
 #' }
-rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen_rcb_as_job", TRUE)) {
+rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen.rcb_as_job", TRUE)) {
 
   assertthat::assert_that(
     is.logical(scanlogs)
@@ -155,9 +155,9 @@ rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen_rcb_as_j
 
 #' Execute an R script in batch mode
 #'
-#' @param path file path of R program
+#' @param path file path of R program.
 #'
-#' @return \code{logical} indicating whether the program executed successfully
+#' @return \code{logical} indicating whether the program executed successfully.
 #' @keywords internal
 .rcb <- function(path) {
 

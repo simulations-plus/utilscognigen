@@ -1,4 +1,4 @@
-#' Create, update, and open R programs with QMS approved headers.
+#' Create, update, and open R programs with QMS approved headers
 #'
 #' @md
 #'
@@ -15,11 +15,11 @@
 #'   section is included. When \code{FALSE}, no section is included. Ignored
 #'   with a warning for files that already have a header.
 #'
-#' @param backup \code{logical} indicating whether to create backup files
+#' @param backup \code{logical} indicating whether to create backup files.
 #'
-#' @param open \code{logical} indicating whether to open files in RStudio
+#' @param open \code{logical} indicating whether to open files in RStudio.
 #'
-#' @return invisibly returns \code{NULL}
+#' @return invisibly returns \code{NULL}.
 #'
 #' @details
 #' Cognigen's R program header documents key elements of programs including:
@@ -31,9 +31,9 @@
 #' * Output Files: Files written by the program.
 #'
 #' `Redit` serves a few distinct purposes:
-#' * Create new R and Rmd files with standard headers
-#' * Add headers to existing R and Rmd files without a header
-#' * Add new timestamps to headers in existing R and Rmd files
+#' * Create new R and Rmd files with standard headers.
+#' * Add headers to existing R and Rmd files without a header.
+#' * Add new timestamps and program owner name to headers in existing R and Rmd files.
 #'
 #' `Redit` does not need to be used every time a program is updated and `Redit`
 #' should not be used for files that are simply being opened.
@@ -72,7 +72,7 @@
 #' }
 #'
 #' @seealso \code{\link{Rcopy}} for copying R programs, \code{\link{get_header_content}}
-#' for getting content from headers
+#' for getting content from headers.
 Redit <- function(...,
                   version = NULL,
                   purpose = NULL,
@@ -103,11 +103,11 @@ Redit <- function(...,
 
 }
 
-#' Create, update, and open an R program.
+#' Create, update, and open an R program
 #'
 #' @inheritParams Redit
 #'
-#' @return invisibly returns \code{NULL}
+#' @return invisibly returns \code{NULL}.
 #'
 #' @keywords internal
 .Redit <- function(path = NULL,
@@ -191,7 +191,7 @@ Redit <- function(...,
 #'
 #' @inheritParams Redit
 #'
-#' @return invisibly returns \code{NULL}
+#' @return invisibly returns \code{NULL}.
 #'
 #' @keywords internal
 make_header <- function(path = NULL,
@@ -416,7 +416,7 @@ build_new_header <- function(path = NULL,
 #'
 #' @inheritParams Redit
 #'
-#' @return \code{character} in the form of \code{R.version.string}
+#' @return \code{character} in the form of \code{R.version.string}.
 #' @keywords internal
 clean_version <- function(version) {
   if(is.null(version)) {
@@ -449,9 +449,9 @@ clean_version <- function(version) {
 #' Get the full name of a \code{user}
 #'
 #' @param user \code{character} user. Defaults to the system environment
-#'   variable \code{USER}
+#'   variable \code{USER}.
 #'
-#' @return \code{character} full name of the \code{user}
+#' @return \code{character} full name of the \code{user}.
 #' @keywords internal
 get_user_full_name <- function(user = Sys.getenv("USER")) {
   assertthat::assert_that(
@@ -493,7 +493,7 @@ make_date_user_line <- function() {
 #'
 #' @inheritParams Redit
 #' @param split_length \code{integer} representing how many characters to split
-#'   at
+#'   at.
 #'
 #' @return \code{character}
 #' @keywords internal
@@ -519,8 +519,8 @@ make_purpose <- function(purpose = NULL, split_length = .split_length) {
 
 #' Make the header lines containing the input or output files
 #'
-#' @param files input or output files
-#' @param type either \code{"input"} or \code{"output"}
+#' @param files input or output files.
+#' @param type either \code{"input"} or \code{"output"}.
 #'
 #' @return \code{character}
 #' @keywords internal

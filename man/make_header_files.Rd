@@ -7,9 +7,9 @@
 make_header_files(files, type = c("input", "output"))
 }
 \arguments{
-\item{files}{input or output files}
+\item{files}{input or output files.}
 
-\item{type}{either \code{"input"} or \code{"output"}}
+\item{type}{either \code{"input"} or \code{"output"}.}
 }
 \value{
 \code{character}

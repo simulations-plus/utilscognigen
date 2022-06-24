@@ -8,7 +8,7 @@ scanlogs_single(path = NULL)
 }
 \arguments{
 \item{path}{a file name or path with extension .R, .r, .Rmd, .Rout, .r.Rout,
-.sas, .log, or .lst. Defaults to the path of the source editor context}
+.sas, .log, or .lst. Defaults to the path of the source editor context.}
 }
 \value{
 invisibly returns a \code{character} vector of scanned results. For

@@ -7,14 +7,14 @@
 file_open(..., no_copies = FALSE)
 }
 \arguments{
-\item{...}{file paths to be opened}
+\item{...}{file paths to be opened.}
 
 \item{no_copies}{\code{logical} indicating whether to avoid downloading
 copies of files. If \code{TRUE} and some file cannot be opened by this
 system, the Windows path is printed as a message.}
 }
 \value{
-invisibly returns \code{NULL}
+invisibly returns \code{NULL}.
 }
 \description{
 The files will be opened if possible. Up to one directory can be shown in the

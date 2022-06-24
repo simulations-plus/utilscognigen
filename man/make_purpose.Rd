@@ -14,7 +14,7 @@ section is included. When \code{FALSE}, no section is included. Ignored
 with a warning for files that already have a header.}
 
 \item{split_length}{\code{integer} representing how many characters to split
-at}
+at.}
 }
 \value{
 \code{character}

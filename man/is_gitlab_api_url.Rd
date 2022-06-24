@@ -7,7 +7,7 @@
 is_gitlab_api_url(url)
 }
 \arguments{
-\item{url}{URL of a GitLab resource}
+\item{url}{URL of a GitLab resource.}
 }
 \value{
 \code{logical}

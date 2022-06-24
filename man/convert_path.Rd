@@ -21,7 +21,7 @@ files that do not exist result in \code{NA}.}
 }
 \value{
 \code{character} vector with length of \code{path} containing the
-  converted paths
+  converted paths.
 }
 \description{
 Facilitator for \code{path_to_unix} and \code{path_to_windows}

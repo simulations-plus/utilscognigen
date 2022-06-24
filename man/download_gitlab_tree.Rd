@@ -7,16 +7,16 @@
 download_gitlab_tree(api_url, destfile, curl_result)
 }
 \arguments{
-\item{api_url}{a single GitLab API URL pointing to a tree}
+\item{api_url}{a single GitLab API URL pointing to a tree.}
 
-\item{destfile}{a single non-existing directory}
+\item{destfile}{a single non-existing directory.}
 
 \item{curl_result}{\code{list} result of the parsed \code{curl} call to
-\code{api_url}}
+\code{api_url}.}
 }
 \value{
 created needed directories, calls \code{download_gitlab} for each
-  blob / file path pair, then invisibly returns \code{NULL}
+  blob / file path pair, then invisibly returns \code{NULL}.
 }
 \description{
 Helper to \code{download_gitlab} to facilitate traversing through trees

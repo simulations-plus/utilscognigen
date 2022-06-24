@@ -3,6 +3,7 @@
 #' This is used to gracefully exit from functions that are not expected to work
 #' outside of Cognigen.
 #' 
+#' @details
 #' Checks that "/misc" is available.
 #'
 #' @keywords internal
