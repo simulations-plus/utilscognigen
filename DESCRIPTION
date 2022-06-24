@@ -5,8 +5,8 @@ Version: 0.0.0.9000
 Date: $date$
 Authors@R: c(person("Nash", "Delcamp", email = "nash.delcamp@simulations-plus.com", role = c("aut", "cre")),
              person("Cognigen Corporation", role = "cph"))
-URL: https://gitlab.cognigencorp.com/r/utilscognigen
-BugReports: https://gitlab.cognigencorp.com/r/utilscognigen/-/issues
+URL: https://gitlab.cognigencorp.com/r/utilscognigen/
+BugReports: https://gitlab.cognigencorp.com/r/utilscognigen/-/issues/
 Description: utilscognigen facilitates creation, execution, and review of R files along with other utilities for an R/RStudio environment. Created/copied R files are designed to include headers that describe the intent of the program. Programs can be executed in batch mode directly from R according to Cognigen's production standards. Resulting log files can be parsed to identify warnings and errors.
 License: MIT + file LICENSE
 Encoding: UTF-8
