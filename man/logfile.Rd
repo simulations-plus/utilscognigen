@@ -9,6 +9,8 @@ logfile(..., open = TRUE)
 \arguments{
 \item{...}{file paths to retrieve the log files of. Defaults to the path of
 the source editor context.}
+
+\item{open}{\code{logical} indicating whether to open files in RStudio}
 }
 \value{
 file paths to log files

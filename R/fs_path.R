@@ -270,7 +270,7 @@ browse_project_email <- function(path = ".") {
   url <- file.path("https://outlook.office.com/mail/group/cognigencorp.com", alias, "email")
   
   for(u in url) {
-    browseURL(u)
+    utils::browseURL(u)
   }
   
   invisible(NULL)
@@ -292,7 +292,7 @@ browse_project_sharepoint <- function(path = ".") {
     if(is.raw(httr::content(httr::GET(u)))) {
       message("Skipping ", basename(u), " because the page does not exist.")
     } else {
-      browseURL(u)
+      utils::browseURL(u)
     }
   }
   
