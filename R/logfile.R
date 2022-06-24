@@ -17,7 +17,7 @@ logfile <- function(..., open = TRUE) {
     cli::cli_abort(
       c(
         "File(s) do not exist: ",
-        set_all_names(paths[!paths_exist], "x")
+        set_all_names(paths[!paths_exist], "x", inline_class = ".file")
       )
     )
   }

@@ -44,7 +44,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen.rcb_as_j
     cli::cli_abort(
       c(
         "File(s) do not exist: ",
-        set_all_names(files[!files_exist], "x")
+        set_all_names(files[!files_exist], "x", inline_class = ".file")
       )
     )
   }
@@ -55,7 +55,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen.rcb_as_j
     cli::cli_abort(
       c(
         "File(s) are not R files: ",
-        set_all_names(files[!files_exts_r], "x")
+        set_all_names(files[!files_exts_r], "x", inline_class = ".file")
       )
     )
   }
