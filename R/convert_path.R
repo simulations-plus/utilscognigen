@@ -43,12 +43,14 @@ NULL
 #' @rdname path_to_
 #' @export
 path_to_unix <- function(path = NULL, ask = FALSE, normalize = TRUE) {
+  require_cognigen()
   return(convert_path(path, ask, normalize, to = "unix"))
 }
 
 #' @rdname path_to_
 #' @export
 path_to_windows <- function(path = NULL, ask = FALSE, normalize = TRUE) {
+  require_cognigen()
   return(convert_path(path, ask, normalize, to = "windows"))
 }
 
