@@ -419,10 +419,11 @@ get_recorded_io <- function(path = NULL) {
         )
       )
     } else {
+      code <- paste0("rcb", basename(path))
       cli::cli_abort(
         c(
           "{.file {log_name}} has not been created.",
-          i = "Generate a log file with {.fn rcb} from the R console or {.code {paste('rcb', basename(path))}} from the Terminal within the script directory."
+          i = "Generate a log file with {.fn rcb} from the R console or {.code {code}} from the Terminal within the script directory."
         )
       )
     }

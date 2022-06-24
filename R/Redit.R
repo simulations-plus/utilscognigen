@@ -219,13 +219,13 @@ make_header <- function(path = NULL,
     # Potential warnings upon exit
     on.exit(expr = {
       if(!is.null(version) && !isFALSE(old_header))
-        cli::cli_warn("{.code version} is ignored since header in {.file {path}} already exists.")
+        cli::cli_warn("{.arg version} is ignored since header in {.file {path}} already exists.")
       if(!is.null(purpose) && !isFALSE(old_header))
-        cli::cli_warn("{.code purpose} is ignored since header in {.file {path}} already exists.")
+        cli::cli_warn("{.arg purpose} is ignored since header in {.file {path}} already exists.")
       if(!is.null(input_files) && !isFALSE(old_header))
-        cli::cli_warn("{.code input_files} is ignored since header in {.file {path}} already exists.")
+        cli::cli_warn("{.arg input_files} is ignored since header in {.file {path}} already exists.")
       if(!is.null(output_files) && !isFALSE(old_header))
-        cli::cli_warn("{.code output_files} is ignored since header in {.file {path}} already exists.")
+        cli::cli_warn("{.arg output_files} is ignored since header in {.file {path}} already exists.")
     },
     add = TRUE)
 
@@ -427,7 +427,7 @@ clean_version <- function(version) {
 
   clean <- gsub("\\.|\\s", "", version)
   if(!grepl("^\\d{3}$", clean)) {
-    cli::cli_abort("{.code version} should be {.code NULL} or an R version number in the form 'N.n.n' or 'Nnn'.")
+    cli::cli_abort("{.arg version} should be {.code NULL} or an R version number in the form 'N.n.n' or 'Nnn'.")
   }
 
   clean <- switch(clean,
