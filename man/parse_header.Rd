@@ -37,11 +37,11 @@ parse_header_is_sourced(header)
 \item{path}{a file path to an R script. Defaults to the path of the source
 editor context.}
 
-\item{sections}{header sections to parse}
+\item{sections}{header sections to parse.}
 
-\item{...}{additional arguments passed to \code{\link{get_header}}}
+\item{...}{additional arguments passed to \code{\link{get_header}}.}
 
-\item{header}{a header from an R script}
+\item{header}{a header from an R script.}
 }
 \value{
 \code{parse_header} returns a \code{list} of parsed sections. Each

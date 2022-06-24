@@ -14,9 +14,9 @@ scanlogs(...)
 
 \item{pattern}{optional \code{character} string containing a regular
 expression. Only file names which match the regular expression will be
-scanned}
+scanned.}
 
-\item{ext}{a \code{character} vector of file extensions to scan the logs of}
+\item{ext}{a \code{character} vector of file extensions to scan the logs of.}
 
 \item{...}{\code{character} vectors containing file names or paths with
 extensions .R, .r, .Rout, .sas, .log, or .lst. Defaults to the path of the
@@ -24,7 +24,7 @@ source editor context.}
 }
 \value{
 \code{dir_scanlogs()} returns a named \code{list} of \code{character}
-  vectors
+  vectors.
 
 \code{scanlogs()} returns a named \code{list} of \code{character}
   vectors of scanned results.

@@ -7,10 +7,10 @@
 curl_and_parse(url)
 }
 \arguments{
-\item{url}{URL of a GitLab resource}
+\item{url}{URL of a GitLab resource.}
 }
 \value{
-\code{list} of information about the resource
+\code{list} of information about the resource.
 }
 \description{
 Run the \code{curl} system command and parse the JSON result

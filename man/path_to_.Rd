@@ -23,7 +23,7 @@ files that do not exist result in \code{NA}.}
 }
 \value{
 \code{character} vector with length of \code{path} containing the
-  converted paths
+  converted paths.
 }
 \description{
 Convert file paths to their Unix or Windows representations

@@ -4,7 +4,7 @@
 \alias{rcb}
 \title{Execute R programs in batch mode}
 \usage{
-rcb(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable())
+rcb(..., scanlogs = TRUE, as_job = getOption("utilscognigen.rcb_as_job", TRUE))
 }
 \arguments{
 \item{...}{file paths of R programs. Defaults to the path of the source
@@ -24,7 +24,7 @@ When executed as an RStudio job, \code{rcb} invisibly returns
 Calls \code{\link[callr]{rcmd}} on all files from each files'
 parent directory. If the execution of any program is unsuccessful, later
 programs are not executed. Command line equivalent for each run is \code{R
-CMD BATCH --no-save --no-environ --no-init-file --no-restore script.R}
+CMD BATCH --no-save --no-environ --no-init-file --no-restore script.R}.
 
 In RStudio sessions, programs can be executed as jobs so the R Console
 remains available.

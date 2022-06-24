@@ -19,7 +19,7 @@
 #'   files that do not exist result in \code{NA}.
 #'
 #' @return \code{character} vector with length of \code{path} containing the
-#'   converted paths
+#'   converted paths.
 #'
 #' @name path_to_
 #'
@@ -56,7 +56,7 @@ path_to_windows <- function(path = NULL, ask = FALSE, normalize = TRUE) {
 
 #' Toggle paths between Unix or Windows based on the first entry
 #' 
-#' This is intended to be used as an RStudio Addin
+#' This is intended to be used as an RStudio Addin.
 #' 
 #' @keywords internal
 toggle_path_selection <- function() {
@@ -107,7 +107,7 @@ toggle_path_selection <- function() {
 #' @param to which OS representation to match. Either 'unix' or 'windows'.
 #' 
 #' @return \code{character} vector with length of \code{path} containing the
-#'   converted paths
+#'   converted paths.
 #'
 #' @keywords internal
 convert_path <- function(path = NULL, ask = FALSE, normalize = TRUE, to = "unix") {
@@ -143,7 +143,7 @@ convert_path <- function(path = NULL, ask = FALSE, normalize = TRUE, to = "unix"
 #'
 #' @inheritParams convert_path
 #'
-#' @return \code{character} vector of cleaned file paths
+#' @return \code{character} vector of cleaned file paths.
 #' @keywords internal
 clean_path <- function(path) {
   
@@ -166,7 +166,7 @@ clean_path <- function(path) {
 #' @inheritParams convert_path
 #'
 #' @return \code{character} vector the length of \code{path} containing the
-#'   converted paths
+#'   converted paths.
 #' @keywords internal
 make_unix_replacements <- function(path, normalize) {
   
@@ -213,7 +213,7 @@ make_unix_replacements <- function(path, normalize) {
 #' @inheritParams convert_path
 #'
 #' @return \code{character} vector the length of \code{path} containing the
-#'   converted paths
+#'   converted paths.
 #' @keywords internal
 make_windows_replacements <- function(path, normalize) {
   

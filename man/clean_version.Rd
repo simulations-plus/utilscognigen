@@ -12,7 +12,7 @@ clean_version(version)
 warning for files that already have a header.}
 }
 \value{
-\code{character} in the form of \code{R.version.string}
+\code{character} in the form of \code{R.version.string}.
 }
 \description{
 Clean a supported R version to its \code{R.version.string} representation

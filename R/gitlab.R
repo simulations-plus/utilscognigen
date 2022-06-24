@@ -130,13 +130,13 @@ download_gitlab <- function(url, destfile = NULL) {
 
 #' Helper to \code{download_gitlab} to facilitate traversing through trees
 #'
-#' @param api_url a single GitLab API URL pointing to a tree
-#' @param destfile a single non-existing directory
+#' @param api_url a single GitLab API URL pointing to a tree.
+#' @param destfile a single non-existing directory.
 #' @param curl_result \code{list} result of the parsed \code{curl} call to
-#'   \code{api_url}
+#'   \code{api_url}.
 #'
 #' @return created needed directories, calls \code{download_gitlab} for each
-#'   blob / file path pair, then invisibly returns \code{NULL}
+#'   blob / file path pair, then invisibly returns \code{NULL}.
 #' @keywords internal
 download_gitlab_tree <- function(api_url, destfile, curl_result) {
 
@@ -195,10 +195,10 @@ download_gitlab_tree <- function(api_url, destfile, curl_result) {
 
 #' List GitLab projects, optionally subset to groups
 #'
-#' @param host GitLab API host to use
-#' @param groups GitLab group name(s)
+#' @param host GitLab API host to use.
+#' @param groups GitLab group name(s).
 #'
-#' @return JSON \code{list} of GitLab projects
+#' @return JSON \code{list} of GitLab projects.
 #' @keywords internal
 list_gitlab_projects <- function(host = "gitlab.cognigencorp.com", groups = NULL) {
 
@@ -233,9 +233,9 @@ list_gitlab_projects <- function(host = "gitlab.cognigencorp.com", groups = NULL
 
 #' Convert a GitLab URL to its API format
 #'
-#' The recursive option is set to \code{true} for trees
+#' The recursive option is set to \code{true} for trees.
 #'
-#' @param url URL of a GitLab resource
+#' @param url URL of a GitLab resource.
 #'
 #' @return \code{character} URL with attributes for host, group, project,
 #'   branch, file, and whether it is a tree (is_tree).
@@ -334,7 +334,7 @@ as_gitlab_api_url <- function(url) {
 
 #' Check if a URL is a GitLab API URL
 #'
-#' @param url URL of a GitLab resource
+#' @param url URL of a GitLab resource.
 #'
 #' @return \code{logical}
 #' @keywords internal
@@ -357,9 +357,9 @@ is_gitlab_api_url <- function(url) {
 
 #' Get a GitLab project id
 #'
-#' @param host GitLab API host to use
-#' @param group GitLab group name
-#' @param project GitLab project name
+#' @param host GitLab API host to use.
+#' @param group GitLab group name.
+#' @param project GitLab project name.
 #'
 #' @return \code{integer} project id
 #' @keywords internal
@@ -384,9 +384,9 @@ get_gitlab_project_id <- function(host, group, project) {
 
 #' Run the \code{curl} system command and parse the JSON result
 #'
-#' @param url URL of a GitLab resource
+#' @param url URL of a GitLab resource.
 #'
-#' @return \code{list} of information about the resource
+#' @return \code{list} of information about the resource.
 #' @keywords internal
 curl_and_parse <- function(url) {
 

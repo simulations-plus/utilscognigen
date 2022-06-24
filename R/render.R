@@ -10,7 +10,7 @@
 #'
 #' @param path file path of R Markdown document. Defaults to the path of the
 #'   source editor context.
-#' @param open \code{logical} indicating whether to open the output file
+#' @param open \code{logical} indicating whether to open the output file.
 #' @inheritParams rcb
 #'
 #' @return \code{logical} indicating whether the document was successfully

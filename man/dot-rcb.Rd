@@ -7,10 +7,10 @@
 .rcb(path)
 }
 \arguments{
-\item{path}{file path of R program}
+\item{path}{file path of R program.}
 }
 \value{
-\code{logical} indicating whether the program executed successfully
+\code{logical} indicating whether the program executed successfully.
 }
 \description{
 Execute an R script in batch mode

@@ -3,6 +3,8 @@
 #' Utility function to collect the paths of input and output files used and 
 #' created in a R script, and print a short report in the console or log file.
 #' 
+#' @md
+#' 
 #' @name recorded_io
 #' 
 #' @param call a function call to read a data file or create a new file; 
@@ -142,7 +144,7 @@ record_output <- function(call, quiet = FALSE){
 #' @inheritParams recorded_io
 #' @param file a file path.
 #' @param type either 'input' or 'output' to document whether the recorded
-#' information corresponds to an input or output file
+#' information corresponds to an input or output file.
 #' 
 #' @keywords internal
 record_io <- function(call, file, type = 'input', quiet = FALSE){

@@ -10,7 +10,7 @@
 #'
 #' @inheritParams base::setwd
 #' @param focus \code{logical} indicating whether to show the working directory
-#' in the RStudio Files pane
+#' in the RStudio Files pane.
 #'
 #' @name wd_aliases
 NULL

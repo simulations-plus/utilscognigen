@@ -10,10 +10,10 @@ logfile(..., open = TRUE)
 \item{...}{file paths to retrieve the log files of. Defaults to the path of
 the source editor context.}
 
-\item{open}{\code{logical} indicating whether to open files in RStudio}
+\item{open}{\code{logical} indicating whether to open files in RStudio.}
 }
 \value{
-file paths to log files
+file paths to log files.
 }
 \description{
 Identify and open R, Rmd, SAS, tex, Rnw log files

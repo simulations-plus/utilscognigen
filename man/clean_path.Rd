@@ -10,7 +10,7 @@ clean_path(path)
 \item{path}{file paths. Defaults to the path of the source editor context.}
 }
 \value{
-\code{character} vector of cleaned file paths
+\code{character} vector of cleaned file paths.
 }
 \description{
 Removes quote characters, replaces backslashes with forward slashes, re-lists

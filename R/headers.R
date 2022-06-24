@@ -82,7 +82,7 @@ get_header_output_files <- function(path = NULL) {
 
 #' Extract a Cognigen header for an R script
 #'
-#' @param x a scanned R or Rmd file or a file path
+#' @param x a scanned R or Rmd file or a file path.
 #' @param min_hash \code{numeric}; The minimum number of "#" that define the
 #'   beginning of the header. There is no maximum.
 #' @param max_first_line \code{numeric}; The maximum number of non-blank lines
@@ -90,7 +90,7 @@ get_header_output_files <- function(path = NULL) {
 #'   this is determined by considering the number of lines in the YAML.
 #'
 #' @return a \code{character} vector of lines of the header or \code{FALSE} with
-#'   a reason attribute if no acceptable header is found
+#'   a reason attribute if no acceptable header is found.
 #'
 #' @keywords internal
 get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
@@ -171,9 +171,9 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
 #'
 #' @param path a file path to an R script. Defaults to the path of the source
 #'   editor context.
-#' @param sections header sections to parse
-#' @param header a header from an R script
-#' @param ... additional arguments passed to \code{\link{get_header}}
+#' @param sections header sections to parse.
+#' @param header a header from an R script.
+#' @param ... additional arguments passed to \code{\link{get_header}}.
 #'
 #' @return \code{parse_header} returns a \code{list} of parsed sections. Each
 #'   \code{parse_<section>} function returns the parsed section.

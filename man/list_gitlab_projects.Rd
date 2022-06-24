@@ -7,12 +7,12 @@
 list_gitlab_projects(host = "gitlab.cognigencorp.com", groups = NULL)
 }
 \arguments{
-\item{host}{GitLab API host to use}
+\item{host}{GitLab API host to use.}
 
-\item{groups}{GitLab group name(s)}
+\item{groups}{GitLab group name(s).}
 }
 \value{
-JSON \code{list} of GitLab projects
+JSON \code{list} of GitLab projects.
 }
 \description{
 List GitLab projects, optionally subset to groups

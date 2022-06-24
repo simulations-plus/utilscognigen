@@ -9,12 +9,12 @@
 #' default), a read-only copy will be opened. When \code{TRUE}, the Windows file
 #' path is printed as a message.
 #'
-#' @param ... file paths to be opened
+#' @param ... file paths to be opened.
 #' @param no_copies \code{logical} indicating whether to avoid downloading
 #'   copies of files. If \code{TRUE} and some file cannot be opened by this
 #'   system, the Windows path is printed as a message.
 #'
-#' @return invisibly returns \code{NULL}
+#' @return invisibly returns \code{NULL}.
 #' @export
 file_open <- function(..., no_copies = FALSE) {
   
@@ -59,6 +59,8 @@ file_open <- function(..., no_copies = FALSE) {
          no_copies = no_copies,
          show_dirs = show_dirs
          )
+  
+  return(invisible(NULL))
 
 }
 
@@ -113,13 +115,17 @@ file_open <- function(..., no_copies = FALSE) {
                           rstudioapi::navigateToFile)
 
   if(no_copies && identical(open_function, file.show)) {
-    cli::cli_alert_danger("Cannot open an editable version. Printing Windows path: {.file {path_to_windows(path)}}")
-    return(FALSE)
+    cli::cli_alert_info(
+      "Windows path: {.file {path_to_windows(path)}}"
+    )
+    return(TRUE)
   }
 
   # Check if file is binary and extension is not expected
   if(is_binary(path) && identical(open_function, rstudioapi::navigateToFile)) {
-    cli::cli_alert_danger("File is binary and cannot be opened: {.file {path}}")
+    cli::cli_alert_warning(
+      "File is binary and cannot be opened: {.file {path}}"
+    )
     return(FALSE)
   }
 

@@ -37,10 +37,10 @@ be wrapped to fit in the header. When \code{NULL} (the default), a blank
 section is included. When \code{FALSE}, no section is included. Ignored
 with a warning for files that already have a header.}
 
-\item{backup}{\code{logical} indicating whether to create backup files}
+\item{backup}{\code{logical} indicating whether to create backup files.}
 }
 \value{
-invisibly returns \code{NULL}
+invisibly returns \code{NULL}.
 }
 \description{
 Create a file with a header or append a timestamp entry to an existing file

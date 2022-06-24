@@ -7,11 +7,11 @@
 get_gitlab_project_id(host, group, project)
 }
 \arguments{
-\item{host}{GitLab API host to use}
+\item{host}{GitLab API host to use.}
 
-\item{group}{GitLab group name}
+\item{group}{GitLab group name.}
 
-\item{project}{GitLab project name}
+\item{project}{GitLab project name.}
 }
 \value{
 \code{integer} project id

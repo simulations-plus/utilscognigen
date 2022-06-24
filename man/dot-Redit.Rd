@@ -2,7 +2,7 @@
 % Please edit documentation in R/Redit.R
 \name{.Redit}
 \alias{.Redit}
-\title{Create, update, and open an R program.}
+\title{Create, update, and open an R program}
 \usage{
 .Redit(
   path = NULL,
@@ -37,14 +37,14 @@ be wrapped to fit in the header. When \code{NULL} (the default), a blank
 section is included. When \code{FALSE}, no section is included. Ignored
 with a warning for files that already have a header.}
 
-\item{backup}{\code{logical} indicating whether to create backup files}
+\item{backup}{\code{logical} indicating whether to create backup files.}
 
-\item{open}{\code{logical} indicating whether to open files in RStudio}
+\item{open}{\code{logical} indicating whether to open files in RStudio.}
 }
 \value{
-invisibly returns \code{NULL}
+invisibly returns \code{NULL}.
 }
 \description{
-Create, update, and open an R program.
+Create, update, and open an R program
 }
 \keyword{internal}

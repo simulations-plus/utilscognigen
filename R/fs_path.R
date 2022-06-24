@@ -1,6 +1,8 @@
 #' Build file paths based on Cognigen's file system and directory structure.
 #' 
 #' These functions are only intended to be used at Cognigen.
+#' 
+#' @md
 #'
 #' @name fs_path
 #'

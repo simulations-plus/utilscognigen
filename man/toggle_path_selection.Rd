@@ -7,6 +7,6 @@
 toggle_path_selection()
 }
 \description{
-This is intended to be used as an RStudio Addin
+This is intended to be used as an RStudio Addin.
 }
 \keyword{internal}

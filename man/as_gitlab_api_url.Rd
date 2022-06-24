@@ -7,13 +7,13 @@
 as_gitlab_api_url(url)
 }
 \arguments{
-\item{url}{URL of a GitLab resource}
+\item{url}{URL of a GitLab resource.}
 }
 \value{
 \code{character} URL with attributes for host, group, project,
   branch, file, and whether it is a tree (is_tree).
 }
 \description{
-The recursive option is set to \code{true} for trees
+The recursive option is set to \code{true} for trees.
 }
 \keyword{internal}
