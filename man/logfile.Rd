@@ -2,19 +2,17 @@
 % Please edit documentation in R/logfile.R
 \name{logfile}
 \alias{logfile}
-\title{Open R, Rmd, SAS, tex, Rnw log files in RStudio for the current source
-document}
+\title{Identify and open R, Rmd, SAS, tex, Rnw log files}
 \usage{
-logfile(...)
+logfile(..., open = TRUE)
 }
 \arguments{
-\item{...}{file paths to open the log files of. Defaults to the path of the
-source editor context.}
+\item{...}{file paths to retrieve the log files of. Defaults to the path of
+the source editor context.}
 }
 \value{
-invisibly returns \code{NULL}
+file paths to log files
 }
 \description{
-Open R, Rmd, SAS, tex, Rnw log files in RStudio for the current source
-document
+Identify and open R, Rmd, SAS, tex, Rnw log files
 }
