@@ -18,7 +18,7 @@ NULL
 
 #' @rdname wd_aliases
 #' @export
-cd <- function(dir, focus = TRUE) {
+cd <- function(dir, focus = getOption("utilscognigen_cd_focus", TRUE)) {
   
   if(missing(dir)) {
     source_file <- tryCatch(
