@@ -23,7 +23,7 @@
 #' \dontrun{
 #' rcb("script1.R", "script2.R")
 #' }
-rcb <- function(..., scanlogs = TRUE, as_job = rstudioapi::isAvailable()) {
+rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen_rcb_as_job", TRUE)) {
 
   assertthat::assert_that(
     is.logical(scanlogs)
