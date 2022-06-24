@@ -43,6 +43,8 @@ logfile <- function(..., open = TRUE) {
   extension = tools::file_ext(paths),
   open = open)
   
+  log_paths <- unlist(log_paths)
+  
   if(open) {
     invisible(log_paths)
   } else {
