@@ -29,12 +29,12 @@ truncated to the project number, drug, or sponsor level. Ignored when the
 first argument is provided.}
 }
 \value{
-The \code{path_*} functions return the path to the sponsor, drug, or project
-directory corresponding to either: the \code{path} of a file or directory; or
-the name of the sponsor, drug, or project number.
+The \code{path_*} functions return the path to the sponsor, drug, or
+project directory corresponding to either: the \code{path} of a file or
+directory; or the name of the sponsor, drug, or project number.
 
-The \code{browse_project_*} functions open the corresponding project's email
-alias or SharePoint site in a new browser tab.
+The \code{browse_project_*} functions open the corresponding project's
+email alias or SharePoint site in a new browser tab.
 
 \code{path_sponsor()} returns the path to the sponsor directory.
 
