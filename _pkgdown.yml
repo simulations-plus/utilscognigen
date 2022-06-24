@@ -1,1 +1,6 @@
 destination: public
+repo:
+  url:
+    home: https://gitlab.cognigencorp.com/r/utilscognigen/
+    source: https://gitlab.cognigencorp.com/r/utilscognigen/-/tree/main/
+    issue: https://gitlab.cognigencorp.com/r/utilscognigen/-/issues/
