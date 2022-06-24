@@ -17,9 +17,14 @@
 #' @return invisibly returns \code{NULL}
 #' @export
 file_open <- function(..., no_copies = FALSE) {
-
+  
   paths <- unique(unlist(list(...)))
-
+  
+  if(is.null(paths)) {
+    cli::cli_alert_danger("No files provided.")
+    return(invisible(NULL))
+  }
+  
   assertthat::assert_that(
     is.character(paths),
     is.logical(no_copies),
@@ -73,6 +78,8 @@ file_open <- function(..., no_copies = FALSE) {
     length(show_dirs) == 1,
     .Platform$OS.type == "unix"
     )
+  
+  path <- fs::path_real(path)
 
   if(dir.exists(path) && show_dirs) {
     cli::cli_alert_info("Showing directory: {.file {path}}")
@@ -83,8 +90,6 @@ file_open <- function(..., no_copies = FALSE) {
     # warning has already been output by file_open with all directories.
     return(FALSE)
   }
-
-  path <- fs::path_real(path)
 
   file_ext <- tools::file_ext(path)
 
