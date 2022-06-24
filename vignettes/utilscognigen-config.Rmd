@@ -1,0 +1,31 @@
+---
+title: "utilscognigen options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{utilscognigen options}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(utilscognigen)
+```
+
+# Configuration options
+
+These are default settings that can be controlled with `options()`. Set the desired options in your .Rprofile. Do not set these options in production code; none of these options control behavior in non-interactive R sessions.
+
+## `utilscognigen_cd_focus`
+
+This option controls whether `cd()` shows the working directory in the RStudio Files pane.
+
+## `utilscognigen_rcb_as_job`
+
+This option controls whether `rcb()` tries to execute the programs as an RStudio Job.
