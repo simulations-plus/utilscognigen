@@ -11,5 +11,5 @@ set_all_names <- function(x, nm) {
     is.vector(x),
     length(nm) == 1
   )
-  stats::setNames(x, rep("x", length(x)))
+  stats::setNames(x, rep(nm, length(x)))
 }
