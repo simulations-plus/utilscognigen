@@ -2,7 +2,7 @@
 % Please edit documentation in R/file_open.R
 \name{file_open}
 \alias{file_open}
-\title{Open files according to their extensions}
+\title{Open files according to their extensions or show a directory}
 \usage{
 file_open(..., no_copies = FALSE)
 }
@@ -17,8 +17,11 @@ system, the Windows path is printed as a message.}
 invisibly returns \code{NULL}
 }
 \description{
-The files will be opened if possible. The behavior for files that cannot be
-displayed in the RStudio source editor or a browser is determined by
-\code{no_copies}. When \code{FALSE} (the default), a read-only copy will be
-opened. When \code{TRUE}, the Windows file path is printed as a message.
+The files will be opened if possible. Up to one directory can be shown in the
+RStudio Files pane. 
+
+The behavior for files that cannot be displayed in the RStudio source editor
+or a browser is determined by \code{no_copies}. When \code{FALSE} (the
+default), a read-only copy will be opened. When \code{TRUE}, the Windows file
+path is printed as a message.
 }
