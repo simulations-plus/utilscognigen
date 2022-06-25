@@ -8,7 +8,7 @@ record_io(call, file, type = "input", quiet = FALSE)
 }
 \arguments{
 \item{call}{a function call to read a data file or create a new file;
-alternatively, call could be a simple file path.}
+alternatively, \code{call} can be one or more file paths.}
 
 \item{file}{a file path.}
 
@@ -16,7 +16,7 @@ alternatively, call could be a simple file path.}
 information corresponds to an input or output file.}
 
 \item{quiet}{a logical value indicating whether messages should be printed
-(FALSE; default) or not (TRUE).}
+(\code{FALSE}; default) or not (\code{TRUE}).}
 }
 \description{
 Utility function supporting \code{record_input} and \code{record_output}

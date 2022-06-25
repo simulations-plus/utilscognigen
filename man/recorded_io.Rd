@@ -6,8 +6,7 @@
 \alias{record_output}
 \alias{clear_recorded_io}
 \alias{get_recorded_io}
-\title{Utility function to collect the paths of input and output files used and
-created in a R script, and print a short report in the console or log file.}
+\title{Record and report input and output files used and created in R scripts}
 \usage{
 record_input(call, quiet = FALSE)
 
@@ -21,53 +20,61 @@ get_recorded_io(path = NULL)
 }
 \arguments{
 \item{call}{a function call to read a data file or create a new file;
-alternatively, call could be a simple file path.}
+alternatively, \code{call} can be one or more file paths.}
 
 \item{quiet}{a logical value indicating whether messages should be printed
-(FALSE; default) or not (TRUE).}
+(\code{FALSE}; default) or not (\code{TRUE}).}
 
 \item{path}{a file path to an R, Rmd, or log file. Defaults to the path of
 the source editor context.}
 }
 \value{
-If \code{call} is a function call, \code{record_input} will execute
-this call and returns its output. If \code{call} is a file path,
-\code{record_input} will simply return the value of \code{call}.
+\code{record_input()} returns the output of the evaluated \code{call}.
 
-In \code{record_output}, \code{call} is expected to create one or more
-files as a side-effect of the call. No return value is expected nor is
-returned.
+\code{record_output()} invisibly returns \code{NULL} after evaluating
+\code{call} which is expected to create one or more files as a side-effect of
+the call.
 
-Calling either \code{record_input} or \code{record_output} will cause
+\code{recorded_io()} and \code{clear_recorded_io()} both invisibly return
+\code{NULL}.
+
+\code{get_recorded_io()} returns a list with two character vector elements:
+input_files and output_files.
+}
+\description{
+Record and report input and output files used and created in R scripts
+}
+\details{
+\subsection{Recording input and output files}{
+
+Calling either \code{record_input()} or \code{record_output()} will cause
 information about file paths to be stored in a dedicated environment. If
-\code{call} is a function call, both functions expect attempts to detect
-file names and paths based upon known arguments of common functions that
-read or creates files; if the argument of the \code{call} are not
-recognized, both \code{record_input} and \code{record_output} will assume
-that the 1st argument \code{call} provided the path of the file to be
-recorded.
+\code{call} is a function call, both functions expect attempts to detect file
+names and paths based upon known arguments of common functions that read or
+creates files; if the argument of the \code{call} are not recognized, both
+\code{record_input()} and \code{record_output()} will assume that the 1st
+argument \code{call} provided the path of the file to be recorded.
 
-By default, a message will be printed by both \code{record_input} and
-\code{record_output} to report the path of the files that were stored.
+By default, a message will be printed by both \code{record_input()} and
+\code{record_output()} to report the path of the files that were stored.
+}
+
+\subsection{Reporting input and output files}{
 
 Ultimately, the collected information can be summarized by calling
-\code{recorded_io} typically at the end of R script. In a .Rmd file,
-\code{recorded_io} would need to be called inside a chunk set with the
-\code{message = FALSE} option so the information could be printed to
-console or the .Rout file when .Rmd file is rendered using
+\code{recorded_io()} typically at the end of an R script. In an .Rmd file,
+\code{recorded_io()} would need to be called inside a chunk set with the
+\code{message = FALSE} option so the information could be printed to console
+or the .Rout file when .Rmd file is rendered using
 \code{\link[utilscognigen]{render}}.
 
 In some cases (eg, in an interactive R session), it could be useful to call
-the \code{clear_recorded_io} function to erase all the recorded input and
-output file paths.
+\code{clear_recorded_io()} to erase all the recorded input and output file
+paths.
 
-To retrieve collected input and output files from an executed R or Rmd
-file, use \code{get_recorded_io}. This returns a list with two character
-vector elements: input_files and output_files.
+Retrieve collected input and output files from the log of an executed R or
+Rmd file with \code{get_recorded_io()}.
 }
-\description{
-Utility function to collect the paths of input and output files used and
-created in a R script, and print a short report in the console or log file.
 }
 \examples{
 
