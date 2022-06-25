@@ -176,7 +176,7 @@ rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen.rcb_as_j
     silent = TRUE
     )
 
-  if(class(callr_result) == "try-error") {
+  if(inherits(callr_result, "try-error")) {
     return(FALSE)
   } else if(callr_result$status != 0) {
     return(FALSE)

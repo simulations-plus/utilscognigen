@@ -240,7 +240,7 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
     silent = TRUE
   )
   
-  if ( class(io) == 'try-error' ){
+  if ( inherits(io, 'try-error') ){
     cli::cli_alert_warning(
       'Invalid {type} information: {.file {file1}}'
     )
@@ -275,7 +275,7 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
       silent = TRUE
     )
     
-    if ( class(io) == 'try-error' ){
+    if ( inherits(io, 'try-error') ){
       cli::cli_alert_warning(
         'Invalid output information: {.file {file2}}'
       )
