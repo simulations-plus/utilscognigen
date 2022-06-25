@@ -22,28 +22,87 @@ browse_project_sharepoint(path = ".")
 \arguments{
 \item{sponsor, drug, project_number}{\code{character} vectors of directory
 patterns or names. Wildcard expansion (also known as 'globbing') is
-supported.}
+supported. See \code{\link[base]{Sys.glob}}.}
 
 \item{path}{\code{character} vector of file or directory paths that will be
-truncated to the project number, drug, or sponsor level. Ignored when the
-first argument is provided.}
+truncated to the project number, drug, or sponsor level. Ignored in
+\code{path_*} functions when the first argument is provided (i.e.,
+\code{path} is ignored if the \code{sponsor} argument is provided to
+\code{path_sponsor()}).}
 }
 \value{
-The \code{path_*} functions return the path to the sponsor, drug, or
+For \code{path_*} functions, the path(s) to the sponsor, drug, or
 project directory corresponding to either: the \code{path} of a file or
-directory; or the name of the sponsor, drug, or project number.
+directory; or the name(s) of the sponsor, drug, or project number.
 
-The \code{browse_project_*} functions open the corresponding project's
-email alias or SharePoint site in a new browser tab.
-
-\code{path_sponsor()} returns the path to the sponsor directory.
-
-\code{path_drug()} returns the path to the drug directory.
-
-\code{path_project()} returns the path to the project directory.
+For \code{browse_project_*} functions, invisibly returns \code{NULL}.
 }
 \description{
 These functions are only intended to be used at Cognigen.
+
+See
+\href{https://wiki.cognigencorp.com/display/qms/QMS-1.6+Standard+Directory+Structure}{Wiki
+QMS 1.6 Standard Directory Structure}
+}
+\details{
+\subsection{\code{path_*}}{
+
+\code{path_sponsor()} returns the path to sponsor directories. * When only
+the \code{path} argument is set (including the default, \code{path = "."}),
+returns one sponsor directory corresponding to each \code{path}.
+\itemize{
+\item When the \code{sponsor} argument is provided, \code{path} is ignored and
+all sponsor directories matching any element of \code{sponsor} are returned.
+}
+
+\code{path_drug()} returns the path to drug directories, which are one
+directory below sponsor directories.
+\itemize{
+\item When only the \code{path} argument is set (including the default,
+\code{path = "."}), returns one drug directory corresponding to each
+\code{path}.
+\item When the \code{drug} argument is provided, \code{path} is ignored and all
+drug directories matching any element of \code{drug} are returned. Further
+subsetting of drug directories can be done by providing \code{sponsor}.
+}
+
+\code{path_project()} returns the path to project directories, which are one
+directory below drug directories.
+\itemize{
+\item When only the \code{path} argument is set (including the default,
+\code{path = "."}), returns one project directory corresponding to each
+\code{path}.
+\item When the \code{project_number} argument is provided, \code{path} is ignored
+and all project directories matching \code{project_number} are returned.
+Further subsetting of project directories can be done by providing
+\code{drug} and/or \code{sponsor}. Resulting directories will match at least
+one element of both \code{drug} and \code{sponsor}.
+}
+}
+
+\subsection{\code{browse_project_*}}{
+
+\code{browse_project_email()} opens email aliases in Outlook on the web in
+a new browser tab.
+\itemize{
+\item When called without any arguments, opens the email alias corresponding to
+the working directory.
+\item When one or more paths are provided to \code{path}, opens all corresponding
+project email aliases.
+\item Email aliases that do not exist or you do not have access to might open,
+but not display email content.
+}
+
+\code{browse_project_sharepoint()} opens internal SharePoint sites in a new
+browser tab.
+\itemize{
+\item When called without any arguments, opens the SharePoint site corresponding
+to the working directory.
+\item When one or more paths are provided to \code{path}, opens all corresponding
+SharePoint sites.
+\item SharePoint sites that do not exist are expected to be skipped.
+}
+}
 }
 \examples{
 \dontrun{
