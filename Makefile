@@ -29,7 +29,7 @@ check: build
 	R CMD check builds/$(PKGNAME)_$(PKGVERS).tar.gz
 
 install:
-	R CMD INSTALL --library=$(R_LIBS_USER) builds/$(PKGNAME)_$(PKGVERS).tar.gz
+	R CMD INSTALL --library=$(R_LIBS_USER) --install-tests builds/$(PKGNAME)_$(PKGVERS).tar.gz
 
 clean:
 	@rm -rf $(PKGNAME).Rcheck

@@ -1,4 +1,4 @@
-#' Build file paths based on Cognigen's file system and directory structure.
+#' Build file paths based on Cognigen's file system and directory structure
 #'
 #' @md
 #'
@@ -9,7 +9,7 @@
 #' 
 #' See
 #' \href{https://wiki.cognigencorp.com/display/qms/QMS-1.6+Standard+Directory+Structure}{Wiki
-#' QMS 1.6 Standard Directory Structure}
+#' QMS 1.6 Standard Directory Structure}.
 #'
 #' @param sponsor,drug,project_number \code{character} vectors of directory
 #'   patterns or names. Wildcard expansion (also known as 'globbing') is

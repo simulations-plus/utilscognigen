@@ -7,7 +7,7 @@
 \alias{path_project}
 \alias{browse_project_email}
 \alias{browse_project_sharepoint}
-\title{Build file paths based on Cognigen's file system and directory structure.}
+\title{Build file paths based on Cognigen's file system and directory structure}
 \usage{
 path_sponsor(sponsor, path = ".")
 
@@ -42,7 +42,7 @@ These functions are only intended to be used at Cognigen.
 
 See
 \href{https://wiki.cognigencorp.com/display/qms/QMS-1.6+Standard+Directory+Structure}{Wiki
-QMS 1.6 Standard Directory Structure}
+QMS 1.6 Standard Directory Structure}.
 }
 \details{
 \subsection{\code{path_*}}{
