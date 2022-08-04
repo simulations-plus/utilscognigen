@@ -36,8 +36,8 @@ Paths are split by commas. Paths that do not exist result in
   \code{NA} since there is no Unix equivalent.
 
   When converting to Windows representation, paths not in '~', '/cognigen',
-  '/doc', '/home', '/misc' result in \code{NA} since there is no Windows
-  equivalent.
+  '/doc', '/home', '/miguel', or '/misc' result in \code{NA} since there is
+  no Windows equivalent.
 }
 \examples{
 \dontrun{
