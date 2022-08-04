@@ -7,8 +7,8 @@
 #'   \code{NA} since there is no Unix equivalent.
 #'
 #'   When converting to Windows representation, paths not in '~', '/cognigen',
-#'   '/doc', '/home', '/misc' result in \code{NA} since there is no Windows
-#'   equivalent.
+#'   '/doc', '/home', '/miguel', or '/misc' result in \code{NA} since there is
+#'   no Windows equivalent.
 #'
 #' @param path file paths. Defaults to the path of the source editor context.
 #' @param ask \code{logical} indicating whether to interactively ask for input.
@@ -175,12 +175,19 @@ make_unix_replacements <- function(path, normalize) {
   path <- gsub("^H:", paste0("/home/", Sys.info()[["user"]]), path, ignore.case = TRUE)
   path <- gsub("^I:", "/home", path, ignore.case = TRUE)
   path <- gsub("^L:", "/cognigen", path, ignore.case = TRUE)
-  path <- gsub("^M:", "/doc", path, ignore.case = TRUE)
+  
+  # since SLP employees do not have access to /cognigen files, use that to 
+  # determine whether M: is /miguel (SLP) or /cognigen (Cognigen)
+  if(length(list.files("/cognigen")) == 0) {
+    path <- gsub("^M:", "/miguel", path, ignore.case = TRUE)
+  } else {
+    path <- gsub("^M:", "/doc", path, ignore.case = TRUE)
+  }
   
   # Catch any C: paths
   c_drive <- grepl("^C:", path, ignore.case = TRUE)
   if(any(c_drive)) {
-    cli::cli_warn("There is no equivalent to the C drive on Unix")
+    cli::cli_warn("There is no equivalent to the C:/ drive on Unix")
     path[c_drive] <- NA_character_
   }
   
@@ -226,6 +233,8 @@ make_windows_replacements <- function(path, normalize) {
   path <- gsub("^/doc", "M:", path, ignore.case = TRUE)
   path <- gsub("^/misc/doc", "M:", path, ignore.case = TRUE)
   path <- gsub("^/misc", "M:", path, ignore.case = TRUE)
+  # /miguel is M: at SLP
+  path <- gsub("^/miguel", "M:", path, ignore.case = TRUE)
   
   # Catch any directories that don't exist on Windows
   dne_paths <- grepl("^/", path)

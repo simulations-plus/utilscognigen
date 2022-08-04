@@ -212,7 +212,8 @@ scan_rout <- function(path) {
 scan_single_warnings <- function(rout) {
   single_warning_lines <- c(grep("^Warning:", rout),
                             grep("^Warning message:", rout),
-                            grep("^In addition: Warning message:", rout))
+                            grep("^In addition: Warning message:", rout),
+                            grep("^Warning in.*:", rout))
   unlist(lapply(
     X = c(single_warning_lines, single_warning_lines + 1),
     FUN = keep_indented_after_message,
