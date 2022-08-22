@@ -65,7 +65,7 @@ file_open <- function(..., no_copies = FALSE) {
 }
 
 # Open a single file
-.file_open <- function(path, no_copies = FALSE, show_dirs) {
+.file_open <- function(path, no_copies = FALSE, show_dirs = TRUE) {
 
   if(!file.exists(path)) {
     cli::cli_alert_danger("File not found: {.file {path}}")
