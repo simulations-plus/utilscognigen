@@ -7,6 +7,7 @@
 Redit(
   ...,
   version = NULL,
+  copyright_holder = NULL,
   purpose = NULL,
   input_files = NULL,
   output_files = NULL,
@@ -21,6 +22,12 @@ Redit(
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
 warning for files that already have a header.}
+
+\item{copyright_holder}{either \code{NULL} for the default Cognigen copyright
+statement, a single \code{character} defining the copyright holders and
+accompanying text to follow copyright mark and year, a \code{character}
+vector for multiple separate copyright statements, or \code{FALSE} for no
+copyright.}
 
 \item{purpose, input_files, output_files}{purpose, input files, and output
 files of R program(s) given as \code{character} vectors. The purpose will

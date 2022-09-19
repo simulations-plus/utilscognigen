@@ -7,7 +7,7 @@
 make_date_user_line()
 }
 \value{
-\code{character}
+\code{character} or \code{NULL}
 }
 \description{
 Make the header line containing the date and user

@@ -4,7 +4,7 @@
 \alias{list_gitlab_projects}
 \title{List GitLab projects, optionally subset to groups}
 \usage{
-list_gitlab_projects(host = "gitlab.cognigencorp.com", groups = NULL)
+list_gitlab_projects(host = NULL, groups = NULL)
 }
 \arguments{
 \item{host}{GitLab API host to use.}
@@ -17,4 +17,3 @@ JSON \code{list} of GitLab projects.
 \description{
 List GitLab projects, optionally subset to groups
 }
-\keyword{internal}

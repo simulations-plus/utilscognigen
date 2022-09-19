@@ -8,6 +8,12 @@
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
 #'   warning for files that already have a header.
+#' 
+#' @param copyright_holder either \code{NULL} for the default Cognigen copyright
+#'   statement, a single \code{character} defining the copyright holders and
+#'   accompanying text to follow copyright mark and year, a \code{character}
+#'   vector for multiple separate copyright statements, or \code{FALSE} for no
+#'   copyright.
 #'
 #' @param purpose,input_files,output_files purpose, input files, and output
 #'   files of R program(s) given as \code{character} vectors. The purpose will
@@ -75,6 +81,7 @@
 #' for getting content from headers.
 Redit <- function(...,
                   version = NULL,
+                  copyright_holder = NULL,
                   purpose = NULL,
                   input_files = NULL,
                   output_files = NULL,
@@ -87,12 +94,13 @@ Redit <- function(...,
     paths <- get_source_file()
     # save current document from interactive session
     rstudioapi::documentSave()
-  } 
-
+  }
+  
   invisible(lapply(paths, function(path) {
     .Redit(
       path = path,
       version = version,
+      copyright_holder = copyright_holder,
       purpose = purpose,
       input_files = input_files,
       output_files = output_files,
@@ -112,6 +120,7 @@ Redit <- function(...,
 #' @keywords internal
 .Redit <- function(path = NULL,
                    version = NULL,
+                   copyright_holder = NULL,
                    purpose = NULL,
                    input_files = NULL,
                    output_files = NULL,
@@ -143,6 +152,7 @@ Redit <- function(...,
 
     tried <- try(make_header(path = path,
                              version = version,
+                             copyright_holder = copyright_holder,
                              purpose = purpose,
                              input_files = input_files,
                              output_files = output_files,
@@ -161,7 +171,7 @@ Redit <- function(...,
 
   }
 
-  return(invisible(NULL))
+  invisible(NULL)
 
 }
 
@@ -172,19 +182,9 @@ Redit <- function(...,
 
 .split_length <- 79
 
-.clean_copyright <- paste0(
-  strwrap(
-    paste0(
-      "Copyright ",
-      format(Sys.Date(), format = "%Y"),
-      ", Cognigen Corporation. The contents of this program are confidential and ",
-      "cannot be used - in any form - for anything outside the drug and specific ",
-      "project for which the file is provided."),
-    width = .split_length,
-    prefix = "# "),
-  collapse = "\n")
-
 .section_break <- paste0(rep("#", .split_length), collapse = "")
+
+.cognigen_copyright_message <- "Cognigen Corporation. The contents of this program are confidential and cannot be used - in any form - for anything outside the drug and specific project for which the file is provided."
 
 #' Create a file with a header or append a timestamp entry to an existing file
 #' with a header
@@ -196,6 +196,7 @@ Redit <- function(...,
 #' @keywords internal
 make_header <- function(path = NULL,
                         version = NULL,
+                        copyright_holder = NULL,
                         purpose = NULL,
                         input_files = NULL,
                         output_files = NULL,
@@ -205,7 +206,7 @@ make_header <- function(path = NULL,
   if(is.null(path)) {
     cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn make_header}.")
   }
-
+  
   file_ext <- tolower(tools::file_ext(path))
 
   if(file.exists(path)) {
@@ -267,6 +268,7 @@ make_header <- function(path = NULL,
 
         header <- build_new_header(path = path,
                                    version = version,
+                                   copyright_holder = copyright_holder,
                                    purpose = purpose,
                                    input_files = input_files,
                                    output_files = output_files)
@@ -331,6 +333,7 @@ make_header <- function(path = NULL,
 
   header <- build_new_header(path = path,
                              version = version,
+                             copyright_holder = copyright_holder,
                              purpose = purpose,
                              input_files = input_files,
                              output_files = output_files)
@@ -357,13 +360,14 @@ make_header <- function(path = NULL,
     writeLines(rmd_content, path)
   }
 
-  return(invisible(NULL))
+  invisible(NULL)
 
 }
 
 
 build_new_header <- function(path = NULL,
                              version = NULL,
+                             copyright_holder = NULL,
                              purpose = NULL,
                              input_files = NULL,
                              output_files = NULL) {
@@ -375,6 +379,13 @@ build_new_header <- function(path = NULL,
   name_line <- paste0("# Name: ", path)
   version <- clean_version(version)
   r_version_line <- paste0("# Written for use with ", gsub("\\s\\(.*", "", version))
+  copyright_line <- make_copyright_line(copyright_holder)
+  
+  # since either the r version line or the copyright line will come prior to a
+  # section break, add a break after the version line if there is a copyright
+  if(!is.null(copyright_line)) {
+    r_version_line <- paste0(r_version_line, "\n", blank)
+  }
 
   header <- paste0(
     .section_break, "\n",
@@ -383,11 +394,10 @@ build_new_header <- function(path = NULL,
     make_date_user_line(), "\n",
     blank,
     r_version_line, "\n",
-    blank,
-    .clean_copyright, "\n",
+    copyright_line, "\n",
     .section_break
   )
-
+  
   # Add purpose, input_files, and output_files as long as they are not all FALSE
   if(!all(isFALSE(purpose), isFALSE(input_files), isFALSE(output_files))) {
 
@@ -406,8 +416,11 @@ build_new_header <- function(path = NULL,
     )
 
   }
+  
+  # remove double new-lines
+  header <- gsub("\\n\\n+", "\n", header)
 
-  return(header)
+  header
 
 }
 
@@ -416,7 +429,7 @@ build_new_header <- function(path = NULL,
 #'
 #' @inheritParams Redit
 #'
-#' @return \code{character} in the form of \code{R.version.string}.
+#' @return \code{character} in the form of \code{R.version.string} or \code{NULL}.
 #' @keywords internal
 clean_version <- function(version) {
   if(is.null(version)) {
@@ -440,7 +453,7 @@ clean_version <- function(version) {
     cli::cli_abort("R version {.version {version}} is not supported")
   }
 
-  return(clean)
+  clean
 
 }
 
@@ -451,7 +464,7 @@ clean_version <- function(version) {
 #' @param user \code{character} user. Defaults to the system environment
 #'   variable \code{USER}.
 #'
-#' @return \code{character} full name of the \code{user}.
+#' @return \code{character} full name of the \code{user} or \code{NULL}.
 #' @keywords internal
 get_user_full_name <- function(user = Sys.getenv("USER")) {
   assertthat::assert_that(
@@ -465,29 +478,79 @@ get_user_full_name <- function(user = Sys.getenv("USER")) {
                                            stdout = TRUE))
 
   if(length(user_account) == 0) {
-    cli::cli_abort("user not found: '{user}'")
+    cli::cli_warn("user not found: '{user}'")
+    return(NULL)
   }
 
   # Fifth field is full name
   full_name <- unlist(lapply(strsplit(user_account, ":"), `[[`, 5))
-  return(full_name)
+  
+  full_name
 
 }
 
 
 #' Make the header line containing the date and user
 #'
-#' @return \code{character}
+#' @return \code{character} or \code{NULL}
 #' @keywords internal
 make_date_user_line <- function() {
-  return(paste0(
+  
+  full_name <- get_user_full_name()
+  user_name <- Sys.getenv("USER")
+  
+  full_name_user_name <- if(full_name == user_name) {
+    user_name
+  } else if(full_name == "" & user_name == "") {
+    ""
+  } else if(is.null(full_name)) {
+    user_name
+  } else if(full_name == "") {
+    user_name
+  } else if(user_name == "") {
+    full_name
+  } else {
+    glue::glue("{full_name} ({user_name})")
+  }
+  
+  date_user_line <- paste0(
     "# ",
     format(Sys.time(), format = "%a %b %d %H:%M:%S %Z %Y", tz = "America/New_York"), " ",
-    get_user_full_name(),
-    " (", Sys.getenv("USER"), ")"
-  ))
+    full_name_user_name
+  )
+  
+  date_user_line
+  
 }
 
+#' Make the header lines for a copyright statement
+#'
+#' @return \code{character} or \code{NULL}
+#' @keywords internal
+make_copyright_line <- function(copyright_holder = NULL) {
+  
+  copyright_with_year <- paste0("Copyright ", format(Sys.Date(), format = "%Y"))
+  
+  if(is.null(copyright_holder)) {
+    copyright_holder <- .cognigen_copyright_message
+  }
+  
+  if(is.character(copyright_holder)) {
+    paste0(
+      strwrap(
+        paste(copyright_with_year, copyright_holder, collapse = "\n\n"),
+        width = .split_length,
+        prefix = "# "
+      ),
+      collapse = "\n"
+    )
+  } else if(isFALSE(copyright_holder)) {
+    NULL
+  } else {
+    NULL
+  }
+  
+}
 
 #' Make the header lines containing the purpose
 #'
@@ -495,7 +558,7 @@ make_date_user_line <- function() {
 #' @param split_length \code{integer} representing how many characters to split
 #'   at.
 #'
-#' @return \code{character}
+#' @return \code{character} or \code{NULL}
 #' @keywords internal
 make_purpose <- function(purpose = NULL, split_length = .split_length) {
 
@@ -512,7 +575,7 @@ make_purpose <- function(purpose = NULL, split_length = .split_length) {
   purpose <- paste0(purpose, collapse = "\n")
   purpose <- paste0("# PURPOSE: \n", purpose, "\n# ")
 
-  return(purpose)
+  purpose
 
 }
 
@@ -522,7 +585,7 @@ make_purpose <- function(purpose = NULL, split_length = .split_length) {
 #' @param files input or output files.
 #' @param type either \code{"input"} or \code{"output"}.
 #'
-#' @return \code{character}
+#' @return \code{character} or \code{NULL}
 #' @keywords internal
 make_header_files <- function(files, type = c("input", "output")) {
 
@@ -541,6 +604,7 @@ make_header_files <- function(files, type = c("input", "output")) {
   # Otherwise, content of header files is provided
   files <- paste0("# ", files, collapse = "\n")
   files <- paste0("# ", section_title, ": \n", files, "\n# ")
-  return(files)
+  
+  files
 
 }

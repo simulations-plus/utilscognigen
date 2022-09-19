@@ -57,7 +57,7 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
 #'
 #' Scan the log files of multiple R and/or SAS programs The scan searches
 #' \*.Rout files for warnings and errors; \*.log files for warnings, errors,
-#' notes, and other messages using the system command \code{scanlogs}.
+#' notes, and other messages using the shell command \code{scanlogs}.
 #'
 #' @param ... \code{character} vectors containing file names or paths with
 #'   extensions .R, .r, .Rout, .sas, .log, or .lst. Defaults to the path of the
@@ -137,6 +137,7 @@ scanlogs_single <- function(path = NULL) {
 }
 
 scanlogs_single.sas <- function(path = NULL) {
+  require_cognigen()
   path <- if(is.null(path)) get_source_file() else path
   return_value <- system(paste0("scanlogs ", path), intern = TRUE)
   return(invisible(return_value))

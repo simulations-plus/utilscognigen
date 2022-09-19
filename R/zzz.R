@@ -1,5 +1,3 @@
-# Copyright 2020-$date Cognigen Corporation, a Simulations Plus Company
-
 .onLoad <- function(libname, pkgname) {
   
   packageStartupMessage(

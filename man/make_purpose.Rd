@@ -17,7 +17,7 @@ with a warning for files that already have a header.}
 at.}
 }
 \value{
-\code{character}
+\code{character} or \code{NULL}
 }
 \description{
 Make the header lines containing the purpose

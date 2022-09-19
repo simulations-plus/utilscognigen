@@ -15,7 +15,7 @@
 #'
 #' @return returns a \code{logical} vector indicating which copy operations
 #'   succeeded for each of the files attempted.
-#' @keywords internal
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -92,8 +92,7 @@ file_copy <- function(from, to, args = c("-p", "-r")) {
 #'
 #' @param from a file name, path, or directory.
 #' @param to a file name, path, or directory.
-#' @param args \code{character} vector of additional arguments to \code{cp}. The
-#'   default includes \code{"-p"}, to preserve mode, ownership, and timestamps.
+#' @param args \code{character} vector of additional arguments to \code{cp}.
 #'   See \code{file_copy(args = "help")} for \code{cp} arguments.
 #'
 #' @return \code{logical} indicating if copy operation succeeded.
@@ -103,7 +102,7 @@ cp <- function(from, to, args = NULL) {
   if(!file.exists(from)) {
     cli::cli_abort("File does not exist: {.file {from}}")
   }
-
+  
   res <- system2("cp", args = c(from, to, args))
   return(ifelse(res == 0, TRUE, FALSE))
 }

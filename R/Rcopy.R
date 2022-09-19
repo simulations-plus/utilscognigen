@@ -1,16 +1,26 @@
 #' Copy and open R and Rmd files with QMS approved headers.
 #'
-#' This function is somewhat similar to the Cognigen system command
-#' \code{Rcopy}, but it is not called.
+#' This function is somewhat similar to the Cognigen shell command \code{Rcopy},
+#' but it is not called.
 #'
-#' @param from path or GitLab web URL of original R program or Rmd file.
-#'   Defaults to the path of the source editor context.
+#' @param from path of original R program or Rmd file. Defaults to the path of
+#'   the source editor context.
+#'   
 #' @param to path or directory of new file. If \code{to} is a directory,
 #'   \code{from} is copied to that directory. Defaults to the basename of the
 #'   \code{from} file.
+#'   
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.
+#' 
+#' @param copyright_holder either \code{NULL} for the default Cognigen copyright
+#'   statement, a single \code{character} defining the copyright holders and
+#'   accompanying text to follow copyright mark and year, a \code{character}
+#'   vector for multiple separate copyright statements, or \code{FALSE} for no
+#'   copyright.
+#'   
 #' @param open \code{logical} indicating whether to open files in RStudio.
+#' 
 #' @param save \code{logical} indicating whether to save files prior to copy.
 #' 
 #' @return invisibly returns \code{NULL}.
@@ -33,16 +43,16 @@
 #' # R Markdown works too
 #' Rcopy("markdown-file.Rmd", "new-markdown-file.Rmd")
 #'
-#' # Copy an R program from GitLab to an "R/includes" directory
-#' Rcopy(
-#'   "https://gitlab.cognigencorp.com/r/shared-code/-/blob/master/functions/sstat.R",
-#'   "../R/includes"
-#' )
 #' }
 #'
-#' @seealso \code{?interactivecog::Rcopy_shared_code} for simpler copying from
-#'   the shared-code repository; \code{\link{Redit}} for creating R programs
-Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isAvailable(), save = FALSE) {
+#' @seealso \code{\link{Rcopy_shared_code}} for simpler copying from the
+#'   shared-code repository; \code{\link{Redit}} for creating R programs
+Rcopy <- function(from = NULL, 
+                  to = NULL, 
+                  version = NULL, 
+                  copyright_holder = NULL,
+                  open = rstudioapi::isAvailable(), 
+                  save = FALSE) {
 
   assertthat::assert_that(
     length(from) == 1 || is.null(from),
@@ -92,31 +102,6 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
   from_original <- from
 
-  # Special case where `from` is a GitLab url.
-  # Download from GitLab to tempdir
-  # Once downloaded, set `from` to the file in tempdir
-
-  from_is_gitlab_url <-
-    grepl("gitlab\\.", from, ignore.case = TRUE) &&
-    grepl("\\.com", from, ignore.case = TRUE) &&
-    !file.exists(from)
-
-  if(from_is_gitlab_url) {
-
-    from_temp <- file.path(tempdir(), basename(from))
-
-    # Download to tempdir; download_gitlab returns a logical
-    download_gitlab_result <- download_gitlab(url = from,
-                                              destfile = from_temp)
-    assertthat::assert_that(
-      download_gitlab_result,
-      msg = "`from` could not be downloaded from GitLab"
-    )
-
-    from <- from_temp
-
-  }
-
   assertthat::assert_that(
     file.exists(from),
     msg = "`from` must be an existing R or Rmd file"
@@ -126,10 +111,12 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
   
   new_header <- if(isFALSE(old_header)) {
     build_new_header(path = to,
-                     version = version)
+                     version = version,
+                     copyright_holder = copyright_holder)
   } else {
     build_new_header(path = to,
                      version = version,
+                     copyright_holder = copyright_holder,
                      purpose = FALSE,
                      input_files = FALSE,
                      output_files = FALSE)
@@ -140,7 +127,9 @@ Rcopy <- function(from = NULL, to = NULL, version = NULL, open = rstudioapi::isA
 
     if(isFALSE(old_header)) {
 
-      file.copy(from, to)
+      # file_copy is expected to be used on Linux at Cognigen. since some files
+      # that are copied are read-only, do not preserve mode and ownership
+      file_copy(from, to, args = c("--preserve=timestamps", "--no-preserve=mode,ownership"))
 
       suppressMessages(Redit(to, open = FALSE))
 

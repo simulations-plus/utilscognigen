@@ -24,19 +24,3 @@ Defaults to the basename of the \code{from} file.}
   input, the first 100 pages are downloaded. For blob input, the blob is
   downloaded. Version 4 of the GitLab API is used.
 }
-\examples{
-\dontrun{
-# Download a single file
-download_gitlab(
-  "https://gitlab.cognigencorp.com/r/shared-code/-/blob/master/functions/sstat.R",
-  "sstat.R"
-)
-
-# Download a directory
-download_gitlab(
-  "https://gitlab.cognigencorp.com/r/shared-code/-/tree/master/functions",
-  "functions"
-)
-}
-}
-\keyword{internal}

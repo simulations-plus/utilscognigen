@@ -2,7 +2,7 @@
 % Please edit documentation in R/gitlab.R
 \name{curl_and_parse}
 \alias{curl_and_parse}
-\title{Run the \code{curl} system command and parse the JSON result}
+\title{Run the \code{curl} shell command and parse the JSON result}
 \usage{
 curl_and_parse(url)
 }
@@ -13,6 +13,6 @@ curl_and_parse(url)
 \code{list} of information about the resource.
 }
 \description{
-Run the \code{curl} system command and parse the JSON result
+Run the \code{curl} shell command and parse the JSON result
 }
 \keyword{internal}

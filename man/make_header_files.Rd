@@ -12,7 +12,7 @@ make_header_files(files, type = c("input", "output"))
 \item{type}{either \code{"input"} or \code{"output"}.}
 }
 \value{
-\code{character}
+\code{character} or \code{NULL}
 }
 \description{
 Make the header lines containing the input or output files

@@ -314,9 +314,14 @@ browse_project_email <- function(path = ".") {
   
   require_cognigen()
   
+  outlook_groups_url <- getOption("utilscognigen.outlook_groups_url")
+  if(is.null(outlook_groups_url)) {
+    cli::cli_abort("The {.arg utilscognigen.outlook_groups_url} option is not set.")
+  }
+  
   alias <- mk_alias(path)
   
-  url <- file.path("https://outlook.office.com/mail/group/cognigencorp.com", alias, "email")
+  url <- file.path(outlook_groups_url, alias, "email")
   
   for(u in url) {
     utils::browseURL(u)
@@ -332,9 +337,14 @@ browse_project_sharepoint <- function(path = ".") {
   
   require_cognigen()
   
+  sharepoint_sites_url <- getOption("utilscognigen.sharepoint_sites_url")
+  if(is.null(sharepoint_sites_url)) {
+    cli::cli_abort("The {.arg utilscognigen.sharepoint_sites_url} option is not set.")
+  }
+  
   alias <- mk_alias(path)
   
-  url <- file.path("https://simulationsplus.sharepoint.com/sites", alias)
+  url <- file.path(sharepoint_sites_url, alias)
   
   for(u in url) {
     # binary body indicates that the page does not exist

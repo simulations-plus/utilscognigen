@@ -11,8 +11,7 @@ cp(from, to, args = NULL)
 
 \item{to}{a file name, path, or directory.}
 
-\item{args}{\code{character} vector of additional arguments to \code{cp}. The
-default includes \code{"-p"}, to preserve mode, ownership, and timestamps.
+\item{args}{\code{character} vector of additional arguments to \code{cp}.
 See \code{file_copy(args = "help")} for \code{cp} arguments.}
 }
 \value{

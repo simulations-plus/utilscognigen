@@ -33,3 +33,19 @@ This option controls whether `cd()` shows the working directory in the RStudio F
 ## `utilscognigen.rcb_as_job`
 
 This option controls whether `rcb()` tries to execute the programs as an RStudio Job.
+
+## `utilscognigen.path_shared_code`
+
+This should be the file path to a directory with some form of shared R code that is expected to be copied.
+
+## `utilscognigen.gitlab_host_url`
+
+This should be the URL that GitLab projects are hosted under.
+
+## `utilscognigen.outlook_groups_url`
+
+This should be the URL that Outlook group emails are under.
+
+## `utilscognigen.sharepoint_sites_url`
+
+This should be the URL that SharePoint sites are under.

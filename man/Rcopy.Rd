@@ -8,13 +8,14 @@ Rcopy(
   from = NULL,
   to = NULL,
   version = NULL,
+  copyright_holder = NULL,
   open = rstudioapi::isAvailable(),
   save = FALSE
 )
 }
 \arguments{
-\item{from}{path or GitLab web URL of original R program or Rmd file.
-Defaults to the path of the source editor context.}
+\item{from}{path of original R program or Rmd file. Defaults to the path of
+the source editor context.}
 
 \item{to}{path or directory of new file. If \code{to} is a directory,
 \code{from} is copied to that directory. Defaults to the basename of the
@@ -22,6 +23,12 @@ Defaults to the path of the source editor context.}
 
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.}
+
+\item{copyright_holder}{either \code{NULL} for the default Cognigen copyright
+statement, a single \code{character} defining the copyright holders and
+accompanying text to follow copyright mark and year, a \code{character}
+vector for multiple separate copyright statements, or \code{FALSE} for no
+copyright.}
 
 \item{open}{\code{logical} indicating whether to open files in RStudio.}
 
@@ -31,8 +38,8 @@ Defaults to the path of the source editor context.}
 invisibly returns \code{NULL}.
 }
 \description{
-This function is somewhat similar to the Cognigen system command
-\code{Rcopy}, but it is not called.
+This function is somewhat similar to the Cognigen shell command \code{Rcopy},
+but it is not called.
 }
 \examples{
 \dontrun{
@@ -51,15 +58,10 @@ Rcopy(to = "new-file.R")
 # R Markdown works too
 Rcopy("markdown-file.Rmd", "new-markdown-file.Rmd")
 
-# Copy an R program from GitLab to an "R/includes" directory
-Rcopy(
-  "https://gitlab.cognigencorp.com/r/shared-code/-/blob/master/functions/sstat.R",
-  "../R/includes"
-)
 }
 
 }
 \seealso{
-\code{?interactivecog::Rcopy_shared_code} for simpler copying from
-  the shared-code repository; \code{\link{Redit}} for creating R programs
+\code{\link{Rcopy_shared_code}} for simpler copying from the
+  shared-code repository; \code{\link{Redit}} for creating R programs
 }

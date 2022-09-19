@@ -9,6 +9,8 @@
 #'   When converting to Windows representation, paths not in '~', '/cognigen',
 #'   '/doc', '/home', '/miguel', or '/misc' result in \code{NA} since there is
 #'   no Windows equivalent.
+#'   
+#'   Also see the Toggle File Path Selection RStudio Addin.
 #'
 #' @param path file paths. Defaults to the path of the source editor context.
 #' @param ask \code{logical} indicating whether to interactively ask for input.
@@ -239,7 +241,7 @@ make_windows_replacements <- function(path, normalize) {
   # Catch any directories that don't exist on Windows
   dne_paths <- grepl("^/", path)
   if(any(dne_paths)) {
-    cli::cli_warn("There are only Windows equivalents for '~', '/cognigen', '/doc', '/home', '/misc'")
+    cli::cli_warn("There are only Windows equivalents for '~', '/cognigen', '/doc', '/home', '/misc', '/miguel'")
     path[dne_paths] <- NA_character_
   }
   

@@ -38,6 +38,8 @@ Paths are split by commas. Paths that do not exist result in
   When converting to Windows representation, paths not in '~', '/cognigen',
   '/doc', '/home', '/miguel', or '/misc' result in \code{NA} since there is
   no Windows equivalent.
+  
+  Also see the Toggle File Path Selection RStudio Addin.
 }
 \examples{
 \dontrun{

@@ -13,22 +13,8 @@
 #'   downloaded. This function does report success even if some resources are
 #'   not successfully downloaded, with a warning for each resource that could
 #'   not be downloaded.
-#' @keywords internal
-#'
-#' @examples
-#' \dontrun{
-#' # Download a single file
-#' download_gitlab(
-#'   "https://gitlab.cognigencorp.com/r/shared-code/-/blob/master/functions/sstat.R",
-#'   "sstat.R"
-#' )
-#'
-#' # Download a directory
-#' download_gitlab(
-#'   "https://gitlab.cognigencorp.com/r/shared-code/-/tree/master/functions",
-#'   "functions"
-#' )
-#' }
+#' 
+#' @export
 download_gitlab <- function(url, destfile = NULL) {
   
   assertthat::assert_that(
@@ -199,8 +185,16 @@ download_gitlab_tree <- function(api_url, destfile, curl_result) {
 #' @param groups GitLab group name(s).
 #'
 #' @return JSON \code{list} of GitLab projects.
-#' @keywords internal
-list_gitlab_projects <- function(host = "gitlab.cognigencorp.com", groups = NULL) {
+#' 
+#' @export
+list_gitlab_projects <- function(host = NULL, groups = NULL) {
+  
+  if(is.null(host)) {
+    host <- getOption("utilscognigen.gitlab_host_url")
+    if(is.null(host)) {
+      cli::cli_abort("No {.arg host} argument was provided and the {.arg utilscognigen.gitlab_host_url} option is not set")
+    }
+  }
 
   url <- file.path(host, "api/v4/projects?per_page=100")
 
@@ -259,7 +253,7 @@ as_gitlab_api_url <- function(url) {
   assertthat::assert_that(
     !httr::http_error(url),
     length(url) == 1L,
-    msg = "`url` must be an accessbile URL with length 1"
+    msg = "`url` must be an accessible URL with length 1"
   )
 
   # Append https protocol if needed
@@ -382,7 +376,7 @@ get_gitlab_project_id <- function(host, group, project) {
 }
 
 
-#' Run the \code{curl} system command and parse the JSON result
+#' Run the \code{curl} shell command and parse the JSON result
 #'
 #' @param url URL of a GitLab resource.
 #'
@@ -398,7 +392,7 @@ curl_and_parse <- function(url) {
 
   assertthat::assert_that(
     Sys.which("curl") != "",
-    msg = "The curl system command must be available"
+    msg = "The curl shell command must be available"
   )
 
   curl_result_json <- system2(command = "curl",
@@ -416,4 +410,12 @@ curl_and_parse <- function(url) {
 
   return(curl_result)
 
+}
+
+#' List of lists of all project contents
+#'
+#' @keywords internal
+get_gitlab_project_contents <- function(url) {
+  api_url <- as_gitlab_api_url(url)
+  structure(curl_and_parse(api_url), project = attr(api_url, "project"))
 }

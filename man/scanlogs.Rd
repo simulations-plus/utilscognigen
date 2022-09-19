@@ -32,7 +32,7 @@ source editor context.}
 \description{
 Scan the log files of multiple R and/or SAS programs The scan searches
 \*.Rout files for warnings and errors; \*.log files for warnings, errors,
-notes, and other messages using the system command \code{scanlogs}.
+notes, and other messages using the shell command \code{scanlogs}.
 }
 \examples{
 \dontrun{

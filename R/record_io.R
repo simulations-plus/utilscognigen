@@ -1,5 +1,3 @@
-# Copyright 2022-$date Cognigen Corporation, a Simulations Plus Company
-
 #' Record and report input and output files used and created in R scripts
 #'
 #' @md
@@ -12,6 +10,9 @@
 #'   (\code{FALSE}; default) or not (\code{TRUE}).
 #' @param path a file path to an R, Rmd, or log file. Defaults to the path of
 #'   the source editor context.
+#' @param invisible a logical value indicating whether the function should
+#'   return a value (\code{FALSE}; default) or not (\code{TRUE}). This is mostly
+#'   useful with \code{source} calls
 #'
 #' @export
 #'
@@ -92,7 +93,7 @@ NULL
 
 #' @rdname recorded_io
 #' @export
-record_input <- function(call, quiet = FALSE){
+record_input <- function(call, quiet = FALSE, invisible = FALSE){
 
   # Evaluate call first so that only valid calls are captured in record_files
   res <- suppressWarnings( call )
@@ -115,7 +116,11 @@ record_input <- function(call, quiet = FALSE){
     )
   }
   
-  return(res)
+  if ( invisible ){
+    invisible()
+  } else {
+    return(res)
+  }
   
 }
 
@@ -213,8 +218,14 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
     # If no argument is detected, assume that 1st argument of call is a file path
     nofile <- is.null(file1) & is.null(file2)
     if ( nofile ){
-      file1 <- eval(call[[2]])
+      if ( length(path) == 0 ){
+        file1 <- eval(call[[2]])
+      } else {
+        file1 <- path
+        nofile <- FALSE
+      }
     }
+    
   }
   
   # Check existence of environment - create one if it does not
@@ -259,8 +270,9 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
     } else {
       if ( !quiet ){
         file1 <- suppressWarnings(normalizePath(file1))
+        snake_type <- snakecase::to_title_case(type)
         cli::cli_alert_info(
-          '{snakecase::to_title_case(type)} file recorded: {.file {file1}}'
+          '{snake_type} file recorded: {.file {file1}}'
         )
       }
     }

@@ -8,7 +8,7 @@
 \alias{get_recorded_io}
 \title{Record and report input and output files used and created in R scripts}
 \usage{
-record_input(call, quiet = FALSE)
+record_input(call, quiet = FALSE, invisible = FALSE)
 
 record_output(call, quiet = FALSE)
 
@@ -24,6 +24,10 @@ alternatively, \code{call} can be one or more file paths.}
 
 \item{quiet}{a logical value indicating whether messages should be printed
 (\code{FALSE}; default) or not (\code{TRUE}).}
+
+\item{invisible}{a logical value indicating whether the function should
+return a value (\code{FALSE}; default) or not (\code{TRUE}). This is mostly
+useful with \code{source} calls}
 
 \item{path}{a file path to an R, Rmd, or log file. Defaults to the path of
 the source editor context.}

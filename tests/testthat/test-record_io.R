@@ -126,7 +126,7 @@ test_that(
 )
 
 test_that(
-  "clear_recorded_io: invisble", 
+  "clear_recorded_io: invisible", 
   {
     expect_invisible(
       { clear_recorded_io() }
@@ -290,6 +290,25 @@ test_that(
       c(1L, 3L)
     )
     
+  }
+)
+
+test_that(
+  "record_output: output type when a function call (haven::write_xpt) provided ", 
+  {
+    expect_identical(
+      {
+        clear_recorded_io()
+        record_input(
+          haven::write_xpt(
+            data = data.frame(a = 1, b = 2),
+            path = file.path(tempdir(), 'junk.xpt') 
+          )
+        )
+        dim(get(x = 'record_files', envir = ioenv))
+      },
+      c(1L, 3L)
+    )
   }
 )
 

@@ -11,7 +11,7 @@ get_user_full_name(user = Sys.getenv("USER"))
 variable \code{USER}.}
 }
 \value{
-\code{character} full name of the \code{user}.
+\code{character} full name of the \code{user} or \code{NULL}.
 }
 \description{
 Get the full name of a \code{user}
