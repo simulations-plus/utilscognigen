@@ -14,7 +14,7 @@ library(utilscognigen)
 ## Creating R Files
 
 - Create, update, and open R files with QMS approved headers with `Redit()` and `Rcopy()`. 
-- Information can be retrieved existing headers using the `get_header_*` family of functions.
+- Information can be retrieved from existing headers using the `get_header_*` family of functions.
 
 ## Executing R Files
 
@@ -23,7 +23,7 @@ library(utilscognigen)
 
 ## Recording Input and Output Files
 
-- `record_input()` and `record_output()` store IO information a dedicated environment.
+- `record_input()` and `record_output()` store IO information in a dedicated environment.
 - Summarize the collected IO information with `recorded_io()`.
 
 ## Reviewing Rout Files
