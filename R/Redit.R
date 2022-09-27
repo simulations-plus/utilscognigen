@@ -230,7 +230,7 @@ make_header <- function(path = NULL,
     },
     add = TRUE)
 
-    # old_header returns FALSE if there is no header
+    # old_header will be FALSE if there is no header
     # For files with a valid header, just add a new timestamp/user
     if(!isFALSE(old_header)) {
 
@@ -247,13 +247,10 @@ make_header <- function(path = NULL,
         )
       }
 
-      # Replace multiple spaces with a single space in date user lines
-      # This is required to match the behavior of scan
-      xfun::gsub_file(path, pattern = paste0("(", format(Sys.Date(), format = "%Y"), ")", "\\s+"), replacement = "\\1 ")
-
+      # is expected to only update the most recent timestamp
       old_date_user_line <- old_header[old_date_user_line_i[1]]
       old_date_user_line_replacement <- paste0(make_date_user_line(), "\n", old_date_user_line)
-      xfun::gsub_file(path, pattern = old_date_user_line, replacement = old_date_user_line_replacement, fixed = TRUE)
+      gsub_file_first(path, pattern = old_date_user_line, replacement = old_date_user_line_replacement, fixed = TRUE)
 
       # Early return
       return(invisible(NULL))
@@ -373,7 +370,11 @@ build_new_header <- function(path = NULL,
                              output_files = NULL) {
 
   path <- if(is.null(path)) get_source_file() else path
-  path <- normalizePath(file.path(normalizePath(dirname(path), mustWork = FALSE), basename(path)), mustWork = FALSE)
+  path <- ifelse(
+    path == "",
+    "",
+    normalizePath(file.path(normalizePath(dirname(path), mustWork = FALSE), basename(path)), mustWork = FALSE)
+  )
 
   blank <- "# \n"
   name_line <- paste0("# Name: ", path)
@@ -467,6 +468,12 @@ clean_version <- function(version) {
 #' @return \code{character} full name of the \code{user} or \code{NULL}.
 #' @keywords internal
 get_user_full_name <- function(user = Sys.getenv("USER")) {
+  
+  # return "testing" if testing package
+  if(isTRUE(testthat::is_testing())) {
+    return(invisible("testing"))
+  }
+  
   assertthat::assert_that(
     .Platform$OS.type == "unix",
     user != "",
@@ -607,4 +614,22 @@ make_header_files <- function(files, type = c("input", "output")) {
   
   files
 
+}
+
+# behaves like xfun::gsub_file but only modifies the first line with a match
+gsub_file_first <- function(file, ..., rw_error = TRUE) {
+  if (!(file.access(file, 2) == 0 && file.access(file, 4) == 0)) {
+    (if (rw_error) stop else warning)("Unable to read or write to ", file)
+    if (!rw_error) return(invisible())
+  }
+  x1 <- tryCatch(xfun::read_utf8(file, error = TRUE), error = function(e) if (rw_error) stop(e))
+  if (is.null(x1)) return(invisible())
+  
+  pattern <- list(...)[["pattern"]]
+  first_occurrence <- grep(pattern, x = x1, fixed = TRUE)
+  if (length(first_occurrence) == 0) return(invisible())
+  first_occurrence <- min(first_occurrence)
+  x_subbed <- gsub(x = x1[1:first_occurrence], ...)
+  x2 <- c(x_subbed, x1[(first_occurrence + 1):length(x1)])
+  if (!identical(x1, x2)) xfun::write_utf8(x2, file)
 }

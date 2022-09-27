@@ -65,7 +65,7 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
           output_files = FALSE,
           open = FALSE)
 
-    cat(paste0('\nrmarkdown::render("', path, '")\n'),
+    cat(paste0('\nrmarkdown::render("', path, '")\n\nsessionInfo()\n'),
         file = r_path,
         append = TRUE)
 
@@ -75,9 +75,13 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
     r_path, 
     as_job = as_job
   ))
+  
+  if(isTRUE(as_job)) {
+    return(invisible(NULL))
+  }
 
-  if(!execution_status) {
-    return(FALSE)
+  if(!isTRUE(execution_status)) {
+    return(invisible(FALSE))
   }
 
   if(open && rstudioapi::isAvailable()) {
@@ -89,8 +93,8 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
     output <- file.path(dirname(r_path), basename(output))
 
     if(file.exists(output)) {
-      opened <- file_open(output)
-      if(isTRUE(opened)) {
+      opened_try <- try(file_open(output), silent = TRUE)
+      if(!inherits(opened_try, "try-error")) {
         cli::cli_alert_success("Opened output file: {.file {output}}")
       } else {
         cli::cli_alert_danger("Could not open output file: {.file {output}}")
@@ -98,6 +102,6 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
     }
   }
 
-  return(execution_status)
+  return(invisible(execution_status))
 
 }

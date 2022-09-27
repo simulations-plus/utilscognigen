@@ -40,7 +40,7 @@ test_that("header retrievers work", {
   )
   
   expect_identical(
-    object = get_header_input_files(filename),
+    object = basename(get_header_input_files(filename)),
     expected = input_files
   )
   
@@ -92,7 +92,7 @@ test_that("header retrievers work", {
   )
   
   expect_identical(
-    object = get_header_input_files(filename),
+    object = basename(get_header_input_files(filename)),
     expected = input_files
   )
   

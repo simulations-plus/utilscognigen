@@ -118,15 +118,16 @@ NULL
 
 # directory names that will not be considered as sponsors
 .drop_sponsor_dirs <- c(
-  ".zfs", "apps", "archive", "cognigen", "doc", "gridengine"
+  ".zfs", "apps", "archive", "cognigen", "doc", "gridengine", "Linux"
 )
 
 # directory names that will not be considered as drugs
 .drop_drug_dirs <- c(
   "client_standards", "concepts", "consult_gen", "kiwi", "legal", 
-  # directories that should not be at this level, but were found.
-  "admin", "consulting", "let", "ltr", "presentation", "Presentations", 
-  "Projman", "proposal", "sponsordoc", "training"
+  "annualrpt2001", "admin", "clinical_trials", "current", "consulting", "bdgt", 
+  "data", "doc", "email", "let", "ltr", "minutes", "nm", "perspective", 
+  "presentation", "presentations", "Presentations",  "Projman", "projman", 
+  "Proposals-Schedule", "proposal", "rpt", "sas", "sponsordoc", "training"
 )
 
 #' @rdname fs_path
@@ -135,7 +136,7 @@ path_sponsor <- function(sponsor, path = ".") {
   
   require_cognigen()
   
-  # if no sponsor is provided, subset path to sponsor
+  # if no sponsor is provided, return sponsor directory path
   if(missing(sponsor)) {
     path <- fs::path_real(path)
     paths <- vapply(path, function(p) {
@@ -163,15 +164,15 @@ path_sponsor <- function(sponsor, path = ".") {
     
   }
   
+  # identify all matching sponsors
   assertthat::assert_that(
     is.character(sponsor)
   )
   
-  paths <- fs::path_real(Sys.glob(file.path("/misc", sponsor)))
-  
-  paths <- paths[!basename(paths) %in% .drop_sponsor_dirs]
-  
+  paths <- Sys.glob(file.path("/misc", sponsor))
   paths <- paths[dir.exists(paths)]
+  paths <- fs::path_real(paths)
+  paths <- paths[!basename(paths) %in% .drop_sponsor_dirs]
   
   fs::path_real(unique(paths))
   
@@ -184,7 +185,7 @@ path_drug <- function(drug, sponsor = "*", path = ".") {
   
   require_cognigen()
   
-  # if no drug is provided, subset path to drug
+  # if no drug is provided, return path to drug directory
   if(missing(drug)) {
     path <- fs::path_real(path)
     paths <- vapply(path, function(p) {
@@ -212,16 +213,17 @@ path_drug <- function(drug, sponsor = "*", path = ".") {
     
   }
   
+  # identify all matching sponsor/drug combinations
   assertthat::assert_that(
     is.character(drug)
   )
   
-  paths <- fs::path_real(Sys.glob(file.path("/misc", sponsor, drug)))
+  paths <- Sys.glob(file.path("/misc", sponsor, drug))
+  paths <- paths[dir.exists(paths)]
+  paths <- fs::path_real(paths)
   
   paths <- paths[!basename(paths) %in% .drop_drug_dirs]
   paths <- paths[!basename(dirname(paths)) %in% .drop_sponsor_dirs]
-  
-  paths <- paths[dir.exists(paths)]
   
   fs::path_real(unique(paths))
   
@@ -234,7 +236,7 @@ path_project <- function(project_number, drug = "*", sponsor = "*", path = ".") 
   
   require_cognigen()
   
-  # if no project_number is provided, subset path to project_number
+  # if no project_number is provided, return path to project directory
   if(missing(project_number)) {
     path <- fs::path_real(path)
     paths <- vapply(path, function(p) {
@@ -282,7 +284,12 @@ path_project <- function(project_number, drug = "*", sponsor = "*", path = ".") 
     lzn = leading_zero_n
   )
   
-  paths <- fs::path_real(Sys.glob(file.path("/misc", sponsor, drug, project_number)))
+  paths <- Sys.glob(file.path("/misc", sponsor, drug, project_number))
+  paths <- paths[dir.exists(paths)]
+  paths <- fs::path_real(paths)
+  
+  paths <- paths[!basename(dirname(paths)) %in% .drop_drug_dirs]
+  paths <- paths[!basename(dirname(dirname(paths))) %in% .drop_sponsor_dirs]
   
   # remove directories that do not include 6 consecutive digits
   paths <- paths[grepl("\\d{6}", basename(paths))]

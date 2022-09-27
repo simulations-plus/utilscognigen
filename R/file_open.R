@@ -124,9 +124,8 @@ file_open <- function(..., no_copies = FALSE) {
   # Check if file is binary and extension is not expected
   if(is_binary(path) && identical(open_function, rstudioapi::navigateToFile)) {
     cli::cli_alert_warning(
-      "File is binary and cannot be opened: {.file {path}}"
+      "File might be binary and may not open: {.file {path}}"
     )
-    return(FALSE)
   }
 
   do.call(open_function, list(path))
@@ -144,7 +143,7 @@ is_binary <- function(path, max = 1000) {
   f <- file(path, "rb", raw = TRUE)
   b <- readBin(f, "int", max, size = 1, signed = FALSE)
   close(f)
-  return(max(b) > 128)
+  return(max(b, 0) > 128)
 }
 
 # Copy xlsm file to xls in tempdir() then re-call .file_open

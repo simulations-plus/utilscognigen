@@ -26,10 +26,11 @@ library(utilscognigen)
 - `record_input()` and `record_output()` store IO information in a dedicated environment.
 - Summarize the collected IO information with `recorded_io()`.
 
-## Reviewing Rout Files
+## Reviewing R and Rout Files
 
 - Review warnings and errors with `scanlogs()`, which is run automatically after `rcb()` and `render()`.
 - Review recorded input and output files of an executed R file with `get_recorded_io()`.
+- Check if an R file meets Cognigen standards with `check_standards()`.
 - Review the entire .Rout file (as well as other logfiles) with `logfile()`.
 
 ## Interacting with the Cognigen File System
@@ -40,3 +41,5 @@ library(utilscognigen)
 - Navigate Outlook and SharePoint project resources with `browse_project_email()` and `browse_project_sharepoint()`.
 - Build file paths based on Cognigen's file system and directory structure with `path_sponsor()`, `path_drug()`, and `path_project()`.
 - Interact with the Cognigen shared-code repository and quickly identify and copy files with `browse_shared_code()`, `list_files_shared_code()`, and `Rcopy_shared_code()`.
+- Copy snippets (including shared-code snippets) with `set_rstudio_snippets()`.
+- Interact with Cognigen's zfs snapshots with `file_snapshots()`, `diff_snapshot()`, and `restore_snapshot()`.

@@ -34,4 +34,7 @@ Imports:
     snakecase,
     glue,
     htmltools,
-    roxygen2
+    roxygen2,
+    diffr,
+    usethis,
+    lubridate

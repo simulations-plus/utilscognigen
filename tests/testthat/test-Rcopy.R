@@ -44,6 +44,9 @@ Redit(
   output_files = FALSE
 )
 
+# sleep to make sure Rcopy produces an updated timestamp
+Sys.sleep(5)
+
 test_that("Rcopy updates existing header", {
   
   Rcopy(
@@ -87,7 +90,7 @@ test_that("Rcopy updates existing header", {
   )
   
   expect_identical(
-    object = get_header_input_files(filename_header_copy),
+    object = basename(get_header_input_files(filename_header_copy)),
     expected = input_files
   )
   

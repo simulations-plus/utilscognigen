@@ -115,7 +115,7 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
     
     yamls <- grep("^---", x)
     if(length(yamls) < 2) {
-      cli::cli_abort("No YAML found in Rmd file.")
+      return(structure(FALSE, reason = "No YAML found in Rmd file"))
     }
     yaml_start <- yamls[[1]]
     yaml_end <- yamls[[2]]
@@ -193,7 +193,7 @@ parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
   header <- get_header(path, ...)
 
   if(is.logical(header)) {
-    cli::cli_abort(attr(header, "reason"))
+    return(invisible(NULL))
   }
 
   # Prepare list of sections
@@ -261,7 +261,7 @@ parse_header_timestamp <- function(header) {
   timestamp <- header[grepl(paste0("^#\\s?(", .days_of_week, ")"), header, ignore.case = TRUE)]
   if(length(timestamp)) {
     timestamp <- trimws(gsub("#", "", timestamp))
-    return(timestamp)
+    return(unique(timestamp))
   } else {
     return(NULL)
   }
@@ -287,7 +287,8 @@ parse_header_version <- function(header) {
 #' @rdname parse_header
 parse_header_copyright <- function(header) {
   
-  copyright_section_start <- grep("Copyright.*Cognigen Corporation", header, ignore.case = TRUE)
+  # requires some kind of copyright YYYY
+  copyright_section_start <- grep("Copyright.*\\d{4}", header, ignore.case = TRUE)
   if(length(copyright_section_start) == 0) {
     # No copyright file section detected
     return(NULL)
@@ -427,11 +428,7 @@ parse_header_is_sourced <- function(header) {
 # Helpers -----------------------------------------------------------------
 
 # Convert an input or output section to a character vector of file paths
-# Working directory is set in order to normalize path, then set back
 file_section_to_files <- function(path, section) {
-
-  oldwd <- setwd(dirname(path))
-  on.exit(setwd(oldwd))
 
   section <- gsub("#", "", section)
   section <- gsub("INPUT FILES?:?|OUTPUT FILES?:?", "", section, ignore.case = TRUE)
@@ -439,7 +436,7 @@ file_section_to_files <- function(path, section) {
 
   files <- trimws(unlist(strsplit(section, ",|;")))
   files <- files[files != ""]
-  files <- normalizePath(files, mustWork = FALSE)
+  files <- fs::path_abs(files, start = dirname(path))
 
   return(files)
 
