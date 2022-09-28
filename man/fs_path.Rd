@@ -47,10 +47,11 @@ QMS 1.6 Standard Directory Structure}.
 \details{
 \subsection{\code{path_*}}{
 
-\code{path_sponsor()} returns the path to sponsor directories. * When only
-the \code{path} argument is set (including the default, \code{path = "."}),
-returns one sponsor directory corresponding to each \code{path}.
+\code{path_sponsor()} returns the path to sponsor directories.
 \itemize{
+\item When only the \code{path} argument is set (including the default,
+\code{path = "."}), returns one sponsor directory corresponding to each
+\code{path}.
 \item When the \code{sponsor} argument is provided, \code{path} is ignored and
 all sponsor directories matching any element of \code{sponsor} are returned.
 }

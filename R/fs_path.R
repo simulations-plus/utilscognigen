@@ -23,9 +23,10 @@
 #' @details 
 #' ## \code{path_*}
 #' 
-#' \code{path_sponsor()} returns the path to sponsor directories. * When only
-#' the \code{path} argument is set (including the default, \code{path = "."}),
-#' returns one sponsor directory corresponding to each \code{path}.
+#' \code{path_sponsor()} returns the path to sponsor directories. 
+#' * When only the \code{path} argument is set (including the default,
+#' \code{path = "."}), returns one sponsor directory corresponding to each
+#' \code{path}.
 #' * When the \code{sponsor} argument is provided, \code{path} is ignored and
 #' all sponsor directories matching any element of \code{sponsor} are returned.
 #'   

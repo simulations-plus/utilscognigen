@@ -1,7 +1,7 @@
 Package: utilscognigen
 Type: Package
 Title: Cognigen Utility Functions
-Version: 0.0.0.9000
+Version: 1.0.0
 Date: $date$
 Authors@R: c(person("Nash", "Delcamp", email = "nash.delcamp@simulations-plus.com", role = c("aut", "cre")),
              person("Sébastien", "Bihorel", role = "aut"),
