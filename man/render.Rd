@@ -7,8 +7,8 @@
 render(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE)
 }
 \arguments{
-\item{path}{file path of R Markdown document. Defaults to the path of the
-source editor context.}
+\item{path}{file path of R Markdown document or R script. Defaults to the
+path of the source editor context.}
 
 \item{open}{\code{logical} indicating whether to open the output file.}
 

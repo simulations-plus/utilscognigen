@@ -8,8 +8,8 @@
 #' The generated R program is not modified if it already exists, but the program
 #' is examined to confirm it calls \code{rmarkdown::render}.
 #'
-#' @param path file path of R Markdown document. Defaults to the path of the
-#'   source editor context.
+#' @param path file path of R Markdown document or R script. Defaults to the
+#'   path of the source editor context.
 #' @param open \code{logical} indicating whether to open the output file.
 #' @inheritParams rcb
 #'
@@ -32,8 +32,8 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
 
   assertthat::assert_that(
     file.exists(path),
-    tolower(tools::file_ext(path)) == "rmd",
-    msg = "`path` must be an existing Rmd file"
+    tolower(tools::file_ext(path)) %in% c("r", "rmd"),
+    msg = "`path` must be an existing R or Rmd file"
   )
 
   assertthat::assert_that(

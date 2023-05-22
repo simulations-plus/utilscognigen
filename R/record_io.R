@@ -94,7 +94,7 @@ NULL
 #' @rdname recorded_io
 #' @export
 record_input <- function(call, quiet = FALSE, invisible = FALSE){
-
+  
   # Evaluate call first so that only valid calls are captured in record_files
   res <- suppressWarnings( call )
   
@@ -168,7 +168,7 @@ record_io <- function(call, file, type = 'input', quiet = FALSE){
     file2 <- NULL
     nofile <- FALSE
     call <- file
-  
+    
   } else {
     
     # Get call arguments names
@@ -382,7 +382,7 @@ recorded_io <- function(){
     cli::cli_alert_info(
       'List of recorded input and output files:'
     )
-    sapply(ios, message)
+    message( paste(ios, collapse = '\n') )
   }
   invisible()
   
