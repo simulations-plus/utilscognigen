@@ -339,7 +339,12 @@ test_that(
         
         rcb(program_name, as_job = FALSE)
         
-        get_recorded_io(program_name)
+        result <- get_recorded_io(program_name)
+        
+        print(result)
+        
+        result
+        
       },
       list(
         input_files = normalizePath(file.path(tempdir(), c("input1.csv", "input2.csv"))),
