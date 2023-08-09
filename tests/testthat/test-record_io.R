@@ -337,7 +337,7 @@ test_that(
           sep = "\n"
         )
         
-        rcb(program_name)
+        rcb(program_name, as_job = FALSE)
         
         get_recorded_io(program_name)
       },
