@@ -325,26 +325,19 @@ test_that(
         file.create(input1_file)
         file.create(input2_file)
         
-        program_content <- c(
-          "library(utilscognigen)",
-          "record_input('input1.csv')",
-          "record_input('input2.csv')",
-          "recorded_io()"
-        )
+        fake_r <- file.path(tempdir(), "fake.R")
+        fake_rout <- file.path(tempdir(), "fake.Rout")
+        file.create(fake_r)
         
-        program_name <- file.path(tempdir(), "get-recorded-io-test.R")
+        clear_recorded_io()
+        record_input(input1_file)
+        record_input(input2_file)
         
-        cat(
-          program_content,
-          file = program_name,
-          sep = "\n"
-        )
+        options(crayon.enabled = FALSE)
+        collected_recorded_io <- capture_messages(recorded_io())
+        cat(collected_recorded_io, file = fake_rout, sep = "")
         
-        rcb_result <- rcb(program_name, as_job = FALSE)
-        
-        stopifnot(all(rcb_result))
-        
-        get_recorded_io(program_name)
+        get_recorded_io(fake_r)
       },
       list(
         input_files = normalizePath(file.path(tempdir(), c("input1.csv", "input2.csv"))),
