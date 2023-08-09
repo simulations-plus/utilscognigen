@@ -21,10 +21,6 @@ test_that(
       path = file.path(tempdir(), 'dat.xpt'),
       version = 5
     )
-    haven::write_sas(
-      dat,
-      path = file.path(tempdir(), 'dat.sas')
-    )
     openxlsx::write.xlsx(
       dat,
       file = file.path(tempdir(), 'dat.xlsx'),
@@ -223,20 +219,6 @@ test_that(
 )
 
 test_that(
-  "record_input: output type when a function call (haven::read_sas) provided ", 
-  {
-    expect_s3_class(
-      { 
-        record_input(
-          haven::read_sas( data_file = file.path(tempdir(), 'dat.sas') )
-        )
-      },
-      'data.frame'
-    )
-  }
-)
-
-test_that(
   "record_input: output type when a function call (read) provided", 
   {
     expect_s3_class(
@@ -269,7 +251,7 @@ test_that(
       },
       file.path(
         tempdir(),
-        c('dat.csv', 'dat.tbl', 'dat.Rda', 'dat.txt', 'dat.xpt', 'dat.sas', 'dat.xlsx')
+        c('dat.csv', 'dat.tbl', 'dat.Rda', 'dat.txt', 'dat.xpt', 'dat.xlsx')
       )
     )
   }
