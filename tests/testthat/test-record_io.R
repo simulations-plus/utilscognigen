@@ -340,7 +340,9 @@ test_that(
           sep = "\n"
         )
         
-        rcb(program_name, as_job = FALSE)
+        rcb_result <- rcb(program_name, as_job = FALSE)
+        
+        stopifnot(all(rcb_result))
         
         get_recorded_io(program_name)
       },
