@@ -44,8 +44,7 @@ cd <- function(dir, focus = getOption("utilscognigen.cd_focus", TRUE)) {
   prev_dir <- base::setwd(dir)
   
   if(rstudioapi::isAvailable() && isTRUE(focus)) {
-    Sys.sleep(1)
-    invisible(rstudioapi::executeCommand("goToWorkingDir"))
+    invisible(rstudioapi::filesPaneNavigate(dir))
   }
   
   cli::cli_alert_info("Working directory set: \n{.file {base::getwd()}}")

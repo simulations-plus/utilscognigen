@@ -1,4 +1,9 @@
+# utilscognigen 1.0.2
+
+* Updated to host publicly on GitHub.
+
 # utilscognigen 1.0.1
+
 * Improved output of `recorded_io` in R Markdown output.
 * R files are now accepted input to `render`.
 
