@@ -339,10 +339,9 @@ test_that(
         
         rcb(program_name, as_job = FALSE)
         
+        Sys.sleep(10)
         result <- get_recorded_io(program_name)
-        
-        print(result)
-        
+        print(result$input_files)
         result
         
       },
