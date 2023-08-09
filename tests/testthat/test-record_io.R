@@ -320,8 +320,8 @@ test_that(
   {
     expect_identical(
       {
-        file.create("input1.csv")
-        file.create("input2.csv")
+        file.create(file.path(tempdir(), "input1.csv"))
+        file.create(file.path(tempdir(), "input2.csv"))
         program_content <- c(
           "library(utilscognigen)",
           "record_input('input1.csv')",
@@ -329,7 +329,7 @@ test_that(
           "recorded_io()"
         )
         
-        program_name <- "get-recorded-io-test.R"
+        program_name <- file.path(tempdir(), "get-recorded-io-test.R")
         
         cat(
           program_content,
@@ -342,7 +342,7 @@ test_that(
         get_recorded_io(program_name)
       },
       list(
-        input_files = normalizePath(c("input1.csv", "input2.csv")),
+        input_files = normalizePath(file.path(tempdir(), c("input1.csv", "input2.csv"))),
         output_files = character()
       )
     )

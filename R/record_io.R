@@ -102,7 +102,7 @@ record_input <- function(call, quiet = FALSE, invisible = FALSE){
   scall <- substitute(call)
   
   # Process call
-  if ( class(scall) == 'call' && scall[[1]] != 'c' ){
+  if ( inherits(scall, 'call') && scall[[1]] != 'c' ){
     # If call is a function call, expand unnamed passed arguments
     scall <- match.call(eval(scall[[1]]), scall)
     record_io(call = scall, type ='input', quiet = quiet)
@@ -134,7 +134,7 @@ record_output <- function(call, quiet = FALSE){
   # Capture call for output creation
   scall <- substitute(call)
   
-  if ( class(scall) == 'call' & !is.vector(call) ){
+  if ( inherits(scall, 'call') & !is.vector(call) ){
     # If call is a function call, expand unnamed passed arguments
     scall <- match.call(eval(scall[[1]]), scall)
     record_io(call = scall, type = 'output', quiet = quiet)

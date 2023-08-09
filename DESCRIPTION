@@ -6,7 +6,7 @@ Date: $date$
 Authors@R: c(person("Nash", "Delcamp", email = "nash.delcamp@simulations-plus.com", role = c("aut", "cre")),
              person("Sébastien", "Bihorel", role = "aut"),
              person("Cognigen", role = "cph"))
-URL: https://github.io/simulations-plus/utilscognigen, https://github.com/simulations-plus/utilscognigen
+URL: https://simulations-plus.github.io/utilscognigen/, https://github.com/simulations-plus/utilscognigen
 BugReports: https://github.com/simulations-plus/utilscognigen/issues
 Description: utilscognigen facilitates creation, execution, and review of R files along with other utilities for an R/RStudio environment. Created/copied R files are designed to include headers that describe the intent of the program. Programs can be executed in batch mode directly from R according to Cognigen's production standards. Resulting log files can be parsed to identify warnings and errors.
 License: MIT + file LICENSE
