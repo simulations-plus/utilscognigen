@@ -45,6 +45,7 @@ cd <- function(dir, focus = getOption("utilscognigen.cd_focus", TRUE)) {
   
   if(rstudioapi::isAvailable() && isTRUE(focus)) {
     invisible(rstudioapi::filesPaneNavigate(dir))
+    invisible(rstudioapi::executeCommand("activateFiles"))
   }
   
   cli::cli_alert_info("Working directory set: \n{.file {base::getwd()}}")
