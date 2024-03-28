@@ -26,19 +26,7 @@ accompanying text to follow copyright mark and year, a \code{character}
 vector for multiple separate copyright statements, or \code{FALSE} for no
 copyright.}
 
-\item{purpose}{purpose, input files, and output
-files of R program(s) given as \code{character} vectors. The purpose will
-be wrapped to fit in the header. When \code{NULL} (the default), a blank
-section is included. When \code{FALSE}, no section is included. Ignored
-with a warning for files that already have a header.}
-
-\item{input_files}{purpose, input files, and output
-files of R program(s) given as \code{character} vectors. The purpose will
-be wrapped to fit in the header. When \code{NULL} (the default), a blank
-section is included. When \code{FALSE}, no section is included. Ignored
-with a warning for files that already have a header.}
-
-\item{output_files}{purpose, input files, and output
+\item{purpose, input_files, output_files}{purpose, input files, and output
 files of R program(s) given as \code{character} vectors. The purpose will
 be wrapped to fit in the header. When \code{NULL} (the default), a blank
 section is included. When \code{FALSE}, no section is included. Ignored

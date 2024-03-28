@@ -7,12 +7,6 @@
 make_purpose(purpose = NULL, split_length = .split_length)
 }
 \arguments{
-\item{purpose}{purpose, input files, and output
-files of R program(s) given as \code{character} vectors. The purpose will
-be wrapped to fit in the header. When \code{NULL} (the default), a blank
-section is included. When \code{FALSE}, no section is included. Ignored
-with a warning for files that already have a header.}
-
 \item{split_length}{\code{integer} representing how many characters to split
 at.}
 }
