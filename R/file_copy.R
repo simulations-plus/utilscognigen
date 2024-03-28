@@ -103,6 +103,6 @@ cp <- function(from, to, args = NULL) {
     cli::cli_abort("File does not exist: {.file {from}}")
   }
   
-  res <- system2("cp", args = c(from, to, args))
+  res <- system2("cp", args = c(shQuote(from), shQuote(to), args))
   return(ifelse(res == 0, TRUE, FALSE))
 }
