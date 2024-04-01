@@ -14,6 +14,8 @@
 #'
 #' @param path a file path to an R script. Defaults to the path of the source
 #'   editor context.
+#' @param use_previous_dir \code{logical} indicating whether to append previous
+#'   directory to file names (defaults to \code{FALSE}).
 #' @name get_header_content
 #'
 #' @return \code{character} vector of requested header item.
@@ -65,15 +67,15 @@ get_header_purpose <- function(path = NULL) {
 
 #' @rdname get_header_content
 #' @export
-get_header_input_files <- function(path = NULL) {
-  files <- unname(unlist(parse_header(path, "input_files")))
+get_header_input_files <- function(path = NULL, use_previous_dir = FALSE) {
+  files <- unname(unlist(parse_header(path, "input_files", use_previous_dir = use_previous_dir)))
   return(files)
 }
 
 #' @rdname get_header_content
 #' @export
-get_header_output_files <- function(path = NULL) {
-  files <- unname(unlist(parse_header(path, "output_files")))
+get_header_output_files <- function(path = NULL, use_previous_dir = FALSE) {
+  files <- unname(unlist(parse_header(path, "output_files", use_previous_dir = use_previous_dir)))
   return(files)
 }
 
@@ -94,7 +96,7 @@ get_header_output_files <- function(path = NULL) {
 #'
 #' @keywords internal
 get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
-
+  
   # If x is a file path, scan it
   if(length(x) == 1 && file.exists(x)) {
     x <- structure(
@@ -102,14 +104,14 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
       path = x
     )
   }
-
+  
   path <- attr(x, "path")
   file_ext <- tolower(tools::file_ext(path))
-
+  
   hashes <- paste0(rep("#", min_hash), collapse = "")
   top_of_header_regex <- paste0("^", hashes)
   potential_header_lines <- grep(top_of_header_regex, x)
-
+  
   # require header be included in the YAML for Rmd files
   if(file_ext == "rmd") {
     
@@ -119,18 +121,18 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
     }
     yaml_start <- yamls[[1]]
     yaml_end <- yamls[[2]]
-
+    
     # Update max_first_line which is the max line where the header content can start
     max_first_line <- yaml_end - 1
-
+    
   }
-
+  
   if(length(potential_header_lines) == 0) {
     return(structure(FALSE, reason = "No header found"))
   }
-
+  
   first_line_header <- min(potential_header_lines)
-
+  
   if(first_line_header > max_first_line) {
     if(file_ext == "rmd") {
       return(structure(FALSE, reason = "No header found in YAML of Rmd file"))
@@ -138,7 +140,7 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
       return(structure(FALSE, reason = "Too many lines before header"))
     }
   }
-
+  
   # 2 is subtracted to account for the starting point and the min(grep())
   # returning the first non-commented line
   suppressWarnings(
@@ -147,10 +149,10 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
   # Adjustment in case a file contains only a header
   last_line_header <- ifelse(is.infinite(last_line_header), length(x), last_line_header)
   header <- x[first_line_header:last_line_header]
-
+  
   # Remove last character from header if it a "#" and remove extra white space
   header <- trimws(gsub("\\s\\s", " ", header))
-
+  
   return(header)
 }
 
@@ -169,8 +171,7 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
 
 #' Parse R script headers
 #'
-#' @param path a file path to an R script. Defaults to the path of the source
-#'   editor context.
+#' @inheritParams get_header_content
 #' @param sections header sections to parse.
 #' @param header a header from an R script.
 #' @param ... additional arguments passed to \code{\link{get_header}}.
@@ -178,28 +179,29 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
 #' @return \code{parse_header} returns a \code{list} of parsed sections. Each
 #'   \code{parse_<section>} function returns the parsed section.
 #' @keywords internal
-parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
-
+parse_header <- function(path = NULL, sections = .valid_header_sections, use_previous_dir = FALSE, ...) {
+  
   path <- if(is.null(path)) get_source_file() else path
-
+  
   assertthat::assert_that(
     is.character(path),
+    is.logical(use_previous_dir),
     length(path) == 1,
     file.exists(path),
     all(sections %in% .valid_header_sections)
-    )
-
+  )
+  
   sections <- tolower(sections)
   header <- get_header(path, ...)
-
+  
   if(is.logical(header)) {
     return(invisible(NULL))
   }
-
+  
   # Prepare list of sections
   list_of_sections <- vector("list", length = length(sections))
   names(list_of_sections) <- sections
-
+  
   # Replace each section with its parsed value
   if("name" %in% sections) list_of_sections[["name"]] <- parse_header_name(header)
   if("all_names" %in% sections) list_of_sections[["all_names"]] <- parse_header_all_names(header)
@@ -207,12 +209,12 @@ parse_header <- function(path = NULL, sections = .valid_header_sections, ...) {
   if("version" %in% sections) list_of_sections[["version"]] <- parse_header_version(header)
   if("copyright" %in% sections) list_of_sections[["copyright"]] <- parse_header_copyright(header)
   if("purpose" %in% sections) list_of_sections[["purpose"]] <- parse_header_purpose(header)
-  if("input_files" %in% sections) list_of_sections[["input_files"]] <- parse_header_input_files(path, header)
-  if("output_files" %in% sections) list_of_sections[["output_files"]] <- parse_header_output_files(path, header)
+  if("input_files" %in% sections) list_of_sections[["input_files"]] <- parse_header_input_files(path, header, use_previous_dir = use_previous_dir)
+  if("output_files" %in% sections) list_of_sections[["output_files"]] <- parse_header_output_files(path, header, use_previous_dir = use_previous_dir)
   if("is_sourced" %in% sections) list_of_sections[["is_sourced"]] <- parse_header_is_sourced(header)
-
+  
   return(list_of_sections)
-
+  
 }
 
 
@@ -234,7 +236,7 @@ parse_header_name <- function(header) {
     )
     return(NULL)
   }
-
+  
 }
 
 
@@ -256,7 +258,7 @@ parse_header_all_names <- function(header) {
 
 #' @rdname parse_header
 parse_header_timestamp <- function(header) {
-
+  
   # timestamp must start with a day of the week abbreviation
   timestamp <- header[grepl(paste0("^#\\s?(", .days_of_week, ")"), header, ignore.case = TRUE)]
   if(length(timestamp)) {
@@ -265,13 +267,13 @@ parse_header_timestamp <- function(header) {
   } else {
     return(NULL)
   }
-
+  
 }
 
 
 #' @rdname parse_header
 parse_header_version <- function(header) {
-
+  
   has_version_line <- any(grepl("Written for use with R version ", header, ignore.case = TRUE))
   if(has_version_line) {
     header_version_line <- header[grepl("Written for use with R version ", header, ignore.case = TRUE)]
@@ -280,7 +282,7 @@ parse_header_version <- function(header) {
   } else {
     return(NULL)
   }
-
+  
 }
 
 
@@ -293,7 +295,7 @@ parse_header_copyright <- function(header) {
     # No copyright file section detected
     return(NULL)
   }
-
+  
   copyright_section_end <- grep("^#{3}|^#\\s*$", header, ignore.case = TRUE)
   if(length(copyright_section_end) == 0) {
     # No end of copyright section detected
@@ -319,13 +321,13 @@ parse_header_copyright <- function(header) {
   } else {
     return(copyright_section)
   }
-
+  
 }
 
 
 #' @rdname parse_header
 parse_header_purpose <- function(header) {
-
+  
   purpose_section_start <- grep("PURPOSE", header, ignore.case = TRUE)
   if(length(purpose_section_start) == 0) {
     # No purpose file section detected
@@ -333,13 +335,13 @@ parse_header_purpose <- function(header) {
   } else {
     purpose_section_start <- min(purpose_section_start)
   }
-
+  
   purpose_section_end <- grep("INPUT FILE|OUTPUT FILE|#NOTE|#\\s+NOTE", header, ignore.case = TRUE)
   # If there are no matches, find last header row starting with 3 consecutive comments
   if(length(purpose_section_end) == 0) {
     purpose_section_end <- grep("^#{3}", header)
   }
-
+  
   if(length(purpose_section_end) == 0) {
     # No end of purpose section detected
     return(NULL)
@@ -347,25 +349,25 @@ parse_header_purpose <- function(header) {
     purpose_section_end <- purpose_section_end[purpose_section_end > purpose_section_start]
     purpose_section_end <- min(purpose_section_end)
   }
-
+  
   purpose_section_end <- min(purpose_section_end[purpose_section_end > purpose_section_start]) - 1
-
+  
   purpose_section <- header[purpose_section_start:purpose_section_end]
-
+  
   purpose_section <- trimws(gsub("#", "", purpose_section))
   purpose_section <- paste0(purpose_section, collapse = " ")
   purpose_section <- gsub("PURPOSE:?", "", purpose_section)
   purpose_section <- trimws(gsub("\\s+", " ", purpose_section))
-
+  
   return(purpose_section)
-
-
+  
+  
 }
 
 
 #' @rdname parse_header
-parse_header_input_files <- function(path, header) {
-
+parse_header_input_files <- function(path, header, use_previous_dir = FALSE) {
+  
   input_section_start <- grep("INPUT FILE", header, ignore.case = TRUE)
   if(length(input_section_start) == 0) {
     # No input file section detected
@@ -374,26 +376,26 @@ parse_header_input_files <- function(path, header) {
     cli::cli_warn("Multiple input file sections detected. None will be reported.")
     return(NULL)
   }
-
+  
   input_section_end <- grep("OUTPUT FILE|#NOTE|#\\s+NOTE|^#{3}", header, ignore.case = TRUE)
   if(length(input_section_end) == 0) {
     # No end of input file section or end of header detected
     return(NULL)
   }
-
+  
   input_section_end <- min(input_section_end[input_section_end > input_section_start]) - 1
-
+  
   input_section <- header[input_section_start:input_section_end]
-
-  files <- file_section_to_files(path = path, section = input_section)
-
+  
+  files <- file_section_to_files(path = path, section = input_section, use_previous_dir = use_previous_dir)
+  
   return(files)
-
+  
 }
 
 
 #' @rdname parse_header
-parse_header_output_files <- function(path, header) {
+parse_header_output_files <- function(path, header, use_previous_dir = FALSE) {
   output_section_start <- grep("OUTPUT FILE", header, ignore.case = TRUE)
   if(length(output_section_start) == 0) {
     # No output file section detected
@@ -402,19 +404,19 @@ parse_header_output_files <- function(path, header) {
     cli::cli_warn("Multiple output file sections detected. None will be reported.")
     return(NULL)
   }
-
-  output_section_end <- grep("#NOTE|#\\s+NOTE|^#{3}", header, ignore.case = TRUE)
+  
+  output_section_end <- grep("#NOTE|#\\s+NOTE|#UPDATE|#\\s+UPDATE|^#{3}", header, ignore.case = TRUE)
   if(length(output_section_end) == 0) {
     # No end of output file section or end of header detected
     return(NULL)
   }
-
+  
   output_section_end <- min(output_section_end[output_section_end > output_section_start]) - 1
-
+  
   output_section <- header[output_section_start:output_section_end]
-
-  files <- file_section_to_files(path = path, section = output_section)
-
+  
+  files <- file_section_to_files(path = path, section = output_section, use_previous_dir = use_previous_dir)
+  
   return(files)
 }
 
@@ -428,16 +430,28 @@ parse_header_is_sourced <- function(header) {
 # Helpers -----------------------------------------------------------------
 
 # Convert an input or output section to a character vector of file paths
-file_section_to_files <- function(path, section) {
-
+file_section_to_files <- function(path, section, use_previous_dir = FALSE) {
+  
   section <- gsub("#", "", section)
   section <- gsub("INPUT FILES?:?|OUTPUT FILES?:?", "", section, ignore.case = TRUE)
   section <- trimws(gsub("\\s+", " ", section))
-
+  
   files <- trimws(unlist(strsplit(section, ",|;")))
   files <- files[files != ""]
-  files <- fs::path_abs(files, start = dirname(path))
-
+  files <- if(isTRUE(use_previous_dir)) make_path_with_previous_dir(files) else fs::path_abs(files, start = dirname(path))
+  
   return(files)
+  
+}
 
+# insert the previous directory to paths that are missing directory
+make_path_with_previous_dir <- function(paths){
+  
+  for (i in seq_along(paths)) {
+    if(dirname(paths[i]) == "." && i > 1){
+      paths[i] <- file.path(dirname(paths[i-1]), paths[i])
+    }
+  }
+  
+  paths
 }

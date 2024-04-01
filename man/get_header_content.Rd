@@ -24,13 +24,16 @@ get_header_copyright(path = NULL)
 
 get_header_purpose(path = NULL)
 
-get_header_input_files(path = NULL)
+get_header_input_files(path = NULL, use_previous_dir = FALSE)
 
-get_header_output_files(path = NULL)
+get_header_output_files(path = NULL, use_previous_dir = FALSE)
 }
 \arguments{
 \item{path}{a file path to an R script. Defaults to the path of the source
 editor context.}
+
+\item{use_previous_dir}{\code{logical} indicating whether to append previous
+directory to file names (defaults to \code{FALSE}).}
 }
 \value{
 \code{character} vector of requested header item.
