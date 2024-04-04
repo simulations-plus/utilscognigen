@@ -5,6 +5,11 @@
 \alias{path_sponsor}
 \alias{path_drug}
 \alias{path_project}
+\alias{path_stage}
+\alias{path_substage}
+\alias{path_dataorig}
+\alias{path_r_includes}
+\alias{path_r_library}
 \alias{browse_project_email}
 \alias{browse_project_sharepoint}
 \title{Build file paths based on Cognigen's file system and directory structure}
@@ -15,20 +20,41 @@ path_drug(drug, sponsor = "*", path = ".")
 
 path_project(project_number, drug = "*", sponsor = "*", path = ".")
 
+path_stage(stage, project_number = "*", drug = "*", sponsor = "*", path = ".")
+
+path_substage(
+  substage,
+  stage = "*",
+  project_number = "*",
+  drug = "*",
+  sponsor = "*",
+  path = "."
+)
+
+path_dataorig(path = ".")
+
+path_r_includes(path = ".")
+
+path_r_library(path = ".", version = NULL)
+
 browse_project_email(path = ".")
 
 browse_project_sharepoint(path = ".")
 }
 \arguments{
-\item{sponsor, drug, project_number}{\code{character} vectors of directory
-patterns or names. Wildcard expansion (also known as 'globbing') is
-supported. See \code{\link[base]{Sys.glob}}.}
+\item{sponsor, drug, project_number, stage, substage}{\code{character} vectors of
+directory patterns or names. Wildcard expansion (also known as 'globbing')
+is supported. See \code{\link[base]{Sys.glob}}.}
 
 \item{path}{\code{character} vector of file or directory paths that will be
-truncated to the project number, drug, or sponsor level. Ignored in
-\code{path_*} functions when the first argument is provided (i.e.,
-\code{path} is ignored if the \code{sponsor} argument is provided to
+truncated to the substage, stage, project number, drug, or sponsor level.
+Ignored in \code{path_*} functions when the first argument is provided
+(i.e., \code{path} is ignored if the \code{sponsor} argument is provided to
 \code{path_sponsor()}).}
+
+\item{version}{a single R version (major and minor) as a \code{character}.
+This argument is used to identify which library tree to use in
+\code{path_r_library}.}
 }
 \value{
 For \code{path_*} functions, the path(s) to the sponsor, drug, or
