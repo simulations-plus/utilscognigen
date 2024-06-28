@@ -19,8 +19,8 @@ scanned.}
 \item{ext}{a \code{character} vector of file extensions to scan the logs of.}
 
 \item{...}{\code{character} vectors containing file names or paths with
-extensions .R, .r, .Rout, .sas, .log, or .lst. Defaults to the path of the
-source editor context.}
+extensions .R, .Rmd, .qmd, .Rout, .sas, .log, or .lst. Defaults to the path
+of the source editor context.}
 }
 \value{
 \code{dir_scanlogs()} returns a named \code{list} of \code{character}

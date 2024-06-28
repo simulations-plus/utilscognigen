@@ -29,7 +29,7 @@ alternatively, \code{call} can be one or more file paths.}
 return a value (\code{FALSE}; default) or not (\code{TRUE}). This is mostly
 useful with \code{source} calls}
 
-\item{path}{a file path to an R, Rmd, or log file. Defaults to the path of
+\item{path}{a file path to an R, Rmd, qmd, or log file. Defaults to the path of
 the source editor context.}
 }
 \value{

@@ -34,6 +34,7 @@ logfile <- function(..., open = TRUE) {
       R = logfile_R(path, open = open),
       r = logfile_r(path, open = open),
       Rmd = logfile_Rmd(path, open = open),
+      qmd = logfile_Rmd(path, open = open),
       sas = logfile_sas(path, open = open),
       tex = logfile_tex(path, open = open),
       Rnw = logfile_Rnw(path, open = open)

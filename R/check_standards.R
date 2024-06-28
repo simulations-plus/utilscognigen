@@ -48,7 +48,7 @@ check_standards <- function(
   assertthat::assert_that(
     length(path) <= 1,
     file.exists(path),
-    tools::file_ext(path) %in% c("R", "r", "Rmd", "rmd")
+    tolower(tools::file_ext(path)) %in% c("r", "rmd", "qmd")
   )
   
   # attribute path is set for cases where the scanned script gets passed to
@@ -160,6 +160,7 @@ check_rout <- function(x, path) {
     "r" = paste0(path, ".Rout"),
     "Rmd" = paste0(tools::file_path_sans_ext(path), "-render.Rout"),
     "rmd" = paste0(tools::file_path_sans_ext(path), "-render.Rout"),
+    "qmd" = paste0(tools::file_path_sans_ext(path), "-render.Rout")
   )
   
   rout_exists <- file.exists(rout_path)

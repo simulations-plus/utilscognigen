@@ -2,7 +2,7 @@
 % Please edit documentation in R/Rcopy.R
 \name{Rcopy}
 \alias{Rcopy}
-\title{Copy and open R and Rmd files with QMS approved headers.}
+\title{Copy and open R, Rmd, and qmd files with QMS approved headers.}
 \usage{
 Rcopy(
   from = NULL,
@@ -14,7 +14,7 @@ Rcopy(
 )
 }
 \arguments{
-\item{from}{path of original R program or Rmd file. Defaults to the path of
+\item{from}{path of original R, Rmd, or qmd file. Defaults to the path of
 the source editor context.}
 
 \item{to}{path or directory of new file. If \code{to} is a directory,

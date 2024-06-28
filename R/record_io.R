@@ -8,7 +8,7 @@
 #'   alternatively, \code{call} can be one or more file paths.
 #' @param quiet a logical value indicating whether messages should be printed
 #'   (\code{FALSE}; default) or not (\code{TRUE}).
-#' @param path a file path to an R, Rmd, or log file. Defaults to the path of
+#' @param path a file path to an R, Rmd, qmd, or log file. Defaults to the path of
 #'   the source editor context.
 #' @param invisible a logical value indicating whether the function should
 #'   return a value (\code{FALSE}; default) or not (\code{TRUE}). This is mostly
@@ -331,9 +331,9 @@ recorded_io <- function(){
   if( !interactive() ){
     source_file <- get_source_file()
     if( !is.null(source_file) ){
-      if( tolower(tools::file_ext(source_file)) == "rmd" ) {
+      if( tolower(tools::file_ext(source_file)) %in% c("rmd", "qmd") ) {
         if( !isFALSE(knitr::opts_current$get("message")) ) {
-          cli::cli_abort("{.fn recorded_io} requires the chunk option {.code message=FALSE} when called from R Markdown.")
+          cli::cli_abort("{.fn recorded_io} requires the chunk option {.code message=FALSE} when called from R Markdown or Quarto.")
         }
       }
     }
@@ -416,7 +416,7 @@ get_recorded_io <- function(path = NULL) {
   path <- if(is.null(path)) get_source_file() else path
   
   if(is.null(path)) {
-    cli::cli_abort("An R, Rmd, or log file must be open or a path must be specified to use {.fn get_recorded_io}.")
+    cli::cli_abort("An R, Rmd, qmd, or log file must be open or a path must be specified to use {.fn get_recorded_io}.")
   } else if(length(path) > 1) {
     cli::cli_abort("Only one file can be specified to use {.fn get_recorded_io}")
   } else if(!file.exists(path)) {
@@ -430,7 +430,8 @@ get_recorded_io <- function(path = NULL) {
     Rout = path,
     R = paste0(tools::file_path_sans_ext(path), ".Rout"),
     r = paste0(path, ".Rout"),
-    Rmd = paste0(tools::file_path_sans_ext(path), "-render.Rout")
+    Rmd = paste0(tools::file_path_sans_ext(path), "-render.Rout"),
+    qmd = paste0(tools::file_path_sans_ext(path), "-render.Rout")
   )
   
   if(!file.exists(log_name)) {

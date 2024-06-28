@@ -16,8 +16,8 @@ Redit(
 )
 }
 \arguments{
-\item{...}{file paths of R or Rmd files. Files without extensions are set to
-\code{".R"}. Defaults to the path of the source editor context.}
+\item{...}{file paths of R, Rmd, or qmd files. Files without extensions are
+set to \code{".R"}. Defaults to the path of the source editor context.}
 
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
@@ -58,9 +58,9 @@ Cognigen's R program header documents key elements of programs including:
 
 \code{Redit} serves a few distinct purposes:
 \itemize{
-\item Create new R and Rmd files with standard headers.
-\item Add headers to existing R and Rmd files without a header.
-\item Add new timestamps and program owner name to headers in existing R and Rmd files.
+\item Create new R, Rmd, and qmd files with standard headers.
+\item Add headers to existing files without a header.
+\item Add new timestamps and program owner name to headers in existing files.
 }
 
 \code{Redit} does not need to be used every time a program is updated and \code{Redit}

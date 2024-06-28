@@ -1,5 +1,7 @@
 # utilscognigen (development version)
 
+* Now accepts Quarto documents as input where R or R Markdown files are accepted.
+
 # utilscognigen 1.0.2
 
 * Updated to host publicly on GitHub.

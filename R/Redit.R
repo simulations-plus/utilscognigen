@@ -2,8 +2,8 @@
 #'
 #' @md
 #'
-#' @param ... file paths of R or Rmd files. Files without extensions are set to
-#'   \code{".R"}. Defaults to the path of the source editor context.
+#' @param ... file paths of R, Rmd, or qmd files. Files without extensions are
+#'   set to \code{".R"}. Defaults to the path of the source editor context.
 #'
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
@@ -37,9 +37,9 @@
 #' * Output Files: Files written by the program.
 #'
 #' `Redit` serves a few distinct purposes:
-#' * Create new R and Rmd files with standard headers.
-#' * Add headers to existing R and Rmd files without a header.
-#' * Add new timestamps and program owner name to headers in existing R and Rmd files.
+#' * Create new R, Rmd, and qmd files with standard headers.
+#' * Add headers to existing files without a header.
+#' * Add new timestamps and program owner name to headers in existing files.
 #'
 #' `Redit` does not need to be used every time a program is updated and `Redit`
 #' should not be used for files that are simply being opened.
@@ -134,14 +134,14 @@ Redit <- function(...,
   call_file_refresh <- is.null(path) && open && rstudioapi::isAvailable()
 
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn .Redit}.")
+    cli::cli_abort("An R, Rmd, or qmd file must be open or a path must be specified to use {.fn .Redit}.")
   }
 
   path <- normalizePath(file.path(normalizePath(dirname(path), mustWork = FALSE), basename(path)), mustWork = FALSE)
 
   file_ext <- tools::file_ext(path)
 
-  if(!(tolower(file_ext) %in% c("r", "rmd", ""))) {
+  if(!(tolower(file_ext) %in% c("r", "rmd", "qmd", ""))) {
     try(cli::cli_abort("'{file_ext}' is not a valid file extension"))
   } else {
 
@@ -204,7 +204,7 @@ make_header <- function(path = NULL,
 
   path <- if(is.null(path)) get_source_file() else path
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn make_header}.")
+    cli::cli_abort("An R, Rmd, or qmd file must be open or a path must be specified to use {.fn make_header}.")
   }
   
   file_ext <- tolower(tools::file_ext(path))
@@ -261,7 +261,7 @@ make_header <- function(path = NULL,
       reason <- if(is.null(reason)) "" else reason
 
       # Rmd special cases
-      if(file_ext == "rmd") {
+      if(file_ext %in% c("rmd", "qmd")) {
 
         header <- build_new_header(path = path,
                                    version = version,
@@ -272,13 +272,13 @@ make_header <- function(path = NULL,
         
         # insert header at bottom of YAML if no header is found in the YAML (or
         # at all)
-        if(reason %in% c("No header found", "No header found in YAML of Rmd file")) {
+        if(reason %in% c("No header found", "No header found in YAML of Rmd/qmd file")) {
           
           lines <- readLines(path, warn = FALSE)
           
           yamls <- grep("^---", lines)
           if(length(yamls) < 2) {
-            cli::cli_abort("No YAML found in Rmd file.")
+            cli::cli_abort("No YAML found in Rmd/qmd file.")
           }
           yaml_start <- yamls[[1]]
           yaml_end <- yamls[[2]]
@@ -335,7 +335,7 @@ make_header <- function(path = NULL,
                              input_files = input_files,
                              output_files = output_files)
 
-  # Write the header to R or Rmd
+  # Write the header to the file
   if(file_ext == "r") {
     writeLines(header, path)
   } else if(file_ext == "rmd") {
@@ -355,6 +355,22 @@ make_header <- function(path = NULL,
     )
 
     writeLines(rmd_content, path)
+  } else if(file_ext == "qmd") {
+    qmd_content <- paste(
+      '---',
+      paste0('title: "', tools::file_path_sans_ext(basename(path)), '"'),
+      paste0('author: "', get_user_full_name(), '"'),
+      'date: today',
+      'format:',
+      '  html:',
+      '    theme: cosmo',
+      '    toc: true',
+      header,
+      '---',
+      sep = "\n"
+    )
+    
+    writeLines(qmd_content, path)
   }
 
   invisible(NULL)

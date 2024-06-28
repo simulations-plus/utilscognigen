@@ -113,11 +113,11 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
   potential_header_lines <- grep(top_of_header_regex, x)
   
   # require header be included in the YAML for Rmd files
-  if(file_ext == "rmd") {
+  if(file_ext %in% c("rmd", "qmd")) {
     
     yamls <- grep("^---", x)
     if(length(yamls) < 2) {
-      return(structure(FALSE, reason = "No YAML found in Rmd file"))
+      return(structure(FALSE, reason = "No YAML found in Rmd/qmd file"))
     }
     yaml_start <- yamls[[1]]
     yaml_end <- yamls[[2]]
@@ -134,8 +134,8 @@ get_header <- function(x, min_hash = 30L, max_first_line = 1L) {
   first_line_header <- min(potential_header_lines)
   
   if(first_line_header > max_first_line) {
-    if(file_ext == "rmd") {
-      return(structure(FALSE, reason = "No header found in YAML of Rmd file"))
+    if(file_ext %in% c("rmd", "qmd")) {
+      return(structure(FALSE, reason = "No header found in YAML of Rmd/qmd file"))
     } else {
       return(structure(FALSE, reason = "Too many lines before header"))
     }
