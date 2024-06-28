@@ -2,7 +2,7 @@
 % Please edit documentation in R/require_cognigen.R
 \name{is_cognigen}
 \alias{is_cognigen}
-\title{Check if the current R session is at Cognigen.}
+\title{Check if the current R session is at CPP.}
 \usage{
 is_cognigen()
 }
@@ -10,6 +10,6 @@ is_cognigen()
 logical
 }
 \description{
-Check if the current R session is at Cognigen.
+Check if the current R session is at CPP.
 }
 \keyword{internal}

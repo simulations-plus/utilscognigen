@@ -12,7 +12,7 @@
 \alias{path_r_library}
 \alias{browse_project_email}
 \alias{browse_project_sharepoint}
-\title{Build file paths based on Cognigen's file system and directory structure}
+\title{Build file paths based on CPP's file system and directory structure}
 \usage{
 path_sponsor(sponsor, path = ".")
 
@@ -64,7 +64,7 @@ directory; or the name(s) of the sponsor, drug, or project number.
 For \code{browse_project_*} functions, invisibly returns \code{NULL}.
 }
 \description{
-These functions are only intended to be used at Cognigen.
+These functions are only intended to be used at CPP
 
 See
 \href{https://wiki.cognigencorp.com/display/qms/QMS-1.6+Standard+Directory+Structure}{Wiki
@@ -133,7 +133,7 @@ SharePoint sites.
 }
 \examples{
 \dontrun{
-# the below examples reference a test directory on Cognigen's file system.
+# the below examples reference a test directory on CPP's file system.
 cd("/misc/dceuticals/doloxan/009002/")
 
 # the default behavior is to return the path to the sponsor, drug, or project.

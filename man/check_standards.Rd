@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_standards.R
 \name{check_standards}
 \alias{check_standards}
-\title{Check an R file against Cognigen standards}
+\title{Check an R file against CPP standards}
 \usage{
 check_standards(
   path = NULL,
@@ -33,7 +33,7 @@ Performs each of the checks described in Details. All checks must pass for
   \item{\code{\link{check_rout}}}{Determines if the R script should have an
   associated Rout file, then checks the content of the Rout.}
   \item{\code{\link{check_header}}}{Checks that the R script has an
-  appropriate Cognigen header.}
+  appropriate header.}
   \item{\code{\link{check_session_info}}}{Checks that
   \code{\link[utils]{sessionInfo}} or
   \code{\link[devtools]{session_info}} is called in the R script, preferably

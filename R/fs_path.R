@@ -1,11 +1,11 @@
-#' Build file paths based on Cognigen's file system and directory structure
+#' Build file paths based on CPP's file system and directory structure
 #'
 #' @md
 #'
 #' @name fs_path
 #' 
 #' @description 
-#' These functions are only intended to be used at Cognigen.
+#' These functions are only intended to be used at CPP
 #' 
 #' See
 #' \href{https://wiki.cognigencorp.com/display/qms/QMS-1.6+Standard+Directory+Structure}{Wiki
@@ -80,7 +80,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' # the below examples reference a test directory on Cognigen's file system.
+#' # the below examples reference a test directory on CPP's file system.
 #' cd("/misc/dceuticals/doloxan/009002/")
 #'
 #' # the default behavior is to return the path to the sponsor, drug, or project.

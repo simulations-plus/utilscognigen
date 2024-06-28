@@ -24,7 +24,7 @@ These are settings that can be controlled with `options()`. Set the desired opti
 
 ## `cli.num_colors`
 
-This is a `cli` option that controls the number of ANSI colors. Set `options(cli.num_colors = 0)` to turn off ANSI colors. In Cognigen's production environments, ANSI colors are disabled by default. See `cli::num_ansi_colors()`. See also the `cli.default_num_colors` option.
+This is a `cli` option that controls the number of ANSI colors. Set `options(cli.num_colors = 0)` to turn off ANSI colors. In CPP's production environments, ANSI colors are disabled by default. See `cli::num_ansi_colors()`. See also the `cli.default_num_colors` option.
 
 ## `utilscognigen.cd_focus`
 

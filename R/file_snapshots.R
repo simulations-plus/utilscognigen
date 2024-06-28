@@ -1,4 +1,4 @@
-#' Interface to Cognigen zfs snapshots
+#' Interface to CPP zfs snapshots
 #'
 #' @description
 #' See

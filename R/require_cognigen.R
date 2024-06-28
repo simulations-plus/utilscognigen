@@ -1,7 +1,7 @@
-#' Require that the current R session is at Cognigen.
+#' Require that the current R session is at CPP.
 #' 
 #' This is used to gracefully exit from functions that are not expected to work
-#' outside of Cognigen.
+#' outside of CPP.
 #' 
 #' @details
 #' Checks that "/misc" is available.
@@ -11,7 +11,7 @@ require_cognigen <- function() {
   
   if(!is_cognigen()) {
     cli::cli_abort(
-      message = "This function is only intended for use at Cognigen.",
+      message = "This function is only intended for use at CPP.",
       call = rlang::caller_env()
     )
   }
@@ -19,7 +19,7 @@ require_cognigen <- function() {
 }
 
 
-#' Check if the current R session is at Cognigen.
+#' Check if the current R session is at CPP.
 #'
 #' @return logical
 #' 

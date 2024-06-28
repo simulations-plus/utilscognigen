@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2023 Cognigen Division of Simulations Plus, Inc
+Copyright (c) 2024 Simulations Plus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

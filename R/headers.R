@@ -82,7 +82,7 @@ get_header_output_files <- function(path = NULL, use_previous_dir = FALSE) {
 
 # Get header --------------------------------------------------------------
 
-#' Extract a Cognigen header for an R script
+#' Extract a header from R code
 #'
 #' @param x a scanned R or Rmd file or a file path.
 #' @param min_hash \code{numeric}; The minimum number of "#" that define the

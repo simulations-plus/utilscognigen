@@ -9,11 +9,11 @@
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
 #'   warning for files that already have a header.
 #' 
-#' @param copyright_holder either \code{NULL} for the default Cognigen copyright
-#'   statement, a single \code{character} defining the copyright holders and
-#'   accompanying text to follow copyright mark and year, a \code{character}
-#'   vector for multiple separate copyright statements, or \code{FALSE} for no
-#'   copyright.
+#' @param copyright_holder either \code{NULL} for the default Simulations Plus
+#'   copyright statement, a single \code{character} defining the copyright
+#'   holders and accompanying text to follow copyright mark and year, a
+#'   \code{character} vector for multiple separate copyright statements, or
+#'   \code{FALSE} for no copyright.
 #'
 #' @param purpose,input_files,output_files purpose, input files, and output
 #'   files of R program(s) given as \code{character} vectors. The purpose will
@@ -28,10 +28,10 @@
 #' @return invisibly returns \code{NULL}.
 #'
 #' @details
-#' Cognigen's R program header documents key elements of programs including:
-#' * Name: The full path to the program on Cognigen's file system.
+#' CPP's R program header documents key elements of programs including:
+#' * Name: The full path to the program on CPP's file system.
 #' * Timestamp: The timestamp and programmer of key updates to the program.
-#' * Copyright: Cognigen's standard Copyright language.
+#' * Copyright: Simulation Plus' standard Copyright language.
 #' * Purpose: What the program is designed to do.
 #' * Input Files: Files read by the program.
 #' * Output Files: Files written by the program.
@@ -192,7 +192,7 @@ Redit <- function(...,
 
 .section_break <- paste0(rep("#", .split_length), collapse = "")
 
-.cognigen_copyright_message <- "Cognigen Corporation. The contents of this program are confidential and cannot be used - in any form - for anything outside the drug and specific project for which the file is provided."
+.simulations_plus_copyright_message <- "Simulations Plus, Inc. The contents of this program are confidential and cannot be used - in any form - for anything outside the drug and specific project for which the file is provided."
 
 #' Create a file with a header or append a timestamp entry to an existing file
 #' with a header
@@ -563,7 +563,7 @@ make_copyright_line <- function(copyright_holder = NULL) {
   copyright_with_year <- paste0("Copyright ", format(Sys.Date(), format = "%Y"))
   
   if(is.null(copyright_holder)) {
-    copyright_holder <- .cognigen_copyright_message
+    copyright_holder <- .simulations_plus_copyright_message
   }
   
   if(is.character(copyright_holder)) {
