@@ -44,6 +44,13 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
   )
 
   path <- normalizePath(path)
+  
+  # Fail if file contains spaces
+  if(grepl("\\s", path)) {
+    cli::cli_abort(
+      "Detected spaces in {.arg path}. File names should not contain spaces."
+    )
+  }
 
   r_path <- paste0(tools::file_path_sans_ext(path), "-render.R")
 

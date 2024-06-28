@@ -96,6 +96,14 @@ Redit <- function(...,
     rstudioapi::documentSave()
   }
   
+  # Fail if any paths have spaces (because callr::rcmd with fail, and it is bad practice)
+  paths_with_spaces <- grep("\\s", paths, value = TRUE)
+  if(length(paths_with_spaces) > 0) {
+    cli::cli_abort(
+      "Detected files with spaces. Files should not contain spaces: {.path {paths_with_spaces}}"
+    )
+  }
+  
   invisible(lapply(paths, function(path) {
     .Redit(
       path = path,
