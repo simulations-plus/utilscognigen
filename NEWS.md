@@ -1,6 +1,7 @@
 # utilscognigen (development version)
 
 * Now accepts Quarto documents as input where R or R Markdown files are accepted.
+* Added functions to view project management sites: `browse_project_gantt` and `browse_project_tracker`.
 
 # utilscognigen 1.0.2
 

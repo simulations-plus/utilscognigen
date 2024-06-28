@@ -70,6 +70,15 @@
 #' * When one or more paths are provided to \code{path}, opens all corresponding
 #' SharePoint sites.
 #' * SharePoint sites that do not exist are expected to be skipped.
+#' 
+#' \code{browse_project_gantt()} and \code{browse_project_tracker()} open
+#' project management services.
+#' * When called without any arguments, opens the project gantt chart or tracker 
+#' corresponding to the working directory.
+#' * When one or more paths are provided to \code{path}, opens all corresponding
+#' project gantt charts or trackers.
+#' * Projects that do not exist or you do not have access to might open,
+#' but not display content.
 #'   
 #'
 #' @return For \code{path_*} functions, the path(s) to the sponsor, drug, or
@@ -542,6 +551,62 @@ browse_project_sharepoint <- function(path = ".") {
   alias <- mk_alias(path)
   
   url <- file.path(sharepoint_sites_url, alias)
+  
+  for(u in url) {
+    # binary body indicates that the page does not exist
+    if(is.raw(httr::content(httr::GET(u)))) {
+      message("Skipping ", basename(u), " because the page does not exist.")
+    } else {
+      utils::browseURL(u)
+    }
+  }
+  
+  invisible(NULL)
+  
+}
+
+#' @rdname fs_path
+#' @export
+browse_project_gantt <- function(path = ".") {
+  
+  require_cognigen()
+  
+  project_management_url <- getOption("utilscognigen.project_management_url")
+  if(is.null(project_management_url)) {
+    cli::cli_abort("The {.arg utilscognigen.project_management_url} option is not set.")
+  }
+  
+  project_number <- basename(path_project(path = path))
+  
+  url <- file.path(project_management_url, project_number, "gantt")
+  
+  for(u in url) {
+    # binary body indicates that the page does not exist
+    if(is.raw(httr::content(httr::GET(u)))) {
+      message("Skipping ", basename(u), " because the page does not exist.")
+    } else {
+      utils::browseURL(u)
+    }
+  }
+  
+  invisible(NULL)
+  
+}
+
+#' @rdname fs_path
+#' @export
+browse_project_tracker <- function(path = ".") {
+  
+  require_cognigen()
+  
+  project_management_url <- getOption("utilscognigen.project_management_url")
+  if(is.null(project_management_url)) {
+    cli::cli_abort("The {.arg utilscognigen.project_management_url} option is not set.")
+  }
+  
+  project_number <- basename(path_project(path = path))
+  
+  url <- file.path(project_management_url, project_number, "tracker")
   
   for(u in url) {
     # binary body indicates that the page does not exist

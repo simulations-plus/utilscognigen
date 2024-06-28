@@ -12,6 +12,8 @@
 \alias{path_r_library}
 \alias{browse_project_email}
 \alias{browse_project_sharepoint}
+\alias{browse_project_gantt}
+\alias{browse_project_tracker}
 \title{Build file paths based on CPP's file system and directory structure}
 \usage{
 path_sponsor(sponsor, path = ".")
@@ -40,6 +42,10 @@ path_r_library(path = ".", version = NULL)
 browse_project_email(path = ".")
 
 browse_project_sharepoint(path = ".")
+
+browse_project_gantt(path = ".")
+
+browse_project_tracker(path = ".")
 }
 \arguments{
 \item{sponsor, drug, project_number, stage, substage}{\code{character} vectors of
@@ -128,6 +134,17 @@ to the working directory.
 \item When one or more paths are provided to \code{path}, opens all corresponding
 SharePoint sites.
 \item SharePoint sites that do not exist are expected to be skipped.
+}
+
+\code{browse_project_gantt()} and \code{browse_project_tracker()} open
+project management services.
+\itemize{
+\item When called without any arguments, opens the project gantt chart or tracker
+corresponding to the working directory.
+\item When one or more paths are provided to \code{path}, opens all corresponding
+project gantt charts or trackers.
+\item Projects that do not exist or you do not have access to might open,
+but not display content.
 }
 }
 }

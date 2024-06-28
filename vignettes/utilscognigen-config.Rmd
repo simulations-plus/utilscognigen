@@ -49,3 +49,7 @@ This should be the URL that Outlook group emails are under.
 ## `utilscognigen.sharepoint_sites_url`
 
 This should be the URL that SharePoint sites are under.
+
+## `utilscognigen.project_management_url`
+
+This should be the URL where project management services are accessed.
