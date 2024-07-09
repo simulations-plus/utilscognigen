@@ -13,7 +13,12 @@
 \alias{parse_header_is_sourced}
 \title{Parse R script headers}
 \usage{
-parse_header(path = NULL, sections = .valid_header_sections, ...)
+parse_header(
+  path = NULL,
+  sections = .valid_header_sections,
+  use_previous_dir = FALSE,
+  ...
+)
 
 parse_header_name(header)
 
@@ -27,9 +32,9 @@ parse_header_copyright(header)
 
 parse_header_purpose(header)
 
-parse_header_input_files(path, header)
+parse_header_input_files(path, header, use_previous_dir = FALSE)
 
-parse_header_output_files(path, header)
+parse_header_output_files(path, header, use_previous_dir = FALSE)
 
 parse_header_is_sourced(header)
 }
@@ -38,6 +43,9 @@ parse_header_is_sourced(header)
 editor context.}
 
 \item{sections}{header sections to parse.}
+
+\item{use_previous_dir}{\code{logical} indicating whether to append previous
+directory to file names (defaults to \code{FALSE}).}
 
 \item{...}{additional arguments passed to \code{\link{get_header}}.}
 

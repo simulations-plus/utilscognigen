@@ -1,24 +1,27 @@
-#' Build file paths based on Cognigen's file system and directory structure
+#' Build file paths based on CPP's file system and directory structure
 #'
 #' @md
 #'
 #' @name fs_path
 #' 
 #' @description 
-#' These functions are only intended to be used at Cognigen.
+#' These functions are only intended to be used at CPP
 #' 
 #' See
 #' \href{https://wiki.cognigencorp.com/display/qms/QMS-1.6+Standard+Directory+Structure}{Wiki
 #' QMS 1.6 Standard Directory Structure}.
 #'
-#' @param sponsor,drug,project_number \code{character} vectors of directory
-#'   patterns or names. Wildcard expansion (also known as 'globbing') is
-#'   supported. See \code{\link[base]{Sys.glob}}.
+#' @param sponsor,drug,project_number,stage,substage \code{character} vectors of
+#'   directory patterns or names. Wildcard expansion (also known as 'globbing')
+#'   is supported. See \code{\link[base]{Sys.glob}}.
 #' @param path \code{character} vector of file or directory paths that will be
-#'   truncated to the project number, drug, or sponsor level. Ignored in
-#'   \code{path_*} functions when the first argument is provided (i.e.,
-#'   \code{path} is ignored if the \code{sponsor} argument is provided to
+#'   truncated to the substage, stage, project number, drug, or sponsor level.
+#'   Ignored in \code{path_*} functions when the first argument is provided
+#'   (i.e., \code{path} is ignored if the \code{sponsor} argument is provided to
 #'   \code{path_sponsor()}).
+#' @param version a single R version (major and minor) as a \code{character}.
+#'   This argument is used to identify which library tree to use in
+#'   \code{path_r_library}.
 #'
 #' @details 
 #' ## \code{path_*}
@@ -67,6 +70,15 @@
 #' * When one or more paths are provided to \code{path}, opens all corresponding
 #' SharePoint sites.
 #' * SharePoint sites that do not exist are expected to be skipped.
+#' 
+#' \code{browse_project_gantt()} and \code{browse_project_tracker()} open
+#' project management services.
+#' * When called without any arguments, opens the project gantt chart or tracker 
+#' corresponding to the working directory.
+#' * When one or more paths are provided to \code{path}, opens all corresponding
+#' project gantt charts or trackers.
+#' * Projects that do not exist or you do not have access to might open,
+#' but not display content.
 #'   
 #'
 #' @return For \code{path_*} functions, the path(s) to the sponsor, drug, or
@@ -77,7 +89,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' # the below examples reference a test directory on Cognigen's file system.
+#' # the below examples reference a test directory on CPP's file system.
 #' cd("/misc/dceuticals/doloxan/009002/")
 #'
 #' # the default behavior is to return the path to the sponsor, drug, or project.
@@ -130,6 +142,12 @@ NULL
   "presentation", "presentations", "Presentations",  "Projman", "projman", 
   "Proposals-Schedule", "proposal", "rpt", "sas", "sponsordoc", "training"
 )
+
+
+# standard directory structure --------------------------------------------
+
+
+## sponsor, drug, project number, stage, substage -------------------------
 
 #' @rdname fs_path
 #' @export
@@ -216,12 +234,12 @@ path_drug <- function(drug, sponsor = "*", path = ".") {
   
   # identify all matching sponsor/drug combinations
   assertthat::assert_that(
+    is.character(sponsor),
     is.character(drug)
   )
   
   paths <- Sys.glob(file.path("/misc", sponsor, drug))
   paths <- paths[dir.exists(paths)]
-  paths <- fs::path_real(paths)
   
   paths <- paths[!basename(paths) %in% .drop_drug_dirs]
   paths <- paths[!basename(dirname(paths)) %in% .drop_sponsor_dirs]
@@ -266,31 +284,17 @@ path_project <- function(project_number, drug = "*", sponsor = "*", path = ".") 
   }
   
   assertthat::assert_that(
+    is.character(sponsor),
+    is.character(drug),
     is.character(project_number) || is.numeric(project_number)
   )
   
-  leading_zero_n <- 6 - nchar(project_number)
+  project_number <- clean_project_number(project_number)
   
-  project_number <- mapply(
-    FUN = function(pn, lzn) {
-      if(grepl("\\*", pn)) {
-        pn
-      } else if(lzn > 0) {
-        paste0(paste0(replicate(n = lzn, expr = 0), collapse = ""), pn)
-      } else {
-        pn
-      }
-    },
-    pn = project_number,
-    lzn = leading_zero_n
-  )
-  
+  # identify all matching sponsor/drug/project number combinations
   paths <- Sys.glob(file.path("/misc", sponsor, drug, project_number))
-  paths <- paths[dir.exists(paths)]
-  paths <- fs::path_real(paths)
   
-  paths <- paths[!basename(dirname(paths)) %in% .drop_drug_dirs]
-  paths <- paths[!basename(dirname(dirname(paths))) %in% .drop_sponsor_dirs]
+  paths <- paths[dir.exists(paths)]
   
   # remove directories that do not include 6 consecutive digits
   paths <- paths[grepl("\\d{6}", basename(paths))]
@@ -298,11 +302,205 @@ path_project <- function(project_number, drug = "*", sponsor = "*", path = ".") 
   paths <- paths[!basename(dirname(paths)) %in% .drop_drug_dirs]
   paths <- paths[!basename(dirname(dirname(paths))) %in% .drop_sponsor_dirs]
   
+  fs::path_real(unique(paths))
+  
+}
+
+#' @rdname fs_path
+#' @export
+path_stage <- function(
+    stage, 
+    project_number = "*", 
+    drug = "*", 
+    sponsor = "*", 
+    path = "."
+) {
+  
+  require_cognigen()
+  
+  # if no stage is provided, return path to stage directory
+  if(missing(stage)) {
+    path <- fs::path_real(path)
+    paths <- vapply(path, function(p) {
+      
+      ps <- fs::path_split(p)[[1]]
+      if(length(ps) < 6) {
+        cli::cli_abort(
+          "{.var path} does not include enough directory levels to be a stage directory: {.file {p}}"
+        )
+      }
+      
+      if(ps[[2]] != "misc") {
+        cli::cli_abort(
+          "{.var path} is not in {.file /misc}: {.file {p}}",
+          call = NULL
+        )
+      }
+      
+      file.path(ps[[1]], ps[[2]], ps[[3]], ps[[4]], ps[[5]], ps[[6]])
+    },
+    FUN.VALUE = character(1L))
+    
+    return(fs::path_real(unique(paths)))
+    
+  }
+  
+  assertthat::assert_that(
+    is.character(sponsor),
+    is.character(drug),
+    is.character(project_number) || is.numeric(project_number),
+    is.character(stage)
+  )
+  
+  project_number <- clean_project_number(project_number)
+  
+  # identify all matching sponsor/drug/project number/stage combinations
+  paths <- Sys.glob(file.path("/misc", sponsor, drug, project_number, stage))
+  
   paths <- paths[dir.exists(paths)]
   
   fs::path_real(unique(paths))
   
 }
+
+#' @rdname fs_path
+#' @export
+path_substage <- function(
+    substage,
+    stage = "*", 
+    project_number = "*", 
+    drug = "*", 
+    sponsor = "*", 
+    path = "."
+) {
+  
+  require_cognigen()
+  
+  # if no substage is provided, return path to substage directory
+  if(missing(substage)) {
+    path <- fs::path_real(path)
+    paths <- vapply(path, function(p) {
+      
+      ps <- fs::path_split(p)[[1]]
+      if(length(ps) < 7) {
+        cli::cli_abort(
+          "{.var path} does not include enough directory levels to be a substage directory: {.file {p}}"
+        )
+      }
+      
+      if(ps[[2]] != "misc") {
+        cli::cli_abort(
+          "{.var path} is not in {.file /misc}: {.file {p}}",
+          call = NULL
+        )
+      }
+      
+      file.path(ps[[1]], ps[[2]], ps[[3]], ps[[4]], ps[[5]], ps[[6]], ps[[7]])
+    },
+    FUN.VALUE = character(1L))
+    
+    return(fs::path_real(unique(paths)))
+    
+  }
+  
+  assertthat::assert_that(
+    is.character(sponsor),
+    is.character(drug),
+    is.character(project_number) || is.numeric(project_number),
+    is.character(stage),
+    is.character(substage)
+  )
+  
+  project_number <- clean_project_number(project_number)
+  
+  # identify all matching sponsor/drug/project number/stage/substage combinations
+  paths <- Sys.glob(file.path("/misc", sponsor, drug, project_number, stage, substage))
+  
+  paths <- paths[dir.exists(paths)]
+  
+  fs::path_real(unique(paths))
+  
+}
+
+
+## based on path only (R subdirectories, dataorig) ------------------------
+
+#' @rdname fs_path
+#' @export
+path_dataorig <- function(path = ".") {
+  
+  paths <- file.path(path_drug(path = path), "dataorig")
+  paths <- paths[file.exists(paths)]
+  fs::path_real(paths)
+  
+}
+
+#' @rdname fs_path
+#' @export
+path_r_includes <- function(path = ".") {
+  
+  paths <- file.path(path_stage(path = path), "R", "includes")
+  paths <- paths[file.exists(paths)]
+  fs::path_real(paths)
+  
+}
+
+#' @rdname fs_path
+#' @export
+path_r_library <- function(path = ".", version = NULL) {
+  
+  if(is.null(version)) {
+    version <- gsub(
+      pattern = "(\\d\\.\\d).*",
+      replacement = "\\1",
+      x = paste0(R.version$major, ".", R.version$minor)
+    )
+  }
+  
+  assertthat::assert_that(
+    is.character(version),
+    length(version) == 1
+  )
+  
+  paths <- vapply(
+    X = path,
+    FUN = function(.path) {
+      .path_r_lib <- file.path(path_stage(path = .path), "R", "library", version)
+      .paths <- .path_r_lib[dir.exists(.path_r_lib)]
+      
+      # if no paths found, try without the version
+      if(length(.paths) == 0) {
+        .path_r_lib <- file.path(path_stage(path = .path), "R", "library")
+        .paths <- .path_r_lib[dir.exists(.path_r_lib)]
+        if(length(.paths) == 0) {
+          cli::cli_warn("No library directory found at {.file {(.path_r_lib)}}.")
+        } else {
+          .trees <- list.dirs(.paths, full.names = FALSE, recursive = FALSE)
+          if(length(.trees) == 0) {
+            cli::cli_alert_warning("No library trees found for any R version under {.file {(.path_r_lib)}}.")
+          } else {
+            cli::cli_alert_warning("No library trees found for R {version} under {.file {(.path_r_lib)}}.")
+            cli::cli_alert_info("These library trees were found: {(.trees)}")
+          }
+          
+        }
+        
+        return(NA_character_)
+      }
+      
+      paths
+      
+    },
+    FUN.VALUE = character(1L)
+  )
+  
+  fs::path_real(paths)
+  
+}
+
+
+## functions to go to websites --------------------------------------------
+
 
 # helper function to make an alias of the form sponsor.project_number
 mk_alias <- function(path = ".") {
@@ -366,3 +564,85 @@ browse_project_sharepoint <- function(path = ".") {
   invisible(NULL)
   
 }
+
+#' @rdname fs_path
+#' @export
+browse_project_gantt <- function(path = ".") {
+  
+  require_cognigen()
+  
+  project_management_url <- getOption("utilscognigen.project_management_url")
+  if(is.null(project_management_url)) {
+    cli::cli_abort("The {.arg utilscognigen.project_management_url} option is not set.")
+  }
+  
+  project_number <- basename(path_project(path = path))
+  
+  url <- file.path(project_management_url, project_number, "gantt")
+  
+  for(u in url) {
+    # binary body indicates that the page does not exist
+    if(is.raw(httr::content(httr::GET(u)))) {
+      message("Skipping ", basename(u), " because the page does not exist.")
+    } else {
+      utils::browseURL(u)
+    }
+  }
+  
+  invisible(NULL)
+  
+}
+
+#' @rdname fs_path
+#' @export
+browse_project_tracker <- function(path = ".") {
+  
+  require_cognigen()
+  
+  project_management_url <- getOption("utilscognigen.project_management_url")
+  if(is.null(project_management_url)) {
+    cli::cli_abort("The {.arg utilscognigen.project_management_url} option is not set.")
+  }
+  
+  project_number <- basename(path_project(path = path))
+  
+  url <- file.path(project_management_url, project_number, "tracker")
+  
+  for(u in url) {
+    # binary body indicates that the page does not exist
+    if(is.raw(httr::content(httr::GET(u)))) {
+      message("Skipping ", basename(u), " because the page does not exist.")
+    } else {
+      utils::browseURL(u)
+    }
+  }
+  
+  invisible(NULL)
+  
+}
+
+
+## helpers ----------------------------------------------------------------
+
+clean_project_number <- function(project_number) {
+  
+  leading_zero_n <- 6 - nchar(project_number)
+  
+  project_number <- mapply(
+    FUN = function(pn, lzn) {
+      if(grepl("\\*", pn)) {
+        pn
+      } else if(lzn > 0) {
+        paste0(paste0(replicate(n = lzn, expr = 0), collapse = ""), pn)
+      } else {
+        pn
+      }
+    },
+    pn = project_number,
+    lzn = leading_zero_n
+  )
+  
+  project_number
+  
+}
+

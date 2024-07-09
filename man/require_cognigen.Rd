@@ -2,13 +2,13 @@
 % Please edit documentation in R/require_cognigen.R
 \name{require_cognigen}
 \alias{require_cognigen}
-\title{Require that the current R session is at Cognigen.}
+\title{Require that the current R session is at CPP.}
 \usage{
 require_cognigen()
 }
 \description{
 This is used to gracefully exit from functions that are not expected to work
-outside of Cognigen.
+outside of CPP.
 }
 \details{
 Checks that "/misc" is available.

@@ -2,13 +2,14 @@
 % Please edit documentation in R/scanlogs.R
 \name{scanlogs_single}
 \alias{scanlogs_single}
-\title{Scan log file of R, Rmd, or SAS programs}
+\title{Scan log file of R, Rmd, qmd, or SAS programs}
 \usage{
 scanlogs_single(path = NULL)
 }
 \arguments{
-\item{path}{a file name or path with extension .R, .r, .Rmd, .Rout, .r.Rout,
-.sas, .log, or .lst. Defaults to the path of the source editor context.}
+\item{path}{a file name or path with extension .R, .r, .Rmd, qmd, .Rout,
+.r.Rout, .sas, .log, or .lst. Defaults to the path of the source editor
+context.}
 }
 \value{
 invisibly returns a \code{character} vector of scanned results. For

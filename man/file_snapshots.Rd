@@ -4,7 +4,7 @@
 \alias{file_snapshots}
 \alias{diff_snapshot}
 \alias{restore_snapshot}
-\title{Interface to Cognigen zfs snapshots}
+\title{Interface to CPP zfs snapshots}
 \usage{
 file_snapshots(path = NULL, date = Sys.Date(), time = NULL)
 

@@ -2,18 +2,18 @@
 #'
 #' @md
 #'
-#' @param ... file paths of R or Rmd files. Files without extensions are set to
-#'   \code{".R"}. Defaults to the path of the source editor context.
+#' @param ... file paths of R, Rmd, or qmd files. Files without extensions are
+#'   set to \code{".R"}. Defaults to the path of the source editor context.
 #'
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
 #'   warning for files that already have a header.
 #' 
-#' @param copyright_holder either \code{NULL} for the default Cognigen copyright
-#'   statement, a single \code{character} defining the copyright holders and
-#'   accompanying text to follow copyright mark and year, a \code{character}
-#'   vector for multiple separate copyright statements, or \code{FALSE} for no
-#'   copyright.
+#' @param copyright_holder either \code{NULL} for the default Simulations Plus
+#'   copyright statement, a single \code{character} defining the copyright
+#'   holders and accompanying text to follow copyright mark and year, a
+#'   \code{character} vector for multiple separate copyright statements, or
+#'   \code{FALSE} for no copyright.
 #'
 #' @param purpose,input_files,output_files purpose, input files, and output
 #'   files of R program(s) given as \code{character} vectors. The purpose will
@@ -28,18 +28,18 @@
 #' @return invisibly returns \code{NULL}.
 #'
 #' @details
-#' Cognigen's R program header documents key elements of programs including:
-#' * Name: The full path to the program on Cognigen's file system.
+#' CPP's R program header documents key elements of programs including:
+#' * Name: The full path to the program on CPP's file system.
 #' * Timestamp: The timestamp and programmer of key updates to the program.
-#' * Copyright: Cognigen's standard Copyright language.
+#' * Copyright: Simulation Plus' standard Copyright language.
 #' * Purpose: What the program is designed to do.
 #' * Input Files: Files read by the program.
 #' * Output Files: Files written by the program.
 #'
 #' `Redit` serves a few distinct purposes:
-#' * Create new R and Rmd files with standard headers.
-#' * Add headers to existing R and Rmd files without a header.
-#' * Add new timestamps and program owner name to headers in existing R and Rmd files.
+#' * Create new R, Rmd, and qmd files with standard headers.
+#' * Add headers to existing files without a header.
+#' * Add new timestamps and program owner name to headers in existing files.
 #'
 #' `Redit` does not need to be used every time a program is updated and `Redit`
 #' should not be used for files that are simply being opened.
@@ -96,6 +96,14 @@ Redit <- function(...,
     rstudioapi::documentSave()
   }
   
+  # Fail if any paths have spaces (because callr::rcmd with fail, and it is bad practice)
+  paths_with_spaces <- grep("\\s", paths, value = TRUE)
+  if(length(paths_with_spaces) > 0) {
+    cli::cli_abort(
+      "Detected files with spaces. Files should not contain spaces: {.path {paths_with_spaces}}"
+    )
+  }
+  
   invisible(lapply(paths, function(path) {
     .Redit(
       path = path,
@@ -134,14 +142,14 @@ Redit <- function(...,
   call_file_refresh <- is.null(path) && open && rstudioapi::isAvailable()
 
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn .Redit}.")
+    cli::cli_abort("An R, Rmd, or qmd file must be open or a path must be specified to use {.fn .Redit}.")
   }
 
   path <- normalizePath(file.path(normalizePath(dirname(path), mustWork = FALSE), basename(path)), mustWork = FALSE)
 
   file_ext <- tools::file_ext(path)
 
-  if(!(tolower(file_ext) %in% c("r", "rmd", ""))) {
+  if(!(tolower(file_ext) %in% c("r", "rmd", "qmd", ""))) {
     try(cli::cli_abort("'{file_ext}' is not a valid file extension"))
   } else {
 
@@ -184,7 +192,7 @@ Redit <- function(...,
 
 .section_break <- paste0(rep("#", .split_length), collapse = "")
 
-.cognigen_copyright_message <- "Cognigen Corporation. The contents of this program are confidential and cannot be used - in any form - for anything outside the drug and specific project for which the file is provided."
+.simulations_plus_copyright_message <- "Simulations Plus, Inc. The contents of this program are confidential and cannot be used - in any form - for anything outside the drug and specific project for which the file is provided."
 
 #' Create a file with a header or append a timestamp entry to an existing file
 #' with a header
@@ -204,7 +212,7 @@ make_header <- function(path = NULL,
 
   path <- if(is.null(path)) get_source_file() else path
   if(is.null(path)) {
-    cli::cli_abort("An R or Rmd file must be open or a path must be specified to use {.fn make_header}.")
+    cli::cli_abort("An R, Rmd, or qmd file must be open or a path must be specified to use {.fn make_header}.")
   }
   
   file_ext <- tolower(tools::file_ext(path))
@@ -261,7 +269,7 @@ make_header <- function(path = NULL,
       reason <- if(is.null(reason)) "" else reason
 
       # Rmd special cases
-      if(file_ext == "rmd") {
+      if(file_ext %in% c("rmd", "qmd")) {
 
         header <- build_new_header(path = path,
                                    version = version,
@@ -272,13 +280,13 @@ make_header <- function(path = NULL,
         
         # insert header at bottom of YAML if no header is found in the YAML (or
         # at all)
-        if(reason %in% c("No header found", "No header found in YAML of Rmd file")) {
+        if(reason %in% c("No header found", "No header found in YAML of Rmd/qmd file")) {
           
           lines <- readLines(path, warn = FALSE)
           
           yamls <- grep("^---", lines)
           if(length(yamls) < 2) {
-            cli::cli_abort("No YAML found in Rmd file.")
+            cli::cli_abort("No YAML found in Rmd/qmd file.")
           }
           yaml_start <- yamls[[1]]
           yaml_end <- yamls[[2]]
@@ -335,7 +343,7 @@ make_header <- function(path = NULL,
                              input_files = input_files,
                              output_files = output_files)
 
-  # Write the header to R or Rmd
+  # Write the header to the file
   if(file_ext == "r") {
     writeLines(header, path)
   } else if(file_ext == "rmd") {
@@ -355,6 +363,22 @@ make_header <- function(path = NULL,
     )
 
     writeLines(rmd_content, path)
+  } else if(file_ext == "qmd") {
+    qmd_content <- paste(
+      '---',
+      paste0('title: "', tools::file_path_sans_ext(basename(path)), '"'),
+      paste0('author: "', get_user_full_name(), '"'),
+      'date: today',
+      'format:',
+      '  html:',
+      '    theme: cosmo',
+      '    toc: true',
+      header,
+      '---',
+      sep = "\n"
+    )
+    
+    writeLines(qmd_content, path)
   }
 
   invisible(NULL)
@@ -539,7 +563,7 @@ make_copyright_line <- function(copyright_holder = NULL) {
   copyright_with_year <- paste0("Copyright ", format(Sys.Date(), format = "%Y"))
   
   if(is.null(copyright_holder)) {
-    copyright_holder <- .cognigen_copyright_message
+    copyright_holder <- .simulations_plus_copyright_message
   }
   
   if(is.character(copyright_holder)) {

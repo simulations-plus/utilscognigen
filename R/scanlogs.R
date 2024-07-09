@@ -60,8 +60,8 @@ dir_scanlogs <- function(path = getwd(), pattern = NULL, ext = c("Rout", "log"))
 #' notes, and other messages using the shell command \code{scanlogs}.
 #'
 #' @param ... \code{character} vectors containing file names or paths with
-#'   extensions .R, .r, .Rout, .sas, .log, or .lst. Defaults to the path of the
-#'   source editor context.
+#'   extensions .R, .Rmd, .qmd, .Rout, .sas, .log, or .lst. Defaults to the path
+#'   of the source editor context.
 #'
 #' @return \code{scanlogs()} returns a named \code{list} of \code{character}
 #'   vectors of scanned results.
@@ -106,12 +106,13 @@ print.scanlogs <- function(x, ...) {
 }
 
 
-#' Scan log file of R, Rmd, or SAS programs
+#' Scan log file of R, Rmd, qmd, or SAS programs
 #'
 #' Only a single path should be passed directly to \code{scanlogs_single()}.
 #'
-#' @param path a file name or path with extension .R, .r, .Rmd, .Rout, .r.Rout,
-#'   .sas, .log, or .lst. Defaults to the path of the source editor context.
+#' @param path a file name or path with extension .R, .r, .Rmd, qmd, .Rout,
+#'   .r.Rout, .sas, .log, or .lst. Defaults to the path of the source editor
+#'   context.
 #'
 #' @return invisibly returns a \code{character} vector of scanned results. For
 #'   R, the findings are prepended by the basename of the log path and line
@@ -181,6 +182,8 @@ scanlogs_single.Rmd <- function(path = NULL) {
   }
   scan_rout(log_name)
 }
+
+scanlogs_single.qmd <- scanlogs_single.Rmd
 
 
 scan_rout <- function(path) {

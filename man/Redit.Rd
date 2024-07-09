@@ -16,18 +16,18 @@ Redit(
 )
 }
 \arguments{
-\item{...}{file paths of R or Rmd files. Files without extensions are set to
-\code{".R"}. Defaults to the path of the source editor context.}
+\item{...}{file paths of R, Rmd, or qmd files. Files without extensions are
+set to \code{".R"}. Defaults to the path of the source editor context.}
 
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}. Ignored with a
 warning for files that already have a header.}
 
-\item{copyright_holder}{either \code{NULL} for the default Cognigen copyright
-statement, a single \code{character} defining the copyright holders and
-accompanying text to follow copyright mark and year, a \code{character}
-vector for multiple separate copyright statements, or \code{FALSE} for no
-copyright.}
+\item{copyright_holder}{either \code{NULL} for the default Simulations Plus
+copyright statement, a single \code{character} defining the copyright
+holders and accompanying text to follow copyright mark and year, a
+\code{character} vector for multiple separate copyright statements, or
+\code{FALSE} for no copyright.}
 
 \item{purpose, input_files, output_files}{purpose, input files, and output
 files of R program(s) given as \code{character} vectors. The purpose will
@@ -46,11 +46,11 @@ invisibly returns \code{NULL}.
 Create, update, and open R programs with QMS approved headers
 }
 \details{
-Cognigen's R program header documents key elements of programs including:
+CPP's R program header documents key elements of programs including:
 \itemize{
-\item Name: The full path to the program on Cognigen's file system.
+\item Name: The full path to the program on CPP's file system.
 \item Timestamp: The timestamp and programmer of key updates to the program.
-\item Copyright: Cognigen's standard Copyright language.
+\item Copyright: Simulation Plus' standard Copyright language.
 \item Purpose: What the program is designed to do.
 \item Input Files: Files read by the program.
 \item Output Files: Files written by the program.
@@ -58,9 +58,9 @@ Cognigen's R program header documents key elements of programs including:
 
 \code{Redit} serves a few distinct purposes:
 \itemize{
-\item Create new R and Rmd files with standard headers.
-\item Add headers to existing R and Rmd files without a header.
-\item Add new timestamps and program owner name to headers in existing R and Rmd files.
+\item Create new R, Rmd, and qmd files with standard headers.
+\item Add headers to existing files without a header.
+\item Add new timestamps and program owner name to headers in existing files.
 }
 
 \code{Redit} does not need to be used every time a program is updated and \code{Redit}

@@ -1,15 +1,17 @@
-#' Render an R Markdown document and open the output
+#' Render an R Markdown or Quarto document and open the output
 #'
 #' @description An R program is generated with the name of \code{path} sans
-#' extension, appended with "-render.R". This contains a header and a call to
-#' \code{rmarkdown::}\code{\link[rmarkdown]{render}}. This program is then
-#' executed from its directory and the output file is optionally opened.
+#'   extension, appended with "-render.R". This contains a header and a call to
+#'   \code{rmarkdown::}\code{\link[rmarkdown]{render}} or
+#'   \code{quarto::}\code{\link[quarto]{quarto_render}}. This program is then
+#'   executed from its directory and the output file is optionally opened.
 #'
 #' The generated R program is not modified if it already exists, but the program
-#' is examined to confirm it calls \code{rmarkdown::render}.
+#' is examined to confirm it calls \code{rmarkdown::render} or
+#' \code{rmarkdown::render}.
 #'
-#' @param path file path of R Markdown document or R script. Defaults to the
-#'   path of the source editor context.
+#' @param path file path of R Markdown document, Quarto document or R script.
+#'   Defaults to the path of the source editor context.
 #' @param open \code{logical} indicating whether to open the output file.
 #' @inheritParams rcb
 #'
@@ -32,8 +34,8 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
 
   assertthat::assert_that(
     file.exists(path),
-    tolower(tools::file_ext(path)) %in% c("r", "rmd"),
-    msg = "`path` must be an existing R or Rmd file"
+    tolower(tools::file_ext(path)) %in% c("r", "rmd", "qmd"),
+    msg = "`path` must be an existing R, Rmd, or qmd file"
   )
 
   assertthat::assert_that(
@@ -42,6 +44,13 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
   )
 
   path <- normalizePath(path)
+  
+  # Fail if file contains spaces
+  if(grepl("\\s", path)) {
+    cli::cli_abort(
+      "Detected spaces in {.arg path}. File names should not contain spaces."
+    )
+  }
 
   r_path <- paste0(tools::file_path_sans_ext(path), "-render.R")
 
@@ -51,10 +60,13 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
   if(file.exists(r_path)) {
 
     r_path_read <- readLines(r_path)
-    has_render_call <- any(grepl("rmarkdown::render", r_path_read))
+    has_render_call <- any(grepl("rmarkdown::render", r_path_read) | grepl("quarto::quarto_render", r_path_read))
     assertthat::assert_that(
       has_render_call,
-      msg = paste0("The R program to be generated already exists and does not call `rmarkdown::render`: '", r_path, "'")
+      msg = paste0(
+        "The R program to be generated already exists and does not call `rmarkdown::render` or `quarto::quarto_render`: '", 
+        r_path, "'"
+      )
     )
 
   } else {
@@ -64,8 +76,14 @@ render <- function(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE
           input_files = FALSE,
           output_files = FALSE,
           open = FALSE)
-
-    cat(paste0('\nrmarkdown::render("', path, '")\n\nsessionInfo()\n'),
+    
+    render_code <- ifelse(
+      fs::path_ext(path) == "qmd",
+      "quarto::quarto_render",
+      "rmarkdown::render"
+    )
+    
+    cat(paste0('\n', render_code, '("', path, '")\n\nsessionInfo()\n'),
         file = r_path,
         append = TRUE)
 

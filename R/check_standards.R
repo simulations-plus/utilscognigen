@@ -1,4 +1,4 @@
-#' Check an R file against Cognigen standards
+#' Check an R file against CPP standards
 #'
 #' Performs each of the checks described in Details. All checks must pass for
 #' \code{check_standards} to return \code{TRUE}.
@@ -7,7 +7,7 @@
 #'   \item{\code{\link{check_rout}}}{Determines if the R script should have an
 #'   associated Rout file, then checks the content of the Rout.}
 #'   \item{\code{\link{check_header}}}{Checks that the R script has an
-#'   appropriate Cognigen header.}
+#'   appropriate header.}
 #'   \item{\code{\link{check_session_info}}}{Checks that
 #'   \code{\link[utils]{sessionInfo}} or
 #'   \code{\link[devtools]{session_info}} is called in the R script, preferably
@@ -48,7 +48,7 @@ check_standards <- function(
   assertthat::assert_that(
     length(path) <= 1,
     file.exists(path),
-    tools::file_ext(path) %in% c("R", "r", "Rmd", "rmd")
+    tolower(tools::file_ext(path)) %in% c("r", "rmd", "qmd")
   )
   
   # attribute path is set for cases where the scanned script gets passed to
@@ -160,6 +160,7 @@ check_rout <- function(x, path) {
     "r" = paste0(path, ".Rout"),
     "Rmd" = paste0(tools::file_path_sans_ext(path), "-render.Rout"),
     "rmd" = paste0(tools::file_path_sans_ext(path), "-render.Rout"),
+    "qmd" = paste0(tools::file_path_sans_ext(path), "-render.Rout")
   )
   
   rout_exists <- file.exists(rout_path)
@@ -232,11 +233,10 @@ check_rout <- function(x, path) {
 
 # header functions --------------------------------------------------------
 
-#' Check if an R script has an appropriate Cognigen header
+#' Check if an R script has an appropriate header
 #'
-#' This checks that the script has a Cognigen header, defines a name that
-#' matches the file path, has a copyright statement, and defines the script's
-#' purpose.
+#' This checks that the script has a header, defines a name that matches the
+#' file path, has a copyright statement, and defines the script's purpose.
 #'
 #' @param x a scanned R script
 #' @param path a \code{character} containing a directory path

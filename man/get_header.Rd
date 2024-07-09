@@ -2,7 +2,7 @@
 % Please edit documentation in R/headers.R
 \name{get_header}
 \alias{get_header}
-\title{Extract a Cognigen header for an R script}
+\title{Extract a header from R code}
 \usage{
 get_header(x, min_hash = 30L, max_first_line = 1L)
 }
@@ -21,6 +21,6 @@ a \code{character} vector of lines of the header or \code{FALSE} with
   a reason attribute if no acceptable header is found.
 }
 \description{
-Extract a Cognigen header for an R script
+Extract a header from R code
 }
 \keyword{internal}

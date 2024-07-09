@@ -41,6 +41,12 @@ get_source_file <- function() {
     args <- commandArgs()
     file <- args[grepl("\\.[rR]$", args)]
     
+    # check for quarto
+    if(grepl("quarto.*rmd/rmd\\.R", file)) {
+      knitr_current_input <- knitr::current_input()
+      file <- fs::path_ext_set(knitr_current_input, "qmd")
+    }
+    
     # error handling
     if(length(file) == 0) {
       cli::cli_abort("No R script can be identified as the source file")
@@ -56,12 +62,20 @@ get_source_file <- function() {
       ))
     }
     
-    # if the file name ends with, "-render.R", update to the Rmd file that 
+    # if the file name ends with, "-render.R", update to the Rmd/qmd file that 
     # the render program is intended to render.
     if(grepl("-render\\.[rR]$", file)) {
-      rmd_file <- gsub("-render\\.[rR]$", ".Rmd", file)
-      if(file.exists(rmd_file)) {
-        file <- rmd_file
+      # determine if the file renders with quarto
+      lines <- readLines(file, warn = FALSE)
+      render_ext <- ifelse(
+        any(grepl("quarto_render", lines)),
+        ".qmd",
+        ".Rmd"
+      )
+      
+      render_file <- gsub("-render\\.[rR]$", render_ext, file)
+      if(file.exists(render_file)) {
+        file <- render_file
       }
     }
     

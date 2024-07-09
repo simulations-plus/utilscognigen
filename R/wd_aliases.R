@@ -41,10 +41,12 @@ cd <- function(dir, focus = getOption("utilscognigen.cd_focus", TRUE)) {
     dir <- dirname(dir)
   }
   
+  dir_absolute <- fs::path_abs(dir)
   prev_dir <- base::setwd(dir)
   
   if(rstudioapi::isAvailable() && isTRUE(focus)) {
-    invisible(rstudioapi::filesPaneNavigate(dir))
+    invisible(rstudioapi::filesPaneNavigate(dir_absolute))
+    invisible(rstudioapi::executeCommand("activateFiles"))
   }
   
   cli::cli_alert_info("Working directory set: \n{.file {base::getwd()}}")

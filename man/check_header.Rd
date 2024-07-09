@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_standards.R
 \name{check_header}
 \alias{check_header}
-\title{Check if an R script has an appropriate Cognigen header}
+\title{Check if an R script has an appropriate header}
 \usage{
 check_header(x, path)
 }
@@ -15,8 +15,7 @@ check_header(x, path)
 a named \code{list} with "pass" and "reason" elements
 }
 \description{
-This checks that the script has a Cognigen header, defines a name that
-matches the file path, has a copyright statement, and defines the script's
-purpose.
+This checks that the script has a header, defines a name that matches the
+file path, has a copyright statement, and defines the script's purpose.
 }
 \keyword{internal}

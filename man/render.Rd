@@ -2,13 +2,13 @@
 % Please edit documentation in R/render.R
 \name{render}
 \alias{render}
-\title{Render an R Markdown document and open the output}
+\title{Render an R Markdown or Quarto document and open the output}
 \usage{
 render(path = NULL, open = rstudioapi::isAvailable(), as_job = FALSE)
 }
 \arguments{
-\item{path}{file path of R Markdown document or R script. Defaults to the
-path of the source editor context.}
+\item{path}{file path of R Markdown document, Quarto document or R script.
+Defaults to the path of the source editor context.}
 
 \item{open}{\code{logical} indicating whether to open the output file.}
 
@@ -20,12 +20,14 @@ path of the source editor context.}
 }
 \description{
 An R program is generated with the name of \code{path} sans
-extension, appended with "-render.R". This contains a header and a call to
-\code{rmarkdown::}\code{\link[rmarkdown]{render}}. This program is then
-executed from its directory and the output file is optionally opened.
+  extension, appended with "-render.R". This contains a header and a call to
+  \code{rmarkdown::}\code{\link[rmarkdown]{render}} or
+  \code{quarto::}\code{\link[quarto]{quarto_render}}. This program is then
+  executed from its directory and the output file is optionally opened.
 
 The generated R program is not modified if it already exists, but the program
-is examined to confirm it calls \code{rmarkdown::render}.
+is examined to confirm it calls \code{rmarkdown::render} or
+\code{rmarkdown::render}.
 }
 \examples{
 \dontrun{

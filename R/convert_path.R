@@ -133,7 +133,7 @@ convert_path <- function(path = NULL, ask = FALSE, normalize = TRUE, to = "unix"
     path <- make_windows_replacements(path = path, normalize = normalize)
   }
   
-  return(path)
+  path
   
 }
 
@@ -179,7 +179,7 @@ make_unix_replacements <- function(path, normalize) {
   path <- gsub("^L:", "/cognigen", path, ignore.case = TRUE)
   
   # since SLP employees do not have access to /cognigen files, use that to 
-  # determine whether M: is /miguel (SLP) or /cognigen (Cognigen)
+  # determine whether M: is /miguel (SLP) or /cognigen (CPP)
   if(length(list.files("/cognigen")) == 0) {
     path <- gsub("^M:", "/miguel", path, ignore.case = TRUE)
   } else {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Rcopy.R
 \name{Rcopy}
 \alias{Rcopy}
-\title{Copy and open R and Rmd files with QMS approved headers.}
+\title{Copy and open R, Rmd, and qmd files with QMS approved headers.}
 \usage{
 Rcopy(
   from = NULL,
@@ -14,7 +14,7 @@ Rcopy(
 )
 }
 \arguments{
-\item{from}{path of original R program or Rmd file. Defaults to the path of
+\item{from}{path of original R, Rmd, or qmd file. Defaults to the path of
 the source editor context.}
 
 \item{to}{path or directory of new file. If \code{to} is a directory,
@@ -24,11 +24,11 @@ the source editor context.}
 \item{version}{either \code{NULL} for the current R version, or a
 \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.}
 
-\item{copyright_holder}{either \code{NULL} for the default Cognigen copyright
-statement, a single \code{character} defining the copyright holders and
-accompanying text to follow copyright mark and year, a \code{character}
-vector for multiple separate copyright statements, or \code{FALSE} for no
-copyright.}
+\item{copyright_holder}{either \code{NULL} for the default Simulations Plus
+copyright statement, a single \code{character} defining the copyright
+holders and accompanying text to follow copyright mark and year, a
+\code{character} vector for multiple separate copyright statements, or
+\code{FALSE} for no copyright.}
 
 \item{open}{\code{logical} indicating whether to open files in RStudio.}
 
@@ -38,7 +38,7 @@ copyright.}
 invisibly returns \code{NULL}.
 }
 \description{
-This function is somewhat similar to the Cognigen shell command \code{Rcopy},
+This function is somewhat similar to the CPP shell command \code{Rcopy},
 but it is not called.
 }
 \examples{

@@ -1,9 +1,9 @@
-#' Copy and open R and Rmd files with QMS approved headers.
+#' Copy and open R, Rmd, and qmd files with QMS approved headers.
 #'
-#' This function is somewhat similar to the Cognigen shell command \code{Rcopy},
+#' This function is somewhat similar to the CPP shell command \code{Rcopy},
 #' but it is not called.
 #'
-#' @param from path of original R program or Rmd file. Defaults to the path of
+#' @param from path of original R, Rmd, or qmd file. Defaults to the path of
 #'   the source editor context.
 #'   
 #' @param to path or directory of new file. If \code{to} is a directory,
@@ -13,11 +13,11 @@
 #' @param version either \code{NULL} for the current R version, or a
 #'   \code{character} in the form \code{"N.n.n"} or \code{"Nnn"}.
 #' 
-#' @param copyright_holder either \code{NULL} for the default Cognigen copyright
-#'   statement, a single \code{character} defining the copyright holders and
-#'   accompanying text to follow copyright mark and year, a \code{character}
-#'   vector for multiple separate copyright statements, or \code{FALSE} for no
-#'   copyright.
+#' @param copyright_holder either \code{NULL} for the default Simulations Plus
+#'   copyright statement, a single \code{character} defining the copyright
+#'   holders and accompanying text to follow copyright mark and year, a
+#'   \code{character} vector for multiple separate copyright statements, or
+#'   \code{FALSE} for no copyright.
 #'   
 #' @param open \code{logical} indicating whether to open files in RStudio.
 #' 
@@ -85,14 +85,14 @@ Rcopy <- function(from = NULL,
   file_ext_to <- tolower(tools::file_ext(to))
 
   assertthat::assert_that(
-    file_ext_from %in% c("r", "rmd"),
-    msg = "`from` must be an R or Rmd file"
+    file_ext_from %in% c("r", "rmd", "qmd"),
+    msg = "`from` must be an R, Rmd, or qmd file"
   )
 
   assertthat::assert_that(
-    file_ext_to %in% c("r", "rmd"),
+    file_ext_to %in% c("r", "rmd", "qmd"),
     !file.exists(to),
-    msg = "`to` must be a non-existing R or Rmd file"
+    msg = "`to` must be a non-existing R, Rmd, or qmd file"
   )
 
   assertthat::assert_that(
@@ -104,7 +104,7 @@ Rcopy <- function(from = NULL,
 
   assertthat::assert_that(
     file.exists(from),
-    msg = "`from` must be an existing R or Rmd file"
+    msg = "`from` must be an existing R, Rmd, or qmd file"
   )
   
   old_header <- get_header(from)
@@ -123,11 +123,11 @@ Rcopy <- function(from = NULL,
   }
 
   # how files are copied depends on their type
-  if(file_ext_to == "rmd") {
+  if(file_ext_to %in% c("rmd", "qmd")) {
 
     if(isFALSE(old_header)) {
 
-      # file_copy is expected to be used on Linux at Cognigen. since some files
+      # file_copy is expected to be used on Linux at CPP since some files
       # that are copied are read-only, do not preserve mode and ownership
       file_copy(from, to, args = c("--preserve=timestamps", "--no-preserve=mode,ownership"))
 

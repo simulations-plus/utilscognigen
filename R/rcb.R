@@ -59,6 +59,14 @@ rcb <- function(..., scanlogs = TRUE, as_job = getOption("utilscognigen.rcb_as_j
       )
     )
   }
+  
+  # Fail if any files have spaces
+  files_with_spaces <- grep("\\s", files, value = TRUE)
+  if(length(files_with_spaces) > 0) {
+    cli::cli_abort(
+      "Detected spaces in file name(s). Cannot execute: {.path {files_with_spaces}}"
+    )
+  }
 
   files <- normalizePath(files)
 
