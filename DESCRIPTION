@@ -1,7 +1,7 @@
 Package: utilscognigen
 Type: Package
 Title: Utility functions for the Clinical Pharmacology and Pharmacometrics (CPP) business unit of Simulations Plus, Inc
-Version: 1.0.2.9000
+Version: 1.0.3
 Date: $date$
 Authors@R: c(person("Nash", "Delcamp", email = "nash.delcamp@simulations-plus.com", role = c("aut", "cre")),
              person("Sébastien", "Bihorel", role = "aut"),
