@@ -133,7 +133,7 @@ convert_path <- function(path = NULL, ask = FALSE, normalize = TRUE, to = "unix"
     path <- make_windows_replacements(path = path, normalize = normalize)
   }
   
-  fs::fs_path(path)
+  path
   
 }
 
